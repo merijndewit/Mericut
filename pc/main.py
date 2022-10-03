@@ -23,8 +23,6 @@ arduino = serial.Serial(port='COM3', baudrate=115200, timeout=.1)
 #    value = write_read(num)
 #    print(value)
 
-
-
 class Main(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
         customtkinter.CTk.__init__(self, *args, **kwargs)
