@@ -8,16 +8,19 @@ boolean newData = false;
 
 MicroGcode microGcode;
 
-void setup() {
+void setup() 
+{
     Serial.begin(115200);
 }
 
-void loop() {
+void loop() 
+{
     checkSerial();
     checkData();
 }
 
-void checkSerial() {
+void checkSerial() 
+{
     static boolean receiving = false;
     static byte ndx = 0;
     char startMarker = '<';
@@ -49,7 +52,8 @@ void checkSerial() {
     }
 }
 
-void checkData() {
+void checkData() 
+{
     if (newData == true) {
         executeCommand(receivedChars);
         newData = false;

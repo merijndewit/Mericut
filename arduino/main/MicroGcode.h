@@ -10,6 +10,8 @@ class MicroGcode
     void executeMiniGcode(char* microGcodeCharacters);
 
   private:
+    void receivedInvalidCode();
+    void executeDcode(char* dCharacters);
 };
 
 #endif
