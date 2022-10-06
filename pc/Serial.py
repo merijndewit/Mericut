@@ -43,7 +43,7 @@ class Serial:
                     string = serialString.decode('Ascii')
                     start = '<'
                     end = '>'
-                    self.parent.callbackMicroGcode.ExecuteCallbackCode(string[string.find(start)+len(start):string.rfind(end)])
+                    self.parent.callbackMeriCode.ExecuteCallbackCode(string[string.find(start)+len(start):string.rfind(end)])
             except:
                 self.parent.connectFrame.SetConnectionStatus(False)    
                 return

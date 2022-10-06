@@ -30,7 +30,7 @@ class ConnectFrame(customtkinter.CTkFrame):
         def SetAvailableComPorts(comPorts):
             self.comPortOption.configure(values=comPorts)
 
-        self.comPortOption = customtkinter.CTkOptionMenu(master=self, values=[], command=ComPortSelected, fg_color=Colors.BUTTON, button_color=Colors.BUTTON, button_hover_color=Colors.BUTTONHOVER)
+        self.comPortOption = customtkinter.CTkOptionMenu(master=self, values=["Select port"], command=ComPortSelected, fg_color=Colors.BUTTON, button_color=Colors.BUTTON, button_hover_color=Colors.BUTTONHOVER)
         
         self.comPortOption.grid(row=1, column=0, sticky=tkinter.NW, columnspan=2)
 
@@ -53,7 +53,7 @@ class ConnectFrame(customtkinter.CTkFrame):
         self.connectionStatus.configure(text="Disconnected.", text_color=Colors.DISCONNECTEDTEXT)
 
 
-class MicroGcodeTestFrame(customtkinter.CTkFrame):
+class MeriCodeTestFrame(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):
         customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
         self.parent = parent
@@ -65,7 +65,7 @@ class MicroGcodeTestFrame(customtkinter.CTkFrame):
         self.grid(row=1, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
         self.grid_propagate(0)
 
-        self.entry = customtkinter.CTkEntry(master=self, placeholder_text="CTkEntry", width=120, height=25, border_width=2, corner_radius=10)
+        self.entry = customtkinter.CTkEntry(master=self, placeholder_text="MeriCode", width=120, height=25, border_width=2, corner_radius=10)
         self.entry.grid(row=0, column=0, sticky=tkinter.NW, columnspan=2)
         
         self.submitButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, command= lambda: SendEntryString())

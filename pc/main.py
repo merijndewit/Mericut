@@ -7,8 +7,8 @@ from Serial import Serial
 
 from TkinterRelated.Colors import Colors
 from Serial import Serial
-from microGcode.CallbackMicroGcode import CallbackMicroGcode
-from microGcode.FileToMicroGcode import FileToMicroGcode
+from MeriCode.CallbackMeriCode import CallbackMeriCode
+from MeriCode.FileToMeriCode import FileToMeriCode
 
 class Main(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
@@ -18,12 +18,12 @@ class Main(customtkinter.CTk):
         self.title("Mericut")
         self.terminating = False
 
-        self.callbackMicroGcode = CallbackMicroGcode(self)
+        self.callbackMeriCode = CallbackMeriCode(self)
         self.serial = Serial(self)
         self.connectFrame = Frames.ConnectFrame(self, self)
-        self.microGcodeFrame = Frames.MicroGcodeTestFrame(self, self)
+        self.MeriCodeFrame = Frames.MeriCodeTestFrame(self, self)
 
-        FileToMicroGcode.GetMicroGcodeFromTxt()
+        FileToMeriCode.GetMeriCodeFromTxt()
 
         self.mainloop();
 

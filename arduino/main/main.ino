@@ -1,12 +1,12 @@
 #include "Arduino.h"
-#include "microGcode.h"
+#include "MeriCode.h"
 
 const byte numChars = 32;
 char receivedChars[numChars];
 
 boolean newData = false;
 
-MicroGcode microGcode;
+MeriCode meriCode;
 
 void setup() 
 {
@@ -62,5 +62,5 @@ void checkData()
 
 void executeCommand(char* receivedChars) 
 {
-    microGcode.executeMiniGcode(receivedChars);
+    meriCode.executeMeriCode(receivedChars);
 }

@@ -1,23 +1,23 @@
 #include "Arduino.h"
-#include "MicroGcode.h"
+#include "MeriCode.h"
 
-MicroGcode::MicroGcode()
+MeriCode::MeriCode()
 {
 
 }
 
-void MicroGcode::receivedInvalidCode()
+void MeriCode::receivedInvalidCode()
 {
     Serial.println("<E0>");
 }
 
-void MicroGcode::executeMiniGcode(char* microGcodeCharacters)
+void MeriCode::executeMeriCode(char* meriCodeCharacters)
 {
-    switch (microGcodeCharacters[0]) //get first character of micro g-code
+    switch (meriCodeCharacters[0]) //get first character of mericode
     {
         case 'D':
         {
-            char* substr = microGcodeCharacters + 1;
+            char* substr = meriCodeCharacters + 1;
             executeDcode(substr++);
         }
             break;
@@ -27,9 +27,9 @@ void MicroGcode::executeMiniGcode(char* microGcodeCharacters)
     }
 }
 
-void MicroGcode::executeDcode(char* dCharacters)
+void MeriCode::executeDcode(char* dCharacters)
 {
-    switch (dCharacters[0]) //get first character of micro g-code
+    switch (dCharacters[0])
     {
         case '0':
             Serial.println("<C0>");
