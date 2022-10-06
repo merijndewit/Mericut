@@ -20,9 +20,6 @@ class ConnectFrame(customtkinter.CTkFrame):
         def ComPortSelected(choice):
             self.parent.serial.selectedComPort = choice
 
-
-
-
         self.connectionStatusText = customtkinter.CTkLabel(master=self, text="Connection status: ", text_color="#ffffff", text_font='Helvetica 11 bold', anchor=tkinter.W)
         self.connectionStatusText.grid(row=0, column=0, sticky=tkinter.NW, columnspan=2)
 
@@ -54,4 +51,27 @@ class ConnectFrame(customtkinter.CTkFrame):
             self.connectionStatus.configure(text="Connected!", text_color=Colors.CONNECTEDTEXT)
             return
         self.connectionStatus.configure(text="Disconnected.", text_color=Colors.DISCONNECTEDTEXT)
+
+
+class MicroGcodeTestFrame(customtkinter.CTkFrame):
+    def __init__(self, parent, frameParent, *args, **kwargs):
+        customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
+        self.parent = parent
+        self.configure( width=300,
+                        height=120,
+                        corner_radius=4,
+                        fg_color=Colors.BGFRAME)
+
+        self.grid(row=1, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
+        self.grid_propagate(0)
+
+        self.entry = customtkinter.CTkEntry(master=self, placeholder_text="CTkEntry", width=120, height=25, border_width=2, corner_radius=10)
+        self.entry.grid(row=0, column=0, sticky=tkinter.NW, columnspan=2)
         
+        self.submitButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, command= lambda: SendEntryString())
+        self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
+
+        def SendEntryString():
+            self.parent.serial.WriteToSerial(self.entry.get())
+
+

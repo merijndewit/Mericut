@@ -7,7 +7,8 @@ from Serial import Serial
 
 from TkinterRelated.Colors import Colors
 from Serial import Serial
-from CallbackMicroGcode import CallbackMicroGcode
+from microGcode.CallbackMicroGcode import CallbackMicroGcode
+from microGcode.FileToMicroGcode import FileToMicroGcode
 
 class Main(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
@@ -20,6 +21,9 @@ class Main(customtkinter.CTk):
         self.callbackMicroGcode = CallbackMicroGcode(self)
         self.serial = Serial(self)
         self.connectFrame = Frames.ConnectFrame(self, self)
+        self.microGcodeFrame = Frames.MicroGcodeTestFrame(self, self)
+
+        FileToMicroGcode.GetMicroGcodeFromTxt()
 
         self.mainloop();
 
