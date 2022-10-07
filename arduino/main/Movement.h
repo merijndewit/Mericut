@@ -2,6 +2,7 @@
 #define Movement_h
 
 #include "Arduino.h"
+#include "MeriCode.h"
 
 class Movement
 {

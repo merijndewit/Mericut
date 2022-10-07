@@ -71,6 +71,9 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
         self.submitButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, command= lambda: SendEntryString())
         self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
 
+        self.sendTestFile = customtkinter.CTkButton(master=self, text="Send File",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=100, height=28, command= lambda: self.parent.serial.StartSendingMeriCodeList())
+        self.sendTestFile.grid(row=1, column=0, sticky=tkinter.NW, columnspan=1)
+
         def SendEntryString():
             self.parent.serial.WriteToSerial(self.entry.get())
 

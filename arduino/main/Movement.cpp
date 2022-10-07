@@ -62,7 +62,6 @@ void Movement::Move()
         digitalWrite(YLEFTPIN, HIGH);
         digitalWrite(YRIGHTPIN, LOW);
         position[1] += 0.1f;
-
     }
     else if (position[1] > targetPosition[1])
     {
@@ -81,7 +80,6 @@ void Movement::Move()
         digitalWrite(ZLEFTPIN, HIGH);
         digitalWrite(ZRIGHTPIN, LOW);
         position[2] += 0.1f;
-
     }
     else if (position[2] > targetPosition[2])
     {
@@ -89,4 +87,5 @@ void Movement::Move()
         digitalWrite(ZLEFTPIN, LOW);
         position[2] -= 0.1f;
     }
+
 }

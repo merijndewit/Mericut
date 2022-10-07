@@ -2,6 +2,7 @@ from serial.tools import list_ports
 import serial
 import time
 import threading
+from MeriCode.FileToMeriCode import FileToMeriCode
 
 class Serial:
     @staticmethod
@@ -32,6 +33,17 @@ class Serial:
     def StartListeningToSerial(self):
         self.child_thread = threading.Thread(target=self.ListenToSerial, daemon=True)
         self.child_thread.start()
+    
+    def StartSendingMeriCodeList(self):
+        self.thread = threading.Thread(target=self.SendMeriCodeList, daemon=True)
+        self.thread.start()
+
+    def SendMeriCodeList(self):
+        listToSend = FileToMeriCode.GetMeriCodeFromTxt()
+        for i in range(len(listToSend)):
+            self.WriteToSerial(listToSend[i])
+            time.sleep(3)
+
 
     def ListenToSerial(self):
         while True:
@@ -48,5 +60,6 @@ class Serial:
             except:
                 self.parent.connectFrame.SetConnectionStatus(False)    
                 return
+
                 
         
