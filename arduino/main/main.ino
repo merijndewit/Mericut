@@ -1,15 +1,25 @@
 #include "Arduino.h"
-#include "MeriCode.h"
+#include "Machine.h"
+#include "Config.h"
 
 const byte numChars = 32;
 char receivedChars[numChars];
 
 boolean newData = false;
 
-MeriCode meriCode;
+Machine machine;
 
 void setup() 
 {
+    pinMode(XRIGHTPIN, OUTPUT);
+    pinMode(XLEFTPIN, OUTPUT);
+    pinMode(YRIGHTPIN, OUTPUT);
+    pinMode(YLEFTPIN, OUTPUT);
+    pinMode(ZRIGHTPIN, OUTPUT);
+    pinMode(ZLEFTPIN, OUTPUT);
+    pinMode(TRIGHTPIN, OUTPUT);
+    pinMode(TLEFTPIN, OUTPUT);
+
     Serial.begin(115200);
 }
 
@@ -17,6 +27,7 @@ void loop()
 {
     checkSerial();
     checkData();
+    machine.Update();
 }
 
 void checkSerial() 
@@ -29,7 +40,6 @@ void checkSerial()
  
     while (Serial.available() > 0 && newData == false) {
         data = Serial.read();
-
         if (receiving == true) {
             if (data != endMarker) {
                 receivedChars[ndx] = data;
@@ -55,12 +65,7 @@ void checkSerial()
 void checkData() 
 {
     if (newData == true) {
-        executeCommand(receivedChars);
+        machine.ExecuteMeriCode(receivedChars);
         newData = false;
     }
-}
-
-void executeCommand(char* receivedChars) 
-{
-    meriCode.executeMeriCode(receivedChars);
 }

@@ -44,6 +44,7 @@ class Serial:
                     start = '<'
                     end = '>'
                     self.parent.callbackMeriCode.ExecuteCallbackCode(string[string.find(start)+len(start):string.rfind(end)])
+                    
             except:
                 self.parent.connectFrame.SetConnectionStatus(False)    
                 return
