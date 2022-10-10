@@ -13,7 +13,7 @@ from MeriCode.FileToMeriCode import FileToMeriCode
 class Main(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
         customtkinter.CTk.__init__(self, *args, **kwargs)
-        self.geometry("800x480")
+        self.geometry("820x520")
         self.configure(bg=Colors.BGCOLOR)
         self.title("Mericut")
         self.terminating = False
@@ -22,6 +22,7 @@ class Main(customtkinter.CTk):
         self.serial = Serial(self)
         self.connectFrame = Frames.ConnectFrame(self, self)
         self.MeriCodeFrame = Frames.MeriCodeTestFrame(self, self)
+        self.canvas = Frames.Canvas(self, self)
 
         FileToMeriCode.GetMeriCodeFromTxt()
 
