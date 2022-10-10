@@ -25,7 +25,7 @@ class Pen(Tool):
         if self.clicks == 1:
             self.nodes[1] = Node(x, y)
             self.clicks = 0
-            DrawingShapes.Line(self.nodes[0].position, self.nodes[1].position, self.parentCanvas)
+            DrawingShapes.Line(self.nodes, self.parentCanvas)
             self.nodes = [None, None]
             return
 

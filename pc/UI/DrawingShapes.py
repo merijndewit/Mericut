@@ -1,13 +1,19 @@
 from UI.Colors import Colors
 
-class Line():
-    def __init__(self, node0, node1, canvas, draw = True):
-        self.node0 = node0
-        self.node1 = node1
+class Shapes():
+    def __init__(self, nodes, canvas):
+        self.nodes = nodes
         self.canvas = canvas
 
-        if draw:
-            self.DrawLine()
+class Line(Shapes):
+    def __init__(self, nodes, canvas, draw = True):
+        self.nodes = nodes
+        self.canvas = canvas
 
-    def DrawLine(self):
-        self.canvas.create_line(self.node0[0], self.node0[1], self.node1[0], self.node1[1], fill=Colors.GRIDCOLOR, width=1)
+        self.canvas.drawnShapes.append(self)
+
+        if draw:
+            self.Draw()
+
+    def Draw(self):
+        self.canvas.create_line(self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1], fill=Colors.GRIDCOLOR, width=3)

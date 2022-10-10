@@ -13,3 +13,4 @@ class Colors():
     CONNECTEDTEXT = "#ADDB81"
     #Canvas
     GRIDCOLOR = "#c0c0c0"
+    COLISIONCIRCLECOLOR = "#ea8015"
