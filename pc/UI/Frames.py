@@ -2,7 +2,7 @@ from cgitb import text
 import customtkinter
 import tkinter
 
-from TkinterRelated.Colors import Colors
+from UI.Colors import Colors
 from Serial import Serial
 
 class ConnectFrame(customtkinter.CTkFrame):

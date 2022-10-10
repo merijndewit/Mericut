@@ -2,10 +2,10 @@ import customtkinter
 import atexit
 
 #mericut
-import TkinterRelated.Frames as Frames
+import UI.Frames as Frames
 from Serial import Serial
 
-from TkinterRelated.Colors import Colors
+from UI.Colors import Colors
 from Serial import Serial
 from MeriCode.CallbackMeriCode import CallbackMeriCode
 from MeriCode.FileToMeriCode import FileToMeriCode
