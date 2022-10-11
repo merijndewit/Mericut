@@ -10,4 +10,5 @@ def DrawGrid(canvas, cellSize, edges = False):
     return canvas
 
 def DrawCircle(canvas, x, y, radius):
-    canvas.create_oval(x - radius, y - radius, x + radius, y + radius, outline=Colors.COLISIONCIRCLECOLOR, width=2)
+    circle = canvas.create_oval(x - radius, y - radius, x + radius, y + radius, outline=Colors.COLISIONCIRCLECOLOR, width=2)
+    return circle
