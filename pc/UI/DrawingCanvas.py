@@ -29,6 +29,11 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.colisionThread = threading.Thread(target=self.CheckColision, daemon=True)
         self.colisionThread.start()
+
+    def SetTool(self, name):
+        if name == "Pen":
+            self.tool = DrawingTools.Pen(self)
+            return
         
 
     def Clicked(self, event):

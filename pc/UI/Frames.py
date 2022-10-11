@@ -15,7 +15,7 @@ class ConnectFrame(customtkinter.CTkFrame):
                         corner_radius=4,
                         fg_color=Colors.BGFRAME)
 
-        self.grid(row=0, column=0, padx=(0, 5), pady=(5, 0), sticky=tkinter.NE)
+        self.grid(row=0, column=0, padx=(0, 5), pady=(5, 0), sticky=tkinter.NE, rowspan=2)
 
         def ComPortSelected(choice):
             self.parent.serial.selectedComPort = choice
@@ -62,7 +62,7 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
                         corner_radius=4,
                         fg_color=Colors.BGFRAME)
 
-        self.grid(row=1, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
+        self.grid(row=2, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
 
         self.entry = customtkinter.CTkEntry(master=self, placeholder_text="MeriCode", width=120, height=25, border_width=2, corner_radius=10, text_color=Colors.BUTTONTEXT)
         self.entry.grid(row=0, column=0, sticky=tkinter.NW, columnspan=2)
@@ -76,6 +76,34 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
         def SendEntryString():
             self.parent.serial.WriteToSerial(self.entry.get())
 
+class ToolSelect(customtkinter.CTkFrame):
+    def __init__(self, parent, frameParent, *args, **kwargs):
+        customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
+        self.parent = parent
+        self.configure( width=480,
+                        height=40,
+                        corner_radius=4,
+                        fg_color=Colors.BGFRAME)
+
+        self.grid(row=0, column=1, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
+        self.lastDisabledButton = None
+
+        self.penButton = customtkinter.CTkButton(master=self, text="Pen", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.penButton.configure(command= lambda: self.SelectTool("Pen", self.penButton))
+        self.penButton.grid(row=0, column=0, sticky=tkinter.W)
+
+        self.SelectTool("Pen", self.penButton)
+
+    def SelectTool(self, name, button):
+        if button == self.lastDisabledButton:
+            return
+        if self.lastDisabledButton != None:
+            self.lastDisabledButton.configure(state=tkinter.NORMAL)
+
+        button.configure(state=tkinter.DISABLED)
+        self.lastDisabledButton = button
+        self.parent.canvas.canvas.SetTool(name)
+
 class Canvas(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):
         customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
@@ -85,7 +113,7 @@ class Canvas(customtkinter.CTkFrame):
                         corner_radius=4,
                         fg_color=Colors.BGFRAME)
 
-        self.grid(row=0, column=1, padx=(0, 0), pady=(5, 0), sticky=tkinter.NE, rowspan=3)
+        self.grid(row=1, column=1, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW, rowspan=3)
 
         self.canvas = DrawingCanvas(self)
         self.canvas.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky=tkinter.NW)
