@@ -34,7 +34,6 @@ class DrawingCanvas(tkinter.Canvas):
         if name == "Pen":
             self.tool = DrawingTools.Pen(self)
             return
-        
 
     def Clicked(self, event):
         self.tool.Clicked(event.x, event.y)
@@ -42,6 +41,7 @@ class DrawingCanvas(tkinter.Canvas):
     def Motion(self, event):
         x, y = event.x, event.y
         self.mousePosition = [x, y]
+        self.tool.Hover(x, y)
 
     def Redraw(self):
         self.delete("all")

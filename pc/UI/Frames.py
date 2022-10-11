@@ -92,6 +92,10 @@ class ToolSelect(customtkinter.CTkFrame):
         self.penButton.configure(command= lambda: self.SelectTool("Pen", self.penButton))
         self.penButton.grid(row=0, column=0, sticky=tkinter.W)
 
+        self.moveButton = customtkinter.CTkButton(master=self, text="Move", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.moveButton.configure(command= lambda: self.SelectTool("Move", self.moveButton))
+        self.moveButton.grid(row=0, column=1, sticky=tkinter.E)
+
         self.SelectTool("Pen", self.penButton)
 
     def SelectTool(self, name, button):
