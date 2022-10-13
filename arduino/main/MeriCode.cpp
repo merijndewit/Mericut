@@ -66,7 +66,7 @@ float MeriCode::GetNumberAfterCharacter(char* characterNumbers)
 {
     char number[32] = {};
     
-    for (size_t i = 0; i < sizeof(characterNumbers); i++)
+    for (size_t i = 0; i < 32; i++)
     {
         if(characterNumbers[i] == ' ')
         {

@@ -1,3 +1,4 @@
+#define MICROSTEPPING 16
 // Stepper driver pins
 #define XDRIVERDIRECTIONPIN 53
 #define XDRIVERSTEPPIN 52

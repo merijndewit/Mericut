@@ -9,6 +9,7 @@ bool compareFloats(float A, float B, float tolerance = 0.05f)
 Movement::Movement()
 {
     xStepper.setMaxSpeed(1000);
+    xStepper.setAcceleration(200);
 }
 
 void Movement::SetTargetPosition(float x, float y, float z)
@@ -20,6 +21,7 @@ void Movement::SetTargetPosition(float x, float y, float z)
     if (x != NAN)
     {
         targetPosition[0] = x;
+        xStepper.moveTo(x * MICROSTEPPING);
     }
     if (y != NAN)
     {
@@ -34,57 +36,7 @@ void Movement::SetTargetPosition(float x, float y, float z)
 
 void Movement::Move()
 {
-    bool moved = false;
-    if (compareFloats(position[0], targetPosition[0]))
-    {
-
-    }
-    else if (position[0] < targetPosition[0])
-    {
-        xStepper.setSpeed(400);
-        xStepper.runSpeed();
-        position[0] += 0.1f;
-        moved = true;
-    }
-    else if (position[0] > targetPosition[0])
-    {
-        xStepper.setSpeed(400);
-        xStepper.runSpeed();
-        position[0] -= 0.1f;
-        moved = true;
-    }
-
-    if (compareFloats(position[1], targetPosition[1]))
-    {
-
-    }
-    else if (position[1] < targetPosition[1])
-    {
-        position[1] += 0.1f;
-        moved = true;
-    }
-    else if (position[1] > targetPosition[1])
-    {
-        position[1] -= 0.1f;
-        moved = true;
-    }
-
-    if (compareFloats(position[2], targetPosition[2]))
-    {
-
-    }
-    else if (position[2] < targetPosition[2])
-    {
-        position[2] += 0.1f;
-        moved = true;
-    }
-    else if (position[2] > targetPosition[2])
-    {
-        position[2] -= 0.1f;
-        moved = true;
-    }
-
-    if (!moved)
+    if(!xStepper.run())
     {
         isMovingToTarget = false;
     }
