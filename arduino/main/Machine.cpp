@@ -8,8 +8,10 @@ Machine::Machine()
 
 void Machine::Update()
 {
-    meriCode.movement.Move();
-    delay(10);
+    if (meriCode.movement.IsMovingToTarget())
+    {
+        meriCode.movement.Move();
+    }
 }
 
 void Machine::ExecuteMeriCode(char* command)

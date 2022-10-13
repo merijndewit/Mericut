@@ -1,6 +1,6 @@
 #include "Arduino.h"
-#include "MeriCode.h"
 #include "Movement.h"
+#include "MeriCode.h"
 
 MeriCode::MeriCode()
 {

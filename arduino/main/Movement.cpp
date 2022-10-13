@@ -1,9 +1,5 @@
 #include "Arduino.h"
 #include "Movement.h"
-#include "Config.h"
-
-float position[3] = {0, 0, 0};
-float targetPosition[3] = {0, 0, 0};
 
 bool compareFloats(float A, float B, float tolerance = 0.05f)
 {
@@ -12,11 +8,15 @@ bool compareFloats(float A, float B, float tolerance = 0.05f)
 
 Movement::Movement()
 {
-    
+    xStepper.setMaxSpeed(1000);
 }
 
 void Movement::SetTargetPosition(float x, float y, float z)
 {
+    if (isMovingToTarget)
+    {
+        return;
+    }
     if (x != NAN)
     {
         targetPosition[0] = x;
@@ -29,63 +29,63 @@ void Movement::SetTargetPosition(float x, float y, float z)
     {
         targetPosition[2] = z;
     }
+    isMovingToTarget = true;
 }
 
 void Movement::Move()
 {
+    bool moved = false;
     if (compareFloats(position[0], targetPosition[0]))
     {
-        digitalWrite(XRIGHTPIN, LOW);
-        digitalWrite(XLEFTPIN, LOW);
+
     }
     else if (position[0] < targetPosition[0])
     {
-        digitalWrite(XLEFTPIN, HIGH);
-        digitalWrite(XRIGHTPIN, LOW);
+        xStepper.setSpeed(400);
+        xStepper.runSpeed();
         position[0] += 0.1f;
-
+        moved = true;
     }
     else if (position[0] > targetPosition[0])
     {
-        digitalWrite(XRIGHTPIN, HIGH);
-        digitalWrite(XLEFTPIN, LOW);
+        xStepper.setSpeed(400);
+        xStepper.runSpeed();
         position[0] -= 0.1f;
+        moved = true;
     }
 
     if (compareFloats(position[1], targetPosition[1]))
     {
-        digitalWrite(YRIGHTPIN, LOW);
-        digitalWrite(YLEFTPIN, LOW);
+
     }
     else if (position[1] < targetPosition[1])
     {
-        digitalWrite(YLEFTPIN, HIGH);
-        digitalWrite(YRIGHTPIN, LOW);
         position[1] += 0.1f;
+        moved = true;
     }
     else if (position[1] > targetPosition[1])
     {
-        digitalWrite(YRIGHTPIN, HIGH);
-        digitalWrite(YLEFTPIN, LOW);
         position[1] -= 0.1f;
+        moved = true;
     }
 
     if (compareFloats(position[2], targetPosition[2]))
     {
-        digitalWrite(ZRIGHTPIN, LOW);
-        digitalWrite(ZLEFTPIN, LOW);
+
     }
     else if (position[2] < targetPosition[2])
     {
-        digitalWrite(ZLEFTPIN, HIGH);
-        digitalWrite(ZRIGHTPIN, LOW);
         position[2] += 0.1f;
+        moved = true;
     }
     else if (position[2] > targetPosition[2])
     {
-        digitalWrite(ZRIGHTPIN, HIGH);
-        digitalWrite(ZLEFTPIN, LOW);
         position[2] -= 0.1f;
+        moved = true;
     }
 
+    if (!moved)
+    {
+        isMovingToTarget = false;
+    }
 }

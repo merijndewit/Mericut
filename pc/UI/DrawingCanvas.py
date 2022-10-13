@@ -24,11 +24,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.drawnShapes = []
         self.drawnUI = []
 
-
         CanvasTools.DrawGrid(self, 59)
-
-        self.colisionThread = threading.Thread(target=self.CheckColision, daemon=True)
-        self.colisionThread.start()
 
     def SetTool(self, name):
         if name == "Pen":
@@ -42,23 +38,21 @@ class DrawingCanvas(tkinter.Canvas):
         x, y = event.x, event.y
         self.mousePosition = [x, y]
         self.tool.Hover(x, y)
+        self.CheckColision()
 
     def Redraw(self):
         self.delete("all")
         CanvasTools.DrawGrid(self, 59)
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Draw()
-        
 
     def CheckColision(self):
-        while True:
-            time.sleep(0.020)
-            for i in range(len(self.drawnUI)):
-                self.delete(self.drawnUI[i])
-            self.drawnUI = []
-            for i in range(len(self.drawnShapes)):
-                for node in range(len(self.drawnShapes[i].nodes)):
-                    distance = abs(math.dist(self.drawnShapes[i].nodes[node].position, self.mousePosition))
-                    if distance < 8:
-                        newCircle = CanvasTools.DrawCircle(self, self.drawnShapes[i].nodes[node].position[0], self.drawnShapes[i].nodes[node].position[1], 8)
-                        self.drawnUI.append(newCircle)
+        for i in range(len(self.drawnUI)):
+            self.delete(self.drawnUI[i])
+        self.drawnUI = []
+        for i in range(len(self.drawnShapes)):
+            for node in range(len(self.drawnShapes[i].nodes)):
+                distance = abs(math.dist(self.drawnShapes[i].nodes[node].position, self.mousePosition))
+                if distance < 8:
+                    newCircle = CanvasTools.DrawCircle(self, self.drawnShapes[i].nodes[node].position[0], self.drawnShapes[i].nodes[node].position[1], 8)
+                    self.drawnUI.append(newCircle)

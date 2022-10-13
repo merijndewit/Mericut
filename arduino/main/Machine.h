@@ -7,14 +7,13 @@
 
 class Machine
 {
-
     public:
         Machine();
         void Update();
         void ExecuteMeriCode(char* command);
         void test();
         MeriCode meriCode;
-        Movement movement;  
+        // Movement movement;  
     protected:
 
 };

@@ -11,15 +11,6 @@ Machine machine;
 
 void setup() 
 {
-    pinMode(XRIGHTPIN, OUTPUT);
-    pinMode(XLEFTPIN, OUTPUT);
-    pinMode(YRIGHTPIN, OUTPUT);
-    pinMode(YLEFTPIN, OUTPUT);
-    pinMode(ZRIGHTPIN, OUTPUT);
-    pinMode(ZLEFTPIN, OUTPUT);
-    pinMode(TRIGHTPIN, OUTPUT);
-    pinMode(TLEFTPIN, OUTPUT);
-
     Serial.begin(115200);
 }
 
