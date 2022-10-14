@@ -38,7 +38,7 @@ class DrawingCanvas(tkinter.Canvas):
         x, y = event.x, event.y
         self.mousePosition = [x, y]
         self.tool.Hover(x, y)
-        self.CheckColision()
+        self.ShowColision ()
 
     def Redraw(self):
         self.delete("all")
@@ -46,13 +46,28 @@ class DrawingCanvas(tkinter.Canvas):
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Draw()
 
-    def CheckColision(self):
+    def GetNearestNode(self, distance):
+        nearestNode = None
+        for i in range(len(self.drawnShapes)):
+            for node in range(len(self.drawnShapes[i].nodes)):
+                nodeDistance = abs(math.dist(self.drawnShapes[i].nodes[node].position, self.mousePosition))
+                if nodeDistance > distance:
+                    continue
+                if nearestNode == None:
+                    nearestNode = (i, node, nodeDistance)
+                    continue
+                if nearestNode[1] > nodeDistance:
+                    nearestNode = (i, node, nodeDistance)
+        if nearestNode == None:
+            return None
+        return self.drawnShapes[nearestNode[0]].nodes[nearestNode[node]]
+
+    def ShowColision(self):
         for i in range(len(self.drawnUI)):
             self.delete(self.drawnUI[i])
         self.drawnUI = []
-        for i in range(len(self.drawnShapes)):
-            for node in range(len(self.drawnShapes[i].nodes)):
-                distance = abs(math.dist(self.drawnShapes[i].nodes[node].position, self.mousePosition))
-                if distance < 8:
-                    newCircle = CanvasTools.DrawCircle(self, self.drawnShapes[i].nodes[node].position[0], self.drawnShapes[i].nodes[node].position[1], 8)
-                    self.drawnUI.append(newCircle)
+        collidingNode = self.GetNearestNode(8)
+        if collidingNode == None:
+            return
+        newCircle = CanvasTools.DrawCircle(self, collidingNode.position[0], collidingNode.position[1], 8)
+        self.drawnUI.append(newCircle)
