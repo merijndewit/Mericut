@@ -56,7 +56,7 @@ void checkSerial()
 void checkData() 
 {
     if (newData == true) {
-        machine.ExecuteMeriCode(receivedChars);
+        machine.AddMeriCodeToBuffer(receivedChars);
         newData = false;
     }
 }

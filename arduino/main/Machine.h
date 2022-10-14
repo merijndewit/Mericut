@@ -10,11 +10,11 @@ class Machine
     public:
         Machine();
         void Update();
-        void ExecuteMeriCode(char* command);
-        void test();
-        MeriCode meriCode;
+        void AddMeriCodeToBuffer(char* command);
         // Movement movement;  
-    protected:
+    private:
+        MeriCode meriCode;
+        bool stoppedMoving = false;
 
 };
 

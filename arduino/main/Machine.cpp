@@ -10,13 +10,20 @@ void Machine::Update()
 {
     if (meriCode.movement.IsMovingToTarget())
     {
+        stoppedMoving = false;
         meriCode.movement.Move();
+        return;
+    }
+    if (stoppedMoving == false)
+    {
+        meriCode.completedMericodeInBuffer();
+        stoppedMoving = true;
     }
 }
 
-void Machine::ExecuteMeriCode(char* command)
+void Machine::AddMeriCodeToBuffer(char* command)
 {
-    meriCode.executeMeriCode(command);
+    meriCode.addMeriCode(command);
 }
 
 

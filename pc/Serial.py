@@ -17,6 +17,8 @@ class Serial:
         self.selectedComPort = None
         self.connectedDevice = None
         self.parent = parent
+        self.fileIndex = 0
+        self.file = FileToMeriCode.GetMeriCodeFromTxt()
 
     def Connect(self):
         if self.selectedComPort == None:
@@ -35,14 +37,12 @@ class Serial:
         self.child_thread.start()
     
     def StartSendingMeriCodeList(self):
-        self.thread = threading.Thread(target=self.SendMeriCodeList, daemon=True)
-        self.thread.start()
+        self.WriteToSerial(self.file[0])
+        self.fileIndex = 1
 
     def SendMeriCodeList(self):
-        listToSend = FileToMeriCode.GetMeriCodeFromTxt()
-        for i in range(len(listToSend)):
-            self.WriteToSerial(listToSend[i])
-            time.sleep(3)
+        self.WriteToSerial(self.file[self.fileIndex])
+        self.fileIndex += 1
 
 
     def ListenToSerial(self):
