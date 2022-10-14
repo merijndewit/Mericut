@@ -26,6 +26,19 @@ class CircleUI():
     def Move(self, x, y):
         self.canvas.coords(self.circle, x - self.radius, y - self.radius, x + self.radius, y + self.radius)
 
-def DrawLine(canvas, x0, y0, x1, y1):
-    line = canvas.create_line(x0, y0, x1, y1, fill=Colors.GRIDCOLOR, width=1)
-    return line
+class LineUI():
+    def __init__(self, x, y, x1, y1, canvas):
+        self.x = x
+        self.y = y 
+        self.x1 = x1
+        self.y1 = y1 
+        self.canvas = canvas
+        self.canvasLine = None
+        self.DrawLine()
+
+    def DrawLine(self):
+        self.canvasLine = self.canvas.create_line(self.x, self.y, self.x1, self.y1, fill=Colors.GRIDCOLOR, width=1)
+    
+    def Move(self, x, y, x1, y1):
+        self.canvas.coords(self.canvasLine, x, y, x1, y1)
+

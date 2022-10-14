@@ -24,7 +24,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.mousePosition = [0, 0]
         self.drawnShapes = []
         self.lastCollidedNode = None
-        self.selectUIObject = None
+        self.selectUIObject = CanvasTools.CircleUI(-20, -20, 8, self)
 
         self.mousePressed = False
 
@@ -78,11 +78,6 @@ class DrawingCanvas(tkinter.Canvas):
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
             return
         if collidingNode == None:
-            if self.selectUIObject == None:
-                return
             self.selectUIObject.Move(-20, -20)
-            return
-        if self.selectUIObject == None:
-            self.selectUIObject = CanvasTools.CircleUI(collidingNode.position[0], collidingNode.position[1], 8, self)
             return
         self.selectUIObject.Move(collidingNode.position[0], collidingNode.position[1])

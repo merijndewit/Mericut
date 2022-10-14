@@ -20,6 +20,10 @@ class Node():
         self.shape = None
 
 class Pen(Tool):
+    def __init__(self, parentCanvas):
+        super().__init__(parentCanvas)
+        self.previewLine = None
+
     def Clicked(self, x, y, clickedNode):
         if clickedNode != None:
             self.nodes.append(clickedNode)
@@ -35,11 +39,11 @@ class Pen(Tool):
         self.clicks += 1
 
     def Hover(self, x, y):
-        for i in range(len(self.previewLines)):
-            self.parentCanvas.delete(self.previewLines[i])
         if self.clicks == 1:
-            previewLine = CanvasTools.DrawLine(self.parentCanvas, self.nodes[0].position[0], self.nodes[0].position[1], x, y)
-            self.previewLines.append(previewLine)
+            if self.previewLine == None:
+                self.previewLine = CanvasTools.LineUI(self.nodes[0].position[0], self.nodes[0].position[1], x, y, self.parentCanvas)
+                return
+            self.previewLine.Move(self.nodes[0].position[0], self.nodes[0].position[1], x, y)
 
 class Move(Tool):
     def Clicked(self, x, y, clickedNode):
