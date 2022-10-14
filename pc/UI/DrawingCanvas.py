@@ -18,11 +18,14 @@ class DrawingCanvas(tkinter.Canvas):
                         bg=Colors.CANVASBACKGROUND)
 
         self.bind("<Button-1>", self.Clicked)
+        self.bind('<ButtonRelease-1>',self.Released)
         self.bind('<Motion>', self.Motion)
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.drawnShapes = []
         self.drawnUI = []
+
+        self.mousePressed = False
 
         CanvasTools.DrawGrid(self, 59)
 
@@ -30,9 +33,16 @@ class DrawingCanvas(tkinter.Canvas):
         if name == "Pen":
             self.tool = DrawingTools.Pen(self)
             return
+        if name == "Move":
+            self.tool = DrawingTools.Move(self)
+            return
 
     def Clicked(self, event):
         self.tool.Clicked(event.x, event.y, self.GetNearestNode(8))
+        self.mousePressed = True
+
+    def Released(self, event):
+        self.mousePressed = False
 
     def Motion(self, event):
         x, y = event.x, event.y
