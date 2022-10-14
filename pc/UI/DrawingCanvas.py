@@ -23,7 +23,8 @@ class DrawingCanvas(tkinter.Canvas):
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.drawnShapes = []
-        self.drawnUI = []
+        self.lastCollidedNode = None
+        self.selectUIObject = None
 
         self.mousePressed = False
 
@@ -73,11 +74,15 @@ class DrawingCanvas(tkinter.Canvas):
         return self.drawnShapes[nearestNode[0]].nodes[nearestNode[node]]
 
     def ShowColision(self):
-        for i in range(len(self.drawnUI)):
-            self.delete(self.drawnUI[i])
-        self.drawnUI = []
         collidingNode = self.GetNearestNode(8)
-        if collidingNode == None:
+        if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
             return
-        newCircle = CanvasTools.DrawCircle(self, collidingNode.position[0], collidingNode.position[1], 8)
-        self.drawnUI.append(newCircle)
+        if collidingNode == None:
+            if self.selectUIObject == None:
+                return
+            self.selectUIObject.Move(-20, -20)
+            return
+        if self.selectUIObject == None:
+            self.selectUIObject = CanvasTools.CircleUI(collidingNode.position[0], collidingNode.position[1], 8, self)
+            return
+        self.selectUIObject.Move(collidingNode.position[0], collidingNode.position[1])
