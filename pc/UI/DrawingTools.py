@@ -18,8 +18,11 @@ class Node():
         self.connectedNodes = []
 
 class Pen(Tool):
-    def Clicked(self, x, y):
-        self.nodes.append(Node(x, y))
+    def Clicked(self, x, y, clickedNode):
+        if clickedNode != None:
+            self.nodes.append(clickedNode)
+        else:
+            self.nodes.append(Node(x, y))
         
         if self.clicks == 1:
             DrawingShapes.Line(self.nodes, self.parentCanvas)

@@ -32,7 +32,7 @@ class DrawingCanvas(tkinter.Canvas):
             return
 
     def Clicked(self, event):
-        self.tool.Clicked(event.x, event.y)
+        self.tool.Clicked(event.x, event.y, self.GetNearestNode(8))
 
     def Motion(self, event):
         x, y = event.x, event.y
