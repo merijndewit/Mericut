@@ -5,6 +5,11 @@ class Shapes():
         self.nodes = nodes
         self.canvas = canvas
 
+    def ReplaceNode(self, nodeToReplace, newNode):
+        for i in range(len(self.nodes)):
+            if (self.nodes[i] == nodeToReplace):
+                self.nodes[i] = newNode
+
 class Line(Shapes):
     def __init__(self, nodes, canvas, draw = True):
         self.nodes = nodes

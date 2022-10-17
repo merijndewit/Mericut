@@ -77,7 +77,8 @@ class DrawingCanvas(tkinter.Canvas):
         collidingNode = self.GetNearestNode(8)
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
             return
-        if collidingNode == None:
+        if collidingNode == None: # mouse is not on a node so hide the colision circle
             self.selectUIObject.Move(-20, -20)
             return
+        self.selectUIObject.SetColor(collidingNode.GetColisionColor())
         self.selectUIObject.Move(collidingNode.position[0], collidingNode.position[1])

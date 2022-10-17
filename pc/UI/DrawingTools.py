@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
 from mimetypes import init
+from platform import node
 
 
 import UI.DrawingShapes as DrawingShapes
@@ -21,13 +22,18 @@ class Pen(Tool):
         self.previewLine = None
 
     def Clicked(self, x, y, clickedNode):
-        if clickedNode != None:
-            self.nodes.append(clickedNode)
-        else:
+        if clickedNode == None: #not clicked on any nodes
             self.nodes.append(Nodes.Node(x, y))
-        
+        elif (isinstance(clickedNode, Nodes.Node)): #clicked on a node
+            self.nodes.append(Nodes.MergedNode(clickedNode.position, [Nodes.Node(x, y), clickedNode]))
+        else: #clicked on a merged node
+            clickedNode.AddNode(Nodes.Node(x, y))
+            self.nodes.append(clickedNode)
         if self.clicks == 1:
-            self.parentCanvas.drawnShapes.append(DrawingShapes.Line(self.nodes, self.parentCanvas)) 
+            line = DrawingShapes.Line(self.nodes, self.parentCanvas)
+            self.parentCanvas.drawnShapes.append(line) 
+            for i in range(len(self.nodes)):
+                self.nodes[i].AddShape(line)
             self.clicks = 0
             self.nodes = []
             self.parentCanvas.delete(self.previewLine.canvasLine)
@@ -51,7 +57,7 @@ class Move(Tool):
     def Hover(self, x, y):
         if self.parentCanvas.mousePressed and self.clickedNode != None:
             self.clickedNode.position = [x, y]
-            self.clickedNode.shape.Update()
+            self.clickedNode.UpdateShape()
             return
         self.clickedNode = None
 

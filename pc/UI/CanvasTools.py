@@ -21,10 +21,13 @@ class CircleUI():
         self.DrawCircle()
 
     def DrawCircle(self):
-        self.circle = self.canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, outline=Colors.COLISIONCIRCLECOLOR, width=2)
+        self.circle = self.canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, outline=Colors.COLISIONNODE, width=2)
     
     def Move(self, x, y):
         self.canvas.coords(self.circle, x - self.radius, y - self.radius, x + self.radius, y + self.radius)
+
+    def SetColor(self, color):
+        self.canvas.itemconfig(self.circle, outline=color)
 
 class LineUI():
     def __init__(self, x, y, x1, y1, canvas):
