@@ -5,6 +5,8 @@ from mimetypes import init
 import UI.DrawingShapes as DrawingShapes
 import UI.CanvasTools as CanvasTools
 
+import UI.Nodes as Nodes
+
 class Tool():
     def __init__(self, parentCanvas):
         self.clicks = 0
@@ -12,12 +14,6 @@ class Tool():
         self.parentCanvas = parentCanvas
         self.previewLines = []
         self.clickedNode = None
-
-class Node():
-    def __init__(self, x, y):
-        self.position = [x, y]
-        self.connectedNodes = []
-        self.shape = None
 
 class Pen(Tool):
     def __init__(self, parentCanvas):
@@ -28,7 +24,7 @@ class Pen(Tool):
         if clickedNode != None:
             self.nodes.append(clickedNode)
         else:
-            self.nodes.append(Node(x, y))
+            self.nodes.append(Nodes.Node(x, y))
         
         if self.clicks == 1:
             self.parentCanvas.drawnShapes.append(DrawingShapes.Line(self.nodes, self.parentCanvas)) 
