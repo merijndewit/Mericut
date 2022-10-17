@@ -8,8 +8,8 @@ bool compareFloats(float A, float B, float tolerance = 0.05f)
 
 Movement::Movement()
 {
-    xStepper.setMaxSpeed(40000);
-    xStepper.setAcceleration(9000);
+    xStepper.setMaxSpeed(400000);
+    xStepper.setAcceleration(20000);
 }
 
 void Movement::SetTargetPosition(float x, float y, float z)

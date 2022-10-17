@@ -34,6 +34,8 @@ class Pen(Tool):
             self.parentCanvas.drawnShapes.append(DrawingShapes.Line(self.nodes, self.parentCanvas)) 
             self.clicks = 0
             self.nodes = []
+            self.parentCanvas.delete(self.previewLine.canvasLine)
+            self.previewLine = None
             return
 
         self.clicks += 1
@@ -44,6 +46,7 @@ class Pen(Tool):
                 self.previewLine = CanvasTools.LineUI(self.nodes[0].position[0], self.nodes[0].position[1], x, y, self.parentCanvas)
                 return
             self.previewLine.Move(self.nodes[0].position[0], self.nodes[0].position[1], x, y)
+            return
 
 class Move(Tool):
     def Clicked(self, x, y, clickedNode):
