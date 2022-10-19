@@ -24,6 +24,7 @@ class Main(customtkinter.CTk):
         self.MeriCodeFrame = Frames.MeriCodeTestFrame(self, self)
         self.canvas = Frames.Canvas(self, self)
         self.toolSelect = Frames.ToolSelect(self, self)
+        self.meriCodeFrame = Frames.MeriCodeFrame(self, self)
 
         FileToMeriCode.GetMeriCodeFromTxt()
 

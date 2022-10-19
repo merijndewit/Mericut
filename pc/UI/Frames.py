@@ -76,6 +76,22 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
         def SendEntryString():
             self.parent.serial.WriteToSerial(self.entry.get())
 
+class MeriCodeFrame(customtkinter.CTkFrame):
+    def __init__(self, parent, frameParent, *args, **kwargs):
+        customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
+        self.parent = parent
+        self.configure( width=300,
+                        height=120,
+                        corner_radius=4,
+                        fg_color=Colors.BGFRAME)
+
+        self.grid(row=3, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.S)
+        
+        self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.CanvasToMeriCode())
+        self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
+
+
+
 class ToolSelect(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):
         customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)

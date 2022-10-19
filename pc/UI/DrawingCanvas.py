@@ -82,3 +82,14 @@ class DrawingCanvas(tkinter.Canvas):
             return
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
         self.selectUIObject.Move(collidingNode.position[0], collidingNode.position[1])
+
+    def CanvasToMeriCode(self):
+        with open('Test/MeriCodeTestFile.txt', "w") as file:
+            file.write("<S1>" + "\n") #file start command
+            for i in range(len(self.drawnShapes)):
+                #for now there are only lines
+                file.write("<M0 X" + str(self.drawnShapes[i].nodes[0].position[0]) +">" + "\n") #move the tool to the start of the line
+                file.write("<M0 X" + str(self.drawnShapes[i].nodes[1].position[0]) +">" + "\n") #move the tool to the start of the line
+            file.write("<M0 X0>" + "\n") #move the tool in the material
+            file.write("<S0>" + "\n") #file stop command
+            file.close()
