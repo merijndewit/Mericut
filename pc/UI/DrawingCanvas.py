@@ -33,6 +33,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.canvasScale = 1
 
         self.mousePressed = False
+        self.snap = True
 
         self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
 
@@ -55,16 +56,27 @@ class DrawingCanvas(tkinter.Canvas):
         if name == "Move":
             self.tool = DrawingTools.Move(self)
             return
+    
+    def Snap(self, x, y):
+        if self.snap:
+            x += int(5 * self.canvasScale) 
+            y += int(5 * self.canvasScale) 
+            x = int(x / (self.canvasScale * 10))
+            x = int(x * (self.canvasScale * 10))
+            y = int(y / (self.canvasScale * 10))
+            y = int(y * (self.canvasScale * 10))
+        return x, y
 
     def Clicked(self, event):
-        self.tool.Clicked(event.x, event.y, self.GetNearestNode(8))
+        x, y = self.Snap(event.x, event.y)
+        self.tool.Clicked(x, y, self.GetNearestNode(8))
         self.mousePressed = True
 
     def Released(self, event):
         self.mousePressed = False
 
-    def Motion(self, event):
-        x, y = event.x, event.y
+    def Motion(self, event):            
+        x, y = self.Snap(event.x, event.y)
         self.mousePosition = [x, y]
         self.tool.Hover(x, y)
         self.ShowColision ()
