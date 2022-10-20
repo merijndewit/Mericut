@@ -4,7 +4,7 @@ from platform import node
 
 
 import UI.DrawingShapes as DrawingShapes
-import UI.CanvasTools as CanvasTools
+import UI.CanvasUI as CanvasUI
 
 import UI.Nodes as Nodes
 
@@ -45,7 +45,7 @@ class Pen(Tool):
     def Hover(self, x, y):
         if self.clicks == 1:
             if self.previewLine == None:
-                self.previewLine = CanvasTools.LineUI(self.nodes[0].position[0], self.nodes[0].position[1], x, y, self.parentCanvas)
+                self.previewLine = CanvasUI.LineUI(self.nodes[0].position[0], self.nodes[0].position[1], x, y, self.parentCanvas)
                 return
             self.previewLine.Move(self.nodes[0].position[0], self.nodes[0].position[1], x, y)
             return

@@ -16,6 +16,7 @@ class ConnectFrame(customtkinter.CTkFrame):
                         fg_color=Colors.BGFRAME)
 
         self.grid(row=0, column=0, padx=(0, 5), pady=(5, 0), sticky=tkinter.NE, rowspan=2)
+        self.grid_propagate(0)
 
         def ComPortSelected(choice):
             self.parent.serial.selectedComPort = choice
@@ -63,6 +64,7 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
                         fg_color=Colors.BGFRAME)
 
         self.grid(row=2, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
+        self.grid_propagate(0)
 
         self.entry = customtkinter.CTkEntry(master=self, placeholder_text="MeriCode", width=120, height=25, border_width=2, corner_radius=10, text_color=Colors.BUTTONTEXT)
         self.entry.grid(row=0, column=0, sticky=tkinter.NW, columnspan=2)
@@ -85,8 +87,9 @@ class MeriCodeFrame(customtkinter.CTkFrame):
                         corner_radius=4,
                         fg_color=Colors.BGFRAME)
 
-        self.grid(row=3, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.S)
-        
+        self.grid(row=3, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.N)
+        self.grid_propagate(0)
+
         self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.CanvasToMeriCode())
         self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
 
@@ -97,11 +100,13 @@ class ToolSelect(customtkinter.CTkFrame):
         customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
         self.parent = parent
         self.configure( width=480,
-                        height=40,
+                        height=28,
                         corner_radius=4,
                         fg_color=Colors.BGFRAME)
 
         self.grid(row=0, column=1, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
+        self.grid_propagate(0)
+
         self.lastDisabledButton = None
 
         self.penButton = customtkinter.CTkButton(master=self, text="Pen", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
@@ -110,7 +115,10 @@ class ToolSelect(customtkinter.CTkFrame):
 
         self.moveButton = customtkinter.CTkButton(master=self, text="Move", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.moveButton.configure(command= lambda: self.SelectTool("Move", self.moveButton))
-        self.moveButton.grid(row=0, column=1, sticky=tkinter.E)
+        self.moveButton.grid(row=0, column=1, sticky=tkinter.W)
+
+        self.loadSVGButton = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.LoadSVG())
+        self.loadSVGButton.grid(row=0, column=2, sticky='e')
 
         self.SelectTool("Pen", self.penButton)
 

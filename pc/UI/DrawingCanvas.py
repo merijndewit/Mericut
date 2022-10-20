@@ -3,9 +3,10 @@ import tkinter
 import threading
 import time
 import math
+import svgelements as svg
 
 from UI.Colors import Colors
-import UI.CanvasTools as CanvasTools
+import UI.CanvasUI as CanvasUI
 import UI.DrawingTools as DrawingTools
 
 class DrawingCanvas(tkinter.Canvas):
@@ -18,17 +19,30 @@ class DrawingCanvas(tkinter.Canvas):
                         bg=Colors.CANVASBACKGROUND)
 
         self.bind("<Button-1>", self.Clicked)
+        self.bind('<MouseWheel>', self.Scroll)
         self.bind('<ButtonRelease-1>',self.Released)
         self.bind('<Motion>', self.Motion)
+
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.drawnShapes = []
         self.lastCollidedNode = None
-        self.selectUIObject = CanvasTools.CircleUI(-20, -20, 8, self)
+        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
+
+        self.pixelsPerMM = 20
 
         self.mousePressed = False
 
-        CanvasTools.DrawGrid(self, 59)
+        self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
+
+    def Scroll(self, event):
+        self.pixelsPerMM += (-1*(event.delta/120)) * 10
+        self.RedrawGrid()
+
+    def RedrawGrid(self):
+        for i in range(len(self.gridLines)):
+            self.delete(self.gridLines[i])
+        self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
 
     def SetTool(self, name):
         if name == "Pen":
@@ -53,7 +67,7 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Redraw(self):
         self.delete("all")
-        CanvasTools.DrawGrid(self, 59)
+        CanvasUI.DrawGrid(self, 59)
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Draw()
 
@@ -82,6 +96,27 @@ class DrawingCanvas(tkinter.Canvas):
             return
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
         self.selectUIObject.Move(collidingNode.position[0], collidingNode.position[1])
+
+    def LoadSVG(self):
+        for element in svg.elements():
+                    try:
+                        if element.values['visibility'] == 'hidden':
+                            continue
+                    except (KeyError, AttributeError):
+                        pass
+                    if isinstance(element, svg.SVGText):
+                        svg.elements.append(element)
+                    elif isinstance(element, svg.Path):
+                        if len(element) != 0:
+                            svg.elements.append(element)
+                    elif isinstance(element, svg.Shape):
+                        e = svg.Path(element)
+                        e.reify()  # In some cases the shape could not have reified, the path must.
+                        if len(e) != 0:
+                            svg.elements.append(e)
+                    elif isinstance(element, svg.Line):
+                        svg.elements.append(element)
+ 
 
     def CanvasToMeriCode(self):
         with open('Test/MeriCodeTestFile.txt', "w") as file:
