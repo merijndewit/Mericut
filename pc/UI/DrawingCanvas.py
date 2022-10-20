@@ -29,20 +29,23 @@ class DrawingCanvas(tkinter.Canvas):
         self.lastCollidedNode = None
         self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
 
-        self.pixelsPerMM = 20
+        self.pixelsPerMM = 10
+        self.canvasScale = 1
 
         self.mousePressed = False
 
         self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
 
     def Scroll(self, event):
-        self.pixelsPerMM += (-1*(event.delta/120)) * 10
+        self.pixelsPerMM += (-1*(event.delta/120)) * 2
+        self.canvasScale = self.pixelsPerMM / 10
+        self.RedrawShapes()
         self.RedrawGrid()
 
     def RedrawGrid(self):
         for i in range(len(self.gridLines)):
             self.delete(self.gridLines[i])
-        self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
+        self.gridLines = CanvasUI.DrawGrid(self, int(10 * self.canvasScale))
 
     def SetTool(self, name):
         if name == "Pen":
@@ -65,9 +68,8 @@ class DrawingCanvas(tkinter.Canvas):
         self.tool.Hover(x, y)
         self.ShowColision ()
 
-    def Redraw(self):
+    def RedrawShapes(self):
         self.delete("all")
-        CanvasUI.DrawGrid(self, 59)
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Draw()
 

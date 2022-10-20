@@ -22,8 +22,10 @@ class Pen(Tool):
         self.previewLine = None
 
     def Clicked(self, x, y, clickedNode):
+        nodePositionX = x / self.parentCanvas.canvasScale
+        nodePositionY = y / self.parentCanvas.canvasScale
         if clickedNode == None: #not clicked on any nodes
-            self.nodes.append(Nodes.Node(x, y))
+            self.nodes.append(Nodes.Node(nodePositionX, nodePositionY))
         elif (isinstance(clickedNode, Nodes.Node)): #clicked on a node
             self.nodes.append(Nodes.MergedNode(clickedNode.position, [Nodes.Node(x, y), clickedNode]))
         else: #clicked on a merged node
@@ -45,9 +47,9 @@ class Pen(Tool):
     def Hover(self, x, y):
         if self.clicks == 1:
             if self.previewLine == None:
-                self.previewLine = CanvasUI.LineUI(self.nodes[0].position[0], self.nodes[0].position[1], x, y, self.parentCanvas)
+                self.previewLine = CanvasUI.LineUI(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y, self.parentCanvas)
                 return
-            self.previewLine.Move(self.nodes[0].position[0], self.nodes[0].position[1], x, y)
+            self.previewLine.Move(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y)
             return
 
 class Move(Tool):
