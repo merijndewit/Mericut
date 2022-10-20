@@ -57,8 +57,10 @@ class Move(Tool):
         self.clickedNode = clickedNode
 
     def Hover(self, x, y):
+        nodePositionX = x / self.parentCanvas.canvasScale
+        nodePositionY = y / self.parentCanvas.canvasScale
         if self.parentCanvas.mousePressed and self.clickedNode != None:
-            self.clickedNode.position = [x, y]
+            self.clickedNode.position = [nodePositionX, nodePositionY]
             self.clickedNode.UpdateShape()
             return
         self.clickedNode = None

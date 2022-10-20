@@ -26,4 +26,4 @@ class Line(Shapes):
         self.canvasLine = self.canvas.create_line(self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale, fill=Colors.GRIDCOLOR, width=3)
 
     def Update(self):
-        self.canvas.coords(self.canvasLine, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1])
+        self.canvas.coords(self.canvasLine, self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale)
