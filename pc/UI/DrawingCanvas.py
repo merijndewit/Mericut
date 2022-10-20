@@ -45,6 +45,7 @@ class DrawingCanvas(tkinter.Canvas):
     def RedrawGrid(self):
         for i in range(len(self.gridLines)):
             self.delete(self.gridLines[i])
+        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
         self.gridLines = CanvasUI.DrawGrid(self, int(10 * self.canvasScale))
 
     def SetTool(self, name):
@@ -77,7 +78,7 @@ class DrawingCanvas(tkinter.Canvas):
         nearestNode = None
         for i in range(len(self.drawnShapes)):
             for node in range(len(self.drawnShapes[i].nodes)):
-                nodeDistance = abs(math.dist(self.drawnShapes[i].nodes[node].position, self.mousePosition))
+                nodeDistance = abs(math.dist([self.drawnShapes[i].nodes[node].position[0] * self.canvasScale, self.drawnShapes[i].nodes[node].position[1] * self.canvasScale], self.mousePosition))
                 if nodeDistance > distance:
                     continue
                 if nearestNode == None:
@@ -97,7 +98,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.selectUIObject.Move(-20, -20)
             return
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
-        self.selectUIObject.Move(collidingNode.position[0], collidingNode.position[1])
+        self.selectUIObject.Move(int(collidingNode.position[0] * self.canvasScale), int(collidingNode.position[1] * self.canvasScale))
 
     def LoadSVG(self):
         for element in svg.elements():
