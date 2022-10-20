@@ -3,12 +3,12 @@ from tkinter import Y
 from turtle import position
 from UI.Colors import Colors
 
-def DrawGrid(canvas, cellSize):
+def DrawGrid(canvas, cellSize, color=Colors.GRIDCOLOR):
     canvasLines = []
     for i in range(int(canvas.winfo_reqwidth() / cellSize) + 1):
-        canvasLines.append(canvas.create_line((i * cellSize), 0, (i * cellSize), canvas.winfo_reqheight(), fill=Colors.GRIDCOLOR, width=1))
+        canvasLines.append(canvas.create_line((i * cellSize), 0, (i * cellSize), canvas.winfo_reqheight(), fill=color, width=1))
     for i in range(int(canvas.winfo_reqheight() / cellSize) + 1):
-        canvasLines.append(canvas.create_line(0, (i * cellSize), canvas.winfo_reqwidth(), (i * cellSize), fill=Colors.GRIDCOLOR, width=1))
+        canvasLines.append(canvas.create_line(0, (i * cellSize), canvas.winfo_reqwidth(), (i * cellSize), fill=color, width=1))
     return canvasLines
 
 class CircleUI():

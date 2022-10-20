@@ -48,14 +48,16 @@ class DrawingCanvas(tkinter.Canvas):
         self.RedrawShapes()
         self.RedrawGrid()
 
-
-
     def RedrawGrid(self):
         for i in range(len(self.gridLines)):
             self.delete(self.gridLines[i])
+        if self.canvasScale > 2:
+            self.gridLines.extend(CanvasUI.DrawGrid(self, self.pixelsPerMM / 5, "#dddddd"))
         self.gridLines = CanvasUI.DrawGrid(self, int(10 * self.canvasScale))
         self.canvasGridScale = CanvasUI.CanvasGridScale(self, self.pixelsPerMM)
         self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
+
+
 
     def SetTool(self, name):
         if name == "Pen":
