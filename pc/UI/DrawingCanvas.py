@@ -22,12 +22,12 @@ class DrawingCanvas(tkinter.Canvas):
         self.bind('<MouseWheel>', self.Scroll)
         self.bind('<ButtonRelease-1>',self.Released)
         self.bind('<Motion>', self.Motion)
+        
 
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.drawnShapes = []
         self.lastCollidedNode = None
-        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
 
         self.pixelsPerMM = 10
         self.canvasScale = 1
@@ -36,18 +36,26 @@ class DrawingCanvas(tkinter.Canvas):
         self.snap = True
 
         self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
+        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
+        self.canvasGridScale = CanvasUI.CanvasGridScale(self, self.pixelsPerMM)
 
     def Scroll(self, event):
         self.pixelsPerMM += (-1*(event.delta/120)) * 2
         self.canvasScale = self.pixelsPerMM / 10
+        if self.pixelsPerMM <= 0:
+            self.pixelsPerMM = 2
+            self.canvasScale = self.pixelsPerMM / 10
         self.RedrawShapes()
         self.RedrawGrid()
+
+
 
     def RedrawGrid(self):
         for i in range(len(self.gridLines)):
             self.delete(self.gridLines[i])
-        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
         self.gridLines = CanvasUI.DrawGrid(self, int(10 * self.canvasScale))
+        self.canvasGridScale = CanvasUI.CanvasGridScale(self, self.pixelsPerMM)
+        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
 
     def SetTool(self, name):
         if name == "Pen":

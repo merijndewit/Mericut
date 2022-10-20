@@ -1,5 +1,6 @@
 from re import X
 from tkinter import Y
+from turtle import position
 from UI.Colors import Colors
 
 def DrawGrid(canvas, cellSize):
@@ -43,4 +44,15 @@ class LineUI():
     
     def Move(self, x, y, x1, y1):
         self.canvas.coords(self.canvasLine, x, y, x1, y1)
+
+class CanvasGridScale():
+    def __init__(self, canvas, pixelsPerMM):
+        self.canvas = canvas
+        self.pixelsPerMM = pixelsPerMM
+        self.Update()
+
+    def Update(self):
+        self.position = [self.canvas.winfo_reqwidth() - 40, self.canvas.winfo_reqheight() - 40]
+        self.text = self.canvas.create_text(self.position[0], self.position[1], fill="#000000", text=str(self.pixelsPerMM)+"mm")
+
 
