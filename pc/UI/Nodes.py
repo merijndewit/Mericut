@@ -1,4 +1,3 @@
-from os import stat
 from UI.Colors import Colors
 
 
@@ -14,7 +13,7 @@ class Node():
     def GetShape(self):
         return self.shape
 
-    def AddShape(self, shape):
+    def SetShape(self, shape):
         self.shape = shape
     @staticmethod
     def GetColisionColor():
@@ -40,7 +39,7 @@ class MergedNode():
                 continue
             self.shapes[i].Update()
 
-    def AddShape(self, shape):
+    def SetShape(self, shape):
         self.shapes.append(shape)
     @staticmethod
     def GetColisionColor():

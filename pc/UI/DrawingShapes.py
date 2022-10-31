@@ -17,7 +17,7 @@ class Line(Shapes):
         self.canvasLine = None
 
         for i in range(len(self.nodes)):
-            self.nodes[i].shape = self
+            self.nodes[i].SetShape(self)
 
         if draw:
             self.Draw()

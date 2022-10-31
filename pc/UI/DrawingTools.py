@@ -1,8 +1,3 @@
-from asyncio.windows_events import NULL
-from mimetypes import init
-from platform import node
-
-
 import UI.DrawingShapes as DrawingShapes
 import UI.CanvasUI as CanvasUI
 
@@ -33,9 +28,7 @@ class Pen(Tool):
             self.nodes.append(clickedNode)
         if self.clicks == 1:
             line = DrawingShapes.Line(self.nodes, self.parentCanvas)
-            self.parentCanvas.drawnShapes.append(line) 
-            for i in range(len(self.nodes)):
-                self.nodes[i].AddShape(line)
+            self.parentCanvas.drawnShapes.append(line)
             self.clicks = 0
             self.nodes = []
             self.parentCanvas.delete(self.previewLine.canvasLine)

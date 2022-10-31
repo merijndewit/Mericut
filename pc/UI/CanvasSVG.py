@@ -19,8 +19,4 @@ def LoadSVG(canvas):
                 node1 = Nodes.Node(object.end.real, object.end.imag)
 
                 line = DrawingShapes.Line([node0, node1], canvas)
-                canvas.drawnShapes.append(line) 
-                node0.AddShape(line)
-                node1.AddShape(line)
-
-                
+                canvas.drawnShapes.append(line)
