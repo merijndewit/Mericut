@@ -72,7 +72,7 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
         self.submitButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: SendEntryString())
         self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
 
-        self.sendTestFile = customtkinter.CTkButton(master=self, text="Send File",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=100, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.StartSendingMeriCodeList())
+        self.sendTestFile = customtkinter.CTkButton(master=self, text="Send File",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=100, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.SendMeriCodeList())
         self.sendTestFile.grid(row=1, column=0, sticky=tkinter.NW, columnspan=1)
 
         def SendEntryString():
@@ -90,8 +90,13 @@ class MeriCodeFrame(customtkinter.CTkFrame):
         self.grid(row=3, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.N)
         self.grid_propagate(0)
 
-        self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.CanvasToMeriCode())
+        self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.GenerateMeriCode())
         self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
+
+    def GenerateMeriCode(self):
+        self.parent.canvas.canvas.CanvasToMeriCode()
+        self.parent.serial.LoadMeriCodeFile()
+
 
 
 

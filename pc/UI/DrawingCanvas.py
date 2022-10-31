@@ -130,6 +130,7 @@ class DrawingCanvas(tkinter.Canvas):
                 file.write("<M0 Z" + str(20) + ">" + "\n")
             
             file.write("<M0 X0 Y0>" + "\n") #move the tool in the material
+            file.write("<M0 Z0>" + "\n") #move the tool in the material
             file.write("<S0>" + "\n") #file stop command
             file.close()
 
