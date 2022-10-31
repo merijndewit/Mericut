@@ -36,14 +36,13 @@ class Serial:
         self.child_thread = threading.Thread(target=self.ListenToSerial, daemon=True)
         self.child_thread.start()
     
-    def StartSendingMeriCodeList(self):
-        self.WriteToSerial(self.file[0])
-        self.fileIndex = 1
+    def LoadMeriCodeFile(self):
+        self.file = FileToMeriCode.GetMeriCodeFromTxt()
+        self.fileIndex = 0
 
     def SendMeriCodeList(self):
         self.WriteToSerial(self.file[self.fileIndex])
         self.fileIndex += 1
-
 
     def ListenToSerial(self):
         while True:
