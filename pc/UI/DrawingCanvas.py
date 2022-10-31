@@ -1,13 +1,10 @@
-from ast import Delete
 import tkinter
-import threading
-import time
 import math
-import svgelements as svg
 
 from UI.Colors import Colors
 import UI.CanvasUI as CanvasUI
 import UI.DrawingTools as DrawingTools
+import UI.CanvasSVG as CanvasSVG
 
 class DrawingCanvas(tkinter.Canvas):
     def __init__(self, parent, *args, **kwargs):
@@ -122,34 +119,16 @@ class DrawingCanvas(tkinter.Canvas):
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
         self.selectUIObject.Move(int(collidingNode.position[0] * self.canvasScale), int(collidingNode.position[1] * self.canvasScale))
 
-    def LoadSVG(self):
-        for element in svg.elements():
-                    try:
-                        if element.values['visibility'] == 'hidden':
-                            continue
-                    except (KeyError, AttributeError):
-                        pass
-                    if isinstance(element, svg.SVGText):
-                        svg.elements.append(element)
-                    elif isinstance(element, svg.Path):
-                        if len(element) != 0:
-                            svg.elements.append(element)
-                    elif isinstance(element, svg.Shape):
-                        e = svg.Path(element)
-                        e.reify()  # In some cases the shape could not have reified, the path must.
-                        if len(e) != 0:
-                            svg.elements.append(e)
-                    elif isinstance(element, svg.Line):
-                        svg.elements.append(element)
- 
-
     def CanvasToMeriCode(self):
         with open('Test/MeriCodeTestFile.txt', "w") as file:
             file.write("<S1>" + "\n") #file start command
             for i in range(len(self.drawnShapes)):
                 #for now there are only lines
-                file.write("<M0 X" + str(self.drawnShapes[i].nodes[0].position[0]) +">" + "\n") #move the tool to the start of the line
-                file.write("<M0 X" + str(self.drawnShapes[i].nodes[1].position[0]) +">" + "\n") #move the tool to the start of the line
-            file.write("<M0 X0>" + "\n") #move the tool in the material
+                file.write("<M0 X" + str(self.drawnShapes[i].nodes[0].position[0]) + " Y" + str(self.drawnShapes[i].nodes[0].position[1]) + ">" + "\n") #move the tool to the start of the line
+                file.write("<M0 X" + str(self.drawnShapes[i].nodes[1].position[0]) + " Y" + str(self.drawnShapes[i].nodes[1].position[1]) + ">" + "\n") #move the tool to the start of the line
+            file.write("<M0 X0 Y0>" + "\n") #move the tool in the material
             file.write("<S0>" + "\n") #file stop command
             file.close()
+
+    def LoadSVG(self):
+        CanvasSVG.LoadSVG(self)
