@@ -5,6 +5,7 @@
 #include "Config.h"
 
 #include <AccelStepper.h>
+#include <MultiStepper.h>
 
 class Movement
 {
@@ -18,7 +19,15 @@ class Movement
         float position[3] = {0, 0, 0};
         float targetPosition[3] = {0, 0, 0};
         bool isMovingToTarget = false;
+        bool xMoving = false;
+        bool yMoving = false;
+        bool zMoving = false;
+
         AccelStepper xStepper = AccelStepper(1, XDRIVERSTEPPIN, XDRIVERDIRECTIONPIN);
+        AccelStepper yStepper = AccelStepper(1, YDRIVERSTEPPIN, YDRIVERDIRECTIONPIN);
+        AccelStepper yyStepper = AccelStepper(1, YYDRIVERSTEPPIN, YYDRIVERDIRECTIONPIN);
+        AccelStepper zStepper = AccelStepper(1, ZDRIVERSTEPPIN, ZDRIVERDIRECTIONPIN);
+        MultiStepper steppers;
 };
 
 #endif

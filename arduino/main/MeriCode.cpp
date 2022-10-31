@@ -15,7 +15,7 @@ void MeriCode::receivedInvalidCode()
 void MeriCode::startListeningToFile()
 {
     listeningToFile = true;
-        Serial.println("<C1>");
+    Serial.println("<C1>");
 }
 
 void MeriCode::addMeriCode(char* meriCodeCharacters)
@@ -177,9 +177,5 @@ void MeriCode::M0(char* characters)
             continue;
         }
     } 
-    Serial.print(x);
-    Serial.print(y);
-    Serial.print(z);
-
     this->movement.SetTargetPosition(x, y, z);
 }
