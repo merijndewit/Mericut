@@ -19,7 +19,6 @@ class DrawingCanvas(tkinter.Canvas):
         self.bind('<MouseWheel>', self.Scroll)
         self.bind('<ButtonRelease-1>',self.Released)
         self.bind('<Motion>', self.Motion)
-        
 
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
@@ -124,8 +123,12 @@ class DrawingCanvas(tkinter.Canvas):
             file.write("<S1>" + "\n") #file start command
             for i in range(len(self.drawnShapes)):
                 #for now there are only lines
+                file.write("<M0 Z" + str(20) + ">" + "\n")
                 file.write("<M0 X" + str(self.drawnShapes[i].nodes[0].position[0]) + " Y" + str(self.drawnShapes[i].nodes[0].position[1]) + ">" + "\n") #move the tool to the start of the line
+                file.write("<M0 Z" + str(0) + ">" + "\n")
                 file.write("<M0 X" + str(self.drawnShapes[i].nodes[1].position[0]) + " Y" + str(self.drawnShapes[i].nodes[1].position[1]) + ">" + "\n") #move the tool to the start of the line
+                file.write("<M0 Z" + str(20) + ">" + "\n")
+            
             file.write("<M0 X0 Y0>" + "\n") #move the tool in the material
             file.write("<S0>" + "\n") #file stop command
             file.close()

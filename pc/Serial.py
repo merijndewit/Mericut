@@ -53,6 +53,7 @@ class Serial:
                 if(self.connectedDevice.in_waiting > 0):
                     serialString = self.connectedDevice.readline()
                     string = serialString.decode('Ascii')
+                    print("Arduino: " + string)
                     start = '<'
                     end = '>'
                     self.parent.callbackMeriCode.ExecuteCallbackCode(string[string.find(start)+len(start):string.rfind(end)])
