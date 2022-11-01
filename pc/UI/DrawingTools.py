@@ -1,5 +1,6 @@
 import UI.DrawingShapes as DrawingShapes
 import UI.CanvasUI as CanvasUI
+import UI.CanvasShapes as CanvasShapes
 
 import UI.Nodes as Nodes
 
@@ -40,7 +41,7 @@ class Pen(Tool):
     def Hover(self, x, y):
         if self.clicks == 1:
             if self.previewLine == None:
-                self.previewLine = CanvasUI.LineUI(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y, self.parentCanvas)
+                self.previewLine = CanvasShapes.CanvasLine(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y, self.parentCanvas)
                 return
             self.previewLine.Move(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y)
             return

@@ -3,6 +3,7 @@ import math
 
 from UI.Colors import Colors
 import UI.CanvasUI as CanvasUI
+import UI.CanvasShapes as CanvasShapes
 import UI.DrawingTools as DrawingTools
 import UI.CanvasSVG as CanvasSVG
 
@@ -32,7 +33,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.snap = True
 
         self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
-        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
+        self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
         self.canvasGridScale = CanvasUI.CanvasGridScale(self, self.pixelsPerMM)
 
     def Scroll(self, event):
@@ -51,7 +52,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.gridLines.extend(CanvasUI.DrawGrid(self, self.pixelsPerMM / 5, "#dddddd"))
         self.gridLines = CanvasUI.DrawGrid(self, int(10 * self.canvasScale))
         self.canvasGridScale = CanvasUI.CanvasGridScale(self, self.pixelsPerMM)
-        self.selectUIObject = CanvasUI.CircleUI(-20, -20, 8, self)
+        self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
 
 
 
