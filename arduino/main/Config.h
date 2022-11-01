@@ -19,3 +19,9 @@
 
 #define TDRIVERDIRECTIONPIN 4
 #define TDRIVERSTEPPIN 16
+
+//Node: without microstepping
+#define XSTEPPERMM 5
+#define YSTEPPERMM 11.14
+
+#define MICROSTEPPING 16

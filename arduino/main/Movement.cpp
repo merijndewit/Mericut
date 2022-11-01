@@ -34,13 +34,13 @@ void Movement::SetTargetPosition(float x, float y, float z)
     if (!isnan(x))
     {
         targetPosition[0] = x;
-        xStepper.moveTo(x * MICROSTEPPING);
+        xStepper.moveTo((x * XSTEPPERMM) * MICROSTEPPING);
         xMoving = true;
     }
     if (!isnan(y))
     {
-        yStepper.moveTo(y * MICROSTEPPING);
-        yyStepper.moveTo(y * MICROSTEPPING);
+        yStepper.moveTo((y * YSTEPPERMM) * MICROSTEPPING);
+        yyStepper.moveTo((y * YSTEPPERMM) * MICROSTEPPING);
         targetPosition[1] = y;
         yMoving = true;
     }    
