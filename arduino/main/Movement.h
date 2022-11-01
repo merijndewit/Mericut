@@ -28,6 +28,8 @@ class Movement
         AccelStepper yyStepper = AccelStepper(1, YYDRIVERSTEPPIN, YYDRIVERDIRECTIONPIN);
         AccelStepper zStepper = AccelStepper(1, ZDRIVERSTEPPIN, ZDRIVERDIRECTIONPIN);
         MultiStepper steppers;
+        void SyncMovementXY(float x, float y);
+        void SetDefaultSpeed();
 };
 
 #endif
