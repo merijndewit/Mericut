@@ -1,5 +1,4 @@
 import UI.DrawingShapes as DrawingShapes
-import UI.CanvasUI as CanvasUI
 import UI.CanvasShapes as CanvasShapes
 
 import UI.Nodes as Nodes

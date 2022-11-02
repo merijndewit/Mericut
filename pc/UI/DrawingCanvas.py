@@ -56,22 +56,17 @@ class DrawingCanvas(tkinter.Canvas):
 
 
 
-    def SetTool(self, name):
-        if name == "Pen":
-            self.tool = DrawingTools.Pen(self)
-            return
-        if name == "Move":
-            self.tool = DrawingTools.Move(self)
-            return
+    def SetTool(self, tool):
+        self.tool = tool(self)
     
     def Snap(self, x, y):
         if self.snap:
-            x += int(5 * self.canvasScale) 
-            y += int(5 * self.canvasScale) 
-            x = int(x / (self.canvasScale * 10))
-            x = int(x * (self.canvasScale * 10))
-            y = int(y / (self.canvasScale * 10))
-            y = int(y * (self.canvasScale * 10))
+            x += int(1 * self.canvasScale) 
+            y += int(1 * self.canvasScale) 
+            x = int(x / (self.canvasScale * 5))
+            x = int(x * (self.canvasScale * 5))
+            y = int(y / (self.canvasScale * 5))
+            y = int(y * (self.canvasScale * 5))
         return x, y
 
     def Clicked(self, event):

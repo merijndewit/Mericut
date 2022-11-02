@@ -113,19 +113,20 @@ class ToolSelect(customtkinter.CTkFrame):
         self.grid_propagate(0)
 
         self.lastDisabledButton = None
+        from UI.DrawingTools import Pen, Move
 
         self.penButton = customtkinter.CTkButton(master=self, text="Pen", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
-        self.penButton.configure(command= lambda: self.SelectTool("Pen", self.penButton))
+        self.penButton.configure(command= lambda: self.SelectTool(Pen, self.penButton))
         self.penButton.grid(row=0, column=0, sticky=tkinter.W)
 
         self.moveButton = customtkinter.CTkButton(master=self, text="Move", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
-        self.moveButton.configure(command= lambda: self.SelectTool("Move", self.moveButton))
+        self.moveButton.configure(command= lambda: self.SelectTool(Move, self.moveButton))
         self.moveButton.grid(row=0, column=1, sticky=tkinter.W)
 
         self.loadSVGButton = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.LoadSVG())
         self.loadSVGButton.grid(row=0, column=2, sticky='e')
 
-        self.SelectTool("Pen", self.penButton)
+        self.SelectTool(Pen, self.penButton)
 
     def SelectTool(self, name, button):
         if button == self.lastDisabledButton:
