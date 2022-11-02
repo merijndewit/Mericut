@@ -47,7 +47,7 @@ class QuadraticBezier(Shapes):
         newNode[1] = int(math.pow(1 - t, 2) * self.nodes[0].position[1] + (1 - t) * 2 * t * self.nodes[1].position[1] + t * t * self.nodes[2].position[1])
         return newNode
 
-    def Draw(self):
+    def Draw(self, useOldLines = False):
         startNode = [0, 0]
         endNode = [0, 0]
         for i in range(20):
@@ -55,11 +55,12 @@ class QuadraticBezier(Shapes):
                 startNode = self.RecalculatePoints(i / 20)
                 continue
             endNode = self.RecalculatePoints(i / 20)
-
-            self.lines.append(self.canvas.create_line(startNode[0] * self.canvas.canvasScale, startNode[1] * self.canvas.canvasScale, endNode[0] * self.canvas.canvasScale, endNode[1] * self.canvas.canvasScale, fill=Colors.GRIDCOLOR, width=3))
+            if useOldLines:
+                self.canvas.coords(self.lines[i - 1], startNode[0] * self.canvas.canvasScale, startNode[1] * self.canvas.canvasScale, endNode[0] * self.canvas.canvasScale, endNode[1] * self.canvas.canvasScale)
+            else:
+                self.lines.append(self.canvas.create_line(startNode[0] * self.canvas.canvasScale, startNode[1] * self.canvas.canvasScale, endNode[0] * self.canvas.canvasScale, endNode[1] * self.canvas.canvasScale, fill=Colors.GRIDCOLOR, width=3))
 
             startNode = endNode
-            print(startNode, endNode)
 
     def Update(self):
-        self.canvas.coords(self.canvasLine, self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale)
+        self.Draw(True)
