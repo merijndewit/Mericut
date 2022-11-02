@@ -98,11 +98,11 @@ class DrawingCanvas(tkinter.Canvas):
                 if nearestNode == None:
                     nearestNode = (i, node, nodeDistance)
                     continue
-                if nearestNode[1] > nodeDistance:
+                if nearestNode[2] > nodeDistance:
                     nearestNode = (i, node, nodeDistance)
         if nearestNode == None:
             return None
-        return self.drawnShapes[nearestNode[0]].nodes[nearestNode[node]]
+        return self.drawnShapes[nearestNode[0]].nodes[nearestNode[1]]
 
     def ShowColision(self):
         collidingNode = self.GetNearestNode(8)
