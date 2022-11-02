@@ -42,7 +42,7 @@ class Pen(Tool):
             if self.previewLine == None:
                 self.previewLine = CanvasShapes.CanvasLine(self.parentCanvas, self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y)
                 return
-            self.previewLine.Move(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y)
+            self.previewLine.Move(self.parentCanvas.canvasScale, self.nodes[0].position[0], self.nodes[0].position[1], x / self.parentCanvas.canvasScale, y / self.parentCanvas.canvasScale)
             return
 
 class Move(Tool):

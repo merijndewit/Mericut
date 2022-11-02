@@ -26,10 +26,10 @@ class Line(Shapes):
             self.Draw()
 
     def Draw(self):
-        self.lines.append(CanvasLine(self.canvas, self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale, Colors.GRIDCOLOR, 3))
+        self.lines.append(CanvasLine(self.canvas, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1], Colors.GRIDCOLOR, 3))
 
     def Update(self):
-        self.lines[0].Move(self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale)
+        self.lines[0].Move(self.canvas.canvasScale, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1])
 
 class QuadraticBezier(Shapes):
     def __init__(self, canvas, nodes, draw = True):
@@ -57,9 +57,9 @@ class QuadraticBezier(Shapes):
                 continue
             endNode = self.GetpointLocation(i / 20)
             if useOldLines:
-                self.lines[i - 1].Move(int(startNode[0] * self.canvas.canvasScale), int(startNode[1] * self.canvas.canvasScale), int(endNode[0] * self.canvas.canvasScale), int(endNode[1] * self.canvas.canvasScale))
+                self.lines[i - 1].Move(self.canvas.canvasScale, startNode[0], startNode[1], endNode[0], endNode[1])
             else:
-                self.lines.append(CanvasLine(self.canvas, int(startNode[0] * self.canvas.canvasScale), int(startNode[1] * self.canvas.canvasScale), int(endNode[0] * self.canvas.canvasScale), int(endNode[1] * self.canvas.canvasScale), Colors.GRIDCOLOR, 3))
+                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.GRIDCOLOR, 3))
 
             startNode = endNode
 
