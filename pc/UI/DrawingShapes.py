@@ -1,4 +1,5 @@
 from UI.Colors import Colors
+from UI.CanvasShapes import CanvasLine
 
 import math
 
@@ -16,7 +17,7 @@ class Line(Shapes):
     def __init__(self, nodes, canvas, draw = True):
         self.nodes = nodes
         self.canvas = canvas
-        self.canvasLine = None
+        self.lines = []
 
         for i in range(len(self.nodes)):
             self.nodes[i].SetShape(self)
@@ -25,15 +26,15 @@ class Line(Shapes):
             self.Draw()
 
     def Draw(self):
-        self.canvasLine = self.canvas.create_line(self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale, fill=Colors.GRIDCOLOR, width=3)
+        self.lines.append(CanvasLine(self.canvas, self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale, Colors.GRIDCOLOR, 3))
 
     def Update(self):
-        self.canvas.coords(self.canvasLine, self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale)
+        self.lines[0].Move(self.nodes[0].position[0] * self.canvas.canvasScale, self.nodes[0].position[1] * self.canvas.canvasScale, self.nodes[1].position[0] * self.canvas.canvasScale, self.nodes[1].position[1] * self.canvas.canvasScale)
 
 class QuadraticBezier(Shapes):
-    def __init__(self, canvas, node0, node1, node2, draw = True):
+    def __init__(self, canvas, nodes, draw = True):
         self.canvas = canvas
-        self.nodes = [node0, node1, node2]
+        self.nodes = nodes
         self.lines = []
         for i in range(len(self.nodes)):
             self.nodes[i].SetShape(self)
@@ -41,10 +42,10 @@ class QuadraticBezier(Shapes):
         if draw:
             self.Draw()
 
-    def RecalculatePoints(self, t):
+    def GetpointLocation(self, t):
         newNode = [0, 0]
-        newNode[0] = int(math.pow(1 - t, 2) * self.nodes[0].position[0] + (1 - t) * 2 * t * self.nodes[1].position[0] + t * t * self.nodes[2].position[0])
-        newNode[1] = int(math.pow(1 - t, 2) * self.nodes[0].position[1] + (1 - t) * 2 * t * self.nodes[1].position[1] + t * t * self.nodes[2].position[1])
+        newNode[0] = math.pow(1 - t, 2) * self.nodes[0].position[0] + (1 - t) * 2 * t * self.nodes[1].position[0] + t * t * self.nodes[2].position[0]
+        newNode[1] = math.pow(1 - t, 2) * self.nodes[0].position[1] + (1 - t) * 2 * t * self.nodes[1].position[1] + t * t * self.nodes[2].position[1]
         return newNode
 
     def Draw(self, useOldLines = False):
@@ -52,13 +53,13 @@ class QuadraticBezier(Shapes):
         endNode = [0, 0]
         for i in range(20):
             if i == 0:
-                startNode = self.RecalculatePoints(i / 20)
+                startNode = self.GetpointLocation(i / 20)
                 continue
-            endNode = self.RecalculatePoints(i / 20)
+            endNode = self.GetpointLocation(i / 20)
             if useOldLines:
-                self.canvas.coords(self.lines[i - 1], startNode[0] * self.canvas.canvasScale, startNode[1] * self.canvas.canvasScale, endNode[0] * self.canvas.canvasScale, endNode[1] * self.canvas.canvasScale)
+                self.lines[i - 1].Move(int(startNode[0] * self.canvas.canvasScale), int(startNode[1] * self.canvas.canvasScale), int(endNode[0] * self.canvas.canvasScale), int(endNode[1] * self.canvas.canvasScale))
             else:
-                self.lines.append(self.canvas.create_line(startNode[0] * self.canvas.canvasScale, startNode[1] * self.canvas.canvasScale, endNode[0] * self.canvas.canvasScale, endNode[1] * self.canvas.canvasScale, fill=Colors.GRIDCOLOR, width=3))
+                self.lines.append(CanvasLine(self.canvas, int(startNode[0] * self.canvas.canvasScale), int(startNode[1] * self.canvas.canvasScale), int(endNode[0] * self.canvas.canvasScale), int(endNode[1] * self.canvas.canvasScale), Colors.GRIDCOLOR, 3))
 
             startNode = endNode
 

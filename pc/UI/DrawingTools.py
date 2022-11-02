@@ -40,7 +40,7 @@ class Pen(Tool):
     def Hover(self, x, y):
         if self.clicks == 1:
             if self.previewLine == None:
-                self.previewLine = CanvasShapes.CanvasLine(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y, self.parentCanvas)
+                self.previewLine = CanvasShapes.CanvasLine(self.parentCanvas, self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y)
                 return
             self.previewLine.Move(self.nodes[0].position[0] * self.parentCanvas.canvasScale, self.nodes[0].position[1] * self.parentCanvas.canvasScale, x, y)
             return
@@ -70,7 +70,7 @@ class QuadraticBezier(Tool):
         return
 
     def DrawCurve(self):
-        curve = DrawingShapes.QuadraticBezier(self.parentCanvas, Nodes.Node(200, 200), Nodes.Node(300, 300), Nodes.Node(200, 400))
+        curve = DrawingShapes.QuadraticBezier(self.parentCanvas, [Nodes.Node(200, 200), Nodes.Node(300, 300), Nodes.Node(200, 400)])
         self.parentCanvas.drawnShapes.append(curve)
 
 

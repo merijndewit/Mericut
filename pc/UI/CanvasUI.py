@@ -1,21 +1,23 @@
 from UI.Colors import Colors
 
-def DrawGrid(canvas, cellSize, color=Colors.GRIDCOLOR):
-    canvasLines = []
-    for i in range(int(canvas.winfo_reqwidth() / cellSize) + 1):
-        canvasLines.append(canvas.create_line((i * cellSize), 0, (i * cellSize), canvas.winfo_reqheight(), fill=color, width=1))
-    for i in range(int(canvas.winfo_reqheight() / cellSize) + 1):
-        canvasLines.append(canvas.create_line(0, (i * cellSize), canvas.winfo_reqwidth(), (i * cellSize), fill=color, width=1))
-    return canvasLines
-
-class CanvasGridScale():
-    def __init__(self, canvas, pixelsPerMM):
+class CanvasGrid():
+    def __init__(self, canvas, cellSize):
+        self.canvasLines = []
+        self.cellSize = cellSize
         self.canvas = canvas
-        self.pixelsPerMM = pixelsPerMM
-        self.Update()
+        self.DrawGrid()
 
-    def Update(self):
-        self.position = [self.canvas.winfo_reqwidth() - 40, self.canvas.winfo_reqheight() - 40]
-        self.text = self.canvas.create_text(self.position[0], self.position[1], fill="#000000", text=str(self.pixelsPerMM)+"mm")
+    def DrawGrid(self, color=Colors.GRIDCOLOR):
+        for i in range(int(self.canvas.winfo_reqwidth() / self.cellSize) + 1):
+            self.canvasLines.append(self.canvas.create_line((i * self.cellSize), 0, (i * self.cellSize), self.canvas.winfo_reqheight(), fill=color, width=1))
+        for i in range(int(self.canvas.winfo_reqheight() / self.cellSize) + 1):
+            self.canvasLines.append(self.canvas.create_line(0, (i * self.cellSize), self.canvas.winfo_reqwidth(), (i * self.cellSize), fill=color, width=1))
 
+    def DeleteGrid(self):
+        for i in range(len(self.canvasLines)):
+            self.canvas.delete(self.canvasLines[i])
 
+    def ReDraw(self, cellSize):
+        self.cellSize = cellSize
+        self.DeleteGrid()
+        self.DrawGrid()

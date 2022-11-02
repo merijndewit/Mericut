@@ -32,9 +32,9 @@ class DrawingCanvas(tkinter.Canvas):
         self.mousePressed = False
         self.snap = True
 
-        self.gridLines = CanvasUI.DrawGrid(self, self.pixelsPerMM)
+        self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
-        self.canvasGridScale = CanvasUI.CanvasGridScale(self, self.pixelsPerMM)
+
 
     def Scroll(self, event):
         self.pixelsPerMM += (-1*(event.delta/120)) * 2
@@ -46,13 +46,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.RedrawGrid()
 
     def RedrawGrid(self):
-        for i in range(len(self.gridLines)):
-            self.delete(self.gridLines[i])
-        if self.canvasScale > 2:
-            self.gridLines.extend(CanvasUI.DrawGrid(self, self.pixelsPerMM / 5, "#dddddd"))
-        self.gridLines = CanvasUI.DrawGrid(self, int(10 * self.canvasScale))
-        self.canvasGridScale = CanvasUI.CanvasGridScale(self, self.pixelsPerMM)
-        self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
+        self.canvasGrid.ReDraw(int(10 * self.canvasScale))
 
 
 
@@ -84,9 +78,8 @@ class DrawingCanvas(tkinter.Canvas):
         self.ShowColision ()
 
     def RedrawShapes(self):
-        self.delete("all")
         for i in range(len(self.drawnShapes)):
-            self.drawnShapes[i].Draw()
+            self.drawnShapes[i].Update()
 
     def GetNearestNode(self, distance):
         nearestNode = None
@@ -118,12 +111,13 @@ class DrawingCanvas(tkinter.Canvas):
         with open('Test/MeriCodeTestFile.txt', "w") as file:
             file.write("<S1>" + "\n") #file start command
             for i in range(len(self.drawnShapes)):
-                #for now there are only lines
-                file.write("<M0 Z" + str(20) + ">" + "\n")
-                file.write("<M0 X" + str(self.drawnShapes[i].nodes[0].position[0]) + " Y" + str(self.drawnShapes[i].nodes[0].position[1]) + ">" + "\n") #move the tool to the start of the line
-                file.write("<M0 Z" + str(0) + ">" + "\n")
-                file.write("<M0 X" + str(self.drawnShapes[i].nodes[1].position[0]) + " Y" + str(self.drawnShapes[i].nodes[1].position[1]) + ">" + "\n") #move the tool to the start of the line
-                file.write("<M0 Z" + str(20) + ">" + "\n")
+                for line in range(len(self.drawnShapes[i].lines)):
+                    #for now there are only lines
+                    file.write("<M0 Z" + str(20) + ">" + "\n")
+                    file.write("<M0 X" + str(self.drawnShapes[i].lines[line].x0) + " Y" + str(self.drawnShapes[i].lines[line].y0) + ">" + "\n") #move the tool to the start of the line
+                    file.write("<M0 Z" + str(0) + ">" + "\n")
+                    file.write("<M0 X" + str(self.drawnShapes[i].lines[line].x1) + " Y" + str(self.drawnShapes[i].lines[line].y1) + ">" + "\n") #move the tool to the start of the line
+            file.write("<M0 Z" + str(20) + ">" + "\n")
             
             file.write("<M0 X0 Y0>" + "\n") #move the tool in the material
             file.write("<M0 Z0>" + "\n") #move the tool in the material
