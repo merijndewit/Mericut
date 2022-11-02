@@ -6,6 +6,7 @@ import UI.CanvasUI as CanvasUI
 import UI.CanvasShapes as CanvasShapes
 import UI.DrawingTools as DrawingTools
 import UI.CanvasSVG as CanvasSVG
+import UI.CanvasToMeriCode as CanvasToMeriCode
 
 class DrawingCanvas(tkinter.Canvas):
     def __init__(self, parent, *args, **kwargs):
@@ -47,8 +48,6 @@ class DrawingCanvas(tkinter.Canvas):
 
     def RedrawGrid(self):
         self.canvasGrid.ReDraw(int(10 * self.canvasScale))
-
-
 
     def SetTool(self, tool):
         self.tool = tool(self)
@@ -97,6 +96,9 @@ class DrawingCanvas(tkinter.Canvas):
             return None
         return self.drawnShapes[nearestNode[0]].nodes[nearestNode[1]]
 
+    def CanvasToMeriCode(self):
+        CanvasToMeriCode.CanvasToMeriCode(self)
+
     def ShowColision(self):
         collidingNode = self.GetNearestNode(8)
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
@@ -106,23 +108,6 @@ class DrawingCanvas(tkinter.Canvas):
             return
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
         self.selectUIObject.Move(int(collidingNode.position[0] * self.canvasScale), int(collidingNode.position[1] * self.canvasScale))
-
-    def CanvasToMeriCode(self):
-        with open('Test/MeriCodeTestFile.txt', "w") as file:
-            file.write("<S1>" + "\n") #file start command
-            for i in range(len(self.drawnShapes)):
-                for line in range(len(self.drawnShapes[i].lines)):
-                    #for now there are only lines
-                    file.write("<M0 Z" + str(20) + ">" + "\n")
-                    file.write("<M0 X" + str(self.drawnShapes[i].lines[line].x0) + " Y" + str(self.drawnShapes[i].lines[line].y0) + ">" + "\n") #move the tool to the start of the line
-                    file.write("<M0 Z" + str(0) + ">" + "\n")
-                    file.write("<M0 X" + str(self.drawnShapes[i].lines[line].x1) + " Y" + str(self.drawnShapes[i].lines[line].y1) + ">" + "\n") #move the tool to the start of the line
-            file.write("<M0 Z" + str(20) + ">" + "\n")
-            
-            file.write("<M0 X0 Y0>" + "\n") #move the tool in the material
-            file.write("<M0 Z0>" + "\n") #move the tool in the material
-            file.write("<S0>" + "\n") #file stop command
-            file.close()
 
     def LoadSVG(self):
         CanvasSVG.LoadSVG(self)
