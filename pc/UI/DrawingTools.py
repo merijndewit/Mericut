@@ -58,5 +58,19 @@ class Move(Tool):
             return
         self.clickedNode = None
 
+class QuadraticBezier(Tool):
+    def __init__(self, parentCanvas):
+        super().__init__(parentCanvas)
+        self.previewLine = None
+
+    def Clicked(self, x, y, clickedNode):
+        self.DrawCurve()
+
+    def Hover(self, x, y):
+        return
+
+    def DrawCurve(self):
+        curve = DrawingShapes.QuadraticBezier(self.parentCanvas, Nodes.Node(200, 200), Nodes.Node(300, 300), Nodes.Node(200, 400))
+        self.parentCanvas.drawnShapes.append(curve)
 
 

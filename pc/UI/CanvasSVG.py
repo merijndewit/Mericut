@@ -3,7 +3,7 @@ from svg.path.path import Line
 from xml.dom import minidom
 
 import UI.Nodes as Nodes
-import UI.CanvasShapes as CanvasShapes
+import UI.DrawingShapes as DrawingShapes
 
 def LoadSVG(canvas):
     doc = minidom.parse('Test/svg.svg')
@@ -18,5 +18,5 @@ def LoadSVG(canvas):
                 node0 = Nodes.Node(object.start.real, object.start.imag)
                 node1 = Nodes.Node(object.end.real, object.end.imag)
 
-                line = CanvasShapes.Line([node0, node1], canvas)
+                line = DrawingShapes.Line([node0, node1], canvas)
                 canvas.drawnShapes.append(line)
