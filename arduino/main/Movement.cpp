@@ -11,6 +11,7 @@ Movement::Movement()
     steppers.addStepper(xStepper);
     steppers.addStepper(yStepper);
     steppers.addStepper(yyStepper);
+    SetDefaultSpeed();
 }
 
 void Movement::SetDefaultSpeed()
@@ -34,7 +35,7 @@ void Movement::SetTargetPosition(float x, float y, float z)
 
     long xyPositions[3] = {long(targetPosition[0]), long(targetPosition[1]), long(targetPosition[1])};
 
-    SetDefaultSpeed();
+
     //SyncMovementXY(x, y);
 
     if (isMovingToTarget)
@@ -71,18 +72,7 @@ void Movement::SetTargetPosition(float x, float y, float z)
 void Movement::Move()
 {
     int moved = 0;
-    //if(xMoving)
-    //{
-    //    xMoving = xStepper.run();
-    //    moved++;
-    //}
-//
-    //if(yMoving)
-    //{
-    //    yMoving = yStepper.run();
-    //    yyStepper.run();
-    //    moved++;
-    //}
+
     if(xMoving)
     {
         xMoving = steppers.run();

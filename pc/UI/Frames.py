@@ -72,8 +72,12 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
         self.submitButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: SendEntryString())
         self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
 
-        self.sendTestFile = customtkinter.CTkButton(master=self, text="Send File",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=100, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.SendMeriCodeList())
+        self.sendTestFile = customtkinter.CTkButton(master=self, text="Send File",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=100, height=28, text_color=Colors.BUTTONTEXT, command= lambda: StartSendingFile())
         self.sendTestFile.grid(row=1, column=0, sticky=tkinter.NW, columnspan=1)
+
+        def StartSendingFile():
+            self.parent.serial.LoadMeriCodeFile()
+            self.parent.serial.SendMeriCodeList()
 
         def SendEntryString():
             self.parent.serial.WriteToSerial(self.entry.get())
@@ -95,7 +99,6 @@ class MeriCodeFrame(customtkinter.CTkFrame):
 
     def GenerateMeriCode(self):
         self.parent.canvas.canvas.CanvasToMeriCode()
-        self.parent.serial.LoadMeriCodeFile()
 
 
 

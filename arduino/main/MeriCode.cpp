@@ -7,49 +7,39 @@ MeriCode::MeriCode()
 
 }
 
+void MeriCode::Run()
+{
+    if (moving)
+    {
+        movement.Move();
+        if (!movement.IsMovingToTarget())
+        {
+            completedMericodeInBuffer();
+            moving = false;
+        }
+    }
+}
+
 void MeriCode::receivedInvalidCode()
 {
     Serial.println("<E0>");
 }
 
-void MeriCode::startListeningToFile()
-{
-    listeningToFile = true;
-    Serial.println("<C1>");
-}
-
 void MeriCode::addMeriCode(char* meriCodeCharacters)
 {
-    if (!listeningToFile)
-    {
-        executeMeriCode(meriCodeCharacters);
-        return;
-    }
     meriCodeBuffer[itemsInBuffer++] = meriCodeCharacters;
-    if (!executingMeriCode)
+    executeMeriCode(meriCodeBuffer[0]);
+    if (!moving)
     {
-        executeMeriCode(meriCodeBuffer[0]);
-        executingMeriCode = true;
+        completedMericodeInBuffer();
     }
 }
 
 void MeriCode::completedMericodeInBuffer()
 {
-
-    if (listeningToFile)
-    {
-        executingMeriCode = false;
-        meriCodeBuffer + 1;
-        itemsInBuffer--;
-        Serial.println("<C1>"); //ask for next command
-    }
-
-    if (itemsInBuffer != 0 && !executingMeriCode)
-    {
-        executeMeriCode(meriCodeBuffer[0]);
-        executingMeriCode = true;
-    }
-
+    meriCodeBuffer + 1;
+    itemsInBuffer--;
+    Serial.println("<C1>"); //ask for next command
 }
 
 void MeriCode::executeMeriCode(char* meriCodeCharacters)
@@ -66,12 +56,6 @@ void MeriCode::executeMeriCode(char* meriCodeCharacters)
         {
             char* substr = meriCodeCharacters + 1;
             executeMcode(substr++);
-        }
-            break;
-        case 'S':
-        {
-            char* substr = meriCodeCharacters + 1;
-            executeScode(substr++);
         }
             break;
         default:
@@ -109,28 +93,6 @@ void MeriCode::executeMcode(char* mCharacters)
     }
 }
 
-void MeriCode::executeScode(char* mCharacters)
-{
-    char* substr = mCharacters + 1;
-    switch (mCharacters[0])
-    {
-        case '0':
-            completedMericodeInBuffer();
-            listeningToFile = false;
-            executingMeriCode = false;
-            itemsInBuffer = 0;
-            break;
-
-        case '1':
-            startListeningToFile();
-            break;
-        
-        default:
-            receivedInvalidCode();
-            break;
-    }
-}
-
 float MeriCode::GetNumberAfterCharacter(char* characterNumbers)
 {
     char number[32] = {};
@@ -149,6 +111,7 @@ float MeriCode::GetNumberAfterCharacter(char* characterNumbers)
 
 void MeriCode::M0(char* characters)
 {
+    moving = true;
     float x = NAN;
     float y = NAN;
     float z = NAN;

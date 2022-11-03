@@ -19,6 +19,7 @@ class Serial:
         self.parent = parent
         self.fileIndex = 0
         self.file = FileToMeriCode.GetMeriCodeFromTxt()
+        self.sendingFile = False
 
     def Connect(self):
         if self.selectedComPort == None:
@@ -39,10 +40,15 @@ class Serial:
     def LoadMeriCodeFile(self):
         self.file = FileToMeriCode.GetMeriCodeFromTxt()
         self.fileIndex = 0
+        self.sendingFile = True
 
     def SendMeriCodeList(self):
+        if (self.sendingFile == False):
+            return
         self.WriteToSerial(self.file[self.fileIndex])
         self.fileIndex += 1
+        if (len(self.file) == self.fileIndex):
+            self.sendingFile = False
 
     def ListenToSerial(self):
         while True:

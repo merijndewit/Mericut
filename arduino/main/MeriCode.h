@@ -9,23 +9,21 @@ class MeriCode
   public:
     MeriCode();
     void addMeriCode(char* meriCodeCharacters);
-    void executeMeriCode(char* meriCodeCharacters);
-    void completedMericodeInBuffer();
+    void Run();
     Movement movement;
 
   private:
-    void startListeningToFile();
+    void executeMeriCode(char* meriCodeCharacters);
+    void completedMericodeInBuffer();
     void receivedInvalidCode();
     void executeDcode(char* dCharacters);
     void executeMcode(char* dCharacters);
-    void executeScode(char* dCharacters);
     void M0(char* characters);
     float GetNumberAfterCharacter(char* characterNumbers);
     int maxItemsInBuffer = 5;
     char* meriCodeBuffer[5];
     int itemsInBuffer = 0;
-    bool listeningToFile = false;
-    bool executingMeriCode = false;
+    bool moving = false;
 };
 
 #endif
