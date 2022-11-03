@@ -73,4 +73,19 @@ class QuadraticBezier(Tool):
         curve = DrawingShapes.QuadraticBezier(self.parentCanvas, [Nodes.Node(20, 20), Nodes.Node(30, 30), Nodes.Node(20, 40)])
         self.parentCanvas.drawnShapes.append(curve)
 
+class CubicBezier(Tool):
+    def __init__(self, parentCanvas):
+        super().__init__(parentCanvas)
+        self.previewLine = None
+
+    def Clicked(self, x, y, clickedNode):
+        self.DrawCurve()
+
+    def Hover(self, x, y):
+        return
+
+    def DrawCurve(self):
+        curve = DrawingShapes.CubicBezier(self.parentCanvas, [Nodes.Node(20, 20), Nodes.Node(30, 30), Nodes.Node(20, 40), Nodes.Node(40, 40)])
+        self.parentCanvas.drawnShapes.append(curve)
+
 

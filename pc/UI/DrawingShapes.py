@@ -68,3 +68,42 @@ class QuadraticBezier(Shapes):
 
     def Update(self):
         self.Draw(True)
+
+class CubicBezier(Shapes):
+    def __init__(self, canvas, nodes, draw = True):
+        self.canvas = canvas
+        self.nodes = nodes
+        self.lines = []
+        self.helpLines = []
+        for i in range(len(self.nodes)):
+            self.nodes[i].SetShape(self)
+        
+        if draw:
+            self.Draw()
+
+    def Draw(self, useOldLines = False):
+        startNode = [0, 0]
+        endNode = [0, 0]
+        self.DrawHelpLines(useOldLines)
+        for i in range(21):
+            if i == 0:
+                startNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / 20)
+                continue
+            endNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / 20)
+            if useOldLines:
+                self.lines[i - 1].Move(self.canvas.canvasScale, startNode[0], startNode[1], endNode[0], endNode[1])
+            else:
+                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.GRIDCOLOR, 3))
+
+            startNode = endNode
+
+    def DrawHelpLines(self, useOldLines = False):
+        if useOldLines:
+            self.helpLines[0].Move(self.canvas.canvasScale, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1])
+            self.helpLines[1].Move(self.canvas.canvasScale, self.nodes[2].position[0], self.nodes[2].position[1], self.nodes[3].position[0], self.nodes[3].position[1])
+            return
+        self.helpLines.append(CanvasLine(self.canvas, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1], Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas, self.nodes[2].position[0], self.nodes[2].position[1], self.nodes[3].position[0], self.nodes[3].position[1], Colors.HELPLINES, 2, (2, 2)))
+
+    def Update(self):
+        self.Draw(True)
