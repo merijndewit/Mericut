@@ -19,7 +19,7 @@ class CanvasCircle():
         self.canvas.itemconfig(self.circle, outline=color)
 
 class CanvasLine():
-    def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1):
+    def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1, dash=None):
         self.x0 = x0
         self.y0 = y0 
         self.x1 = x1
@@ -27,12 +27,13 @@ class CanvasLine():
         self.canvas = canvas
         self.color = color
         self.width = width
+        self.dash = dash
 
         self.canvasLine = None
         self.Draw(self.canvas.canvasScale)
 
     def Draw(self, scale):
-        self.canvasLine = self.canvas.create_line(int(self.x0 * scale), int(self.y0 * scale), int(self.x1 * scale), int(self.y1 * scale), fill=self.color, width=self.width)
+        self.canvasLine = self.canvas.create_line(int(self.x0 * scale), int(self.y0 * scale), int(self.x1 * scale), int(self.y1 * scale), fill=self.color, width=self.width, dash=self.dash)
     
     def Move(self, scale, x0, y0, x1, y1):
         self.x0 = x0

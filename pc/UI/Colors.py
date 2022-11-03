@@ -15,3 +15,4 @@ class Colors():
     GRIDCOLOR = "#c0c0c0"
     COLISIONNODE = "#ea8015"
     COLISIONMERGEDNODE = "#ff2020"
+    HELPLINES = "#c9bba7"
