@@ -1,7 +1,6 @@
 from UI.Colors import Colors
 from UI.CanvasShapes import CanvasLine
-
-import math
+import VectorMath
 
 class Shapes():
     def __init__(self, nodes, canvas):
@@ -42,20 +41,14 @@ class QuadraticBezier(Shapes):
         if draw:
             self.Draw()
 
-    def GetpointLocation(self, t):
-        newNode = [0, 0]
-        newNode[0] = math.pow(1 - t, 2) * self.nodes[0].position[0] + (1 - t) * 2 * t * self.nodes[1].position[0] + t * t * self.nodes[2].position[0]
-        newNode[1] = math.pow(1 - t, 2) * self.nodes[0].position[1] + (1 - t) * 2 * t * self.nodes[1].position[1] + t * t * self.nodes[2].position[1]
-        return newNode
-
     def Draw(self, useOldLines = False):
         startNode = [0, 0]
         endNode = [0, 0]
-        for i in range(20):
+        for i in range(21):
             if i == 0:
-                startNode = self.GetpointLocation(i / 20)
+                startNode = VectorMath.QuadraticBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, i / 20)
                 continue
-            endNode = self.GetpointLocation(i / 20)
+            endNode = VectorMath.QuadraticBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, i / 20)
             if useOldLines:
                 self.lines[i - 1].Move(self.canvas.canvasScale, startNode[0], startNode[1], endNode[0], endNode[1])
             else:

@@ -70,7 +70,7 @@ class QuadraticBezier(Tool):
         return
 
     def DrawCurve(self):
-        curve = DrawingShapes.QuadraticBezier(self.parentCanvas, [Nodes.Node(200, 200), Nodes.Node(300, 300), Nodes.Node(200, 400)])
+        curve = DrawingShapes.QuadraticBezier(self.parentCanvas, [Nodes.Node(20, 20), Nodes.Node(30, 30), Nodes.Node(20, 40)])
         self.parentCanvas.drawnShapes.append(curve)
 
 
