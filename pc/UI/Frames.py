@@ -116,7 +116,7 @@ class ToolSelect(customtkinter.CTkFrame):
         self.grid_propagate(0)
 
         self.lastDisabledButton = None
-        from UI.DrawingTools import Pen, Move, QuadraticBezier, CubicBezier
+        from UI.DrawingTools import Pen, Move, QuadraticBezier, CubicBezier, Arc
 
         self.penButton = customtkinter.CTkButton(master=self, text="Pen", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.penButton.configure(command= lambda: self.SelectTool(Pen, self.penButton))
@@ -129,6 +129,10 @@ class ToolSelect(customtkinter.CTkFrame):
         self.cubicBezierButton = customtkinter.CTkButton(master=self, text="C Bezier", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.cubicBezierButton.configure(command= lambda: self.SelectTool(CubicBezier, self.cubicBezierButton))
         self.cubicBezierButton.grid(row=0, column=2, sticky=tkinter.W)
+
+        self.arcButton = customtkinter.CTkButton(master=self, text="Arc", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.arcButton.configure(command= lambda: self.SelectTool(Arc, self.arcButton))
+        self.arcButton.grid(row=0, column=2, sticky=tkinter.W)
 
         self.moveButton = customtkinter.CTkButton(master=self, text="Move", fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.moveButton.configure(command= lambda: self.SelectTool(Move, self.moveButton))
