@@ -6,19 +6,31 @@ class CanvasToMeriCode:
         with open('Test/MeriCodeTestFile.txt', "w") as file:
             file.write("<S1>" + "\n") #file start command
             for i in range(len(self.canvas.drawnShapes)):
-                for line in range(len(self.canvas.drawnShapes[i].lines)):
-                    #for now there are only lines
-                    self.WriteMeriCodeLine(file, self.canvas.drawnShapes[i].lines[line].x0, self.canvas.drawnShapes[i].lines[line].y0, self.canvas.drawnShapes[i].lines[line].x1, self.canvas.drawnShapes[i].lines[line].y1)
+                self.WriteShape(file, self.canvas.drawnShapes[i].lines)
 
             self.MoveToolUp(file)
             self.MoveToHome(file)
             file.write("<S0>" + "\n") #file stop command
             file.close()
 
+    def WriteShape(self, file, lines):
+        for i in range(len(lines)):
+            if (i == len(lines) - 1):
+                if (self.canvas.drawnShapes[i + 1] is None):
+                    return
+                        
+                return 
+            self.WriteMeriCodeLine(file, lines[i].x0, lines[i].y0, lines[i].x1, lines[i].y1)
+
+
     def WriteMeriCodeLine(self, file, x0, y0, x1, y1):
         if (abs(self.position[0] - x0) <= self.mergeDistance and abs(self.position[1] - y0) <= self.mergeDistance):
             file.write("<M0 X" + str(x1) + " Y" + str(y1) + ">" + "\n") #move the tool to the start of the line
             self.position = [x1, y1]
+            return
+        if (abs(self.position[0] - x1) <= self.mergeDistance and abs(self.position[1] - y1) <= self.mergeDistance):
+            file.write("<M0 X" + str(x0) + " Y" + str(y0) + ">" + "\n") #move the tool to the start of the line
+            self.position = [x0, y0]
             return
         self.MoveToolUp(file)
         file.write("<M0 X" + str(x0) + " Y" + str(y0) + ">" + "\n") #move the tool to the start of the line
