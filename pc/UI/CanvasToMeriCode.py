@@ -2,26 +2,37 @@ class CanvasToMeriCode:
     def __init__(self, canvas):
         self.position = [0, 0]
         self.canvas = canvas
-        self.mergeDistance = 0.01
+        self.mergeDistance = 0.04
         with open('Test/MeriCodeTestFile.txt', "w") as file:
-            file.write("<S1>" + "\n") #file start command
             for i in range(len(self.canvas.drawnShapes)):
-                self.WriteShape(file, self.canvas.drawnShapes[i].lines)
-
+                shapeStartPosition = self.canvas.drawnShapes[i].GetStartPosition()
+                shapeEndPosition = self.canvas.drawnShapes[i].GetEndPosition()
+                print([shapeStartPosition, shapeEndPosition])
+                if (abs(self.position[0] - shapeStartPosition[0]) <= self.mergeDistance and abs(self.position[1] - shapeStartPosition[1]) <= self.mergeDistance):
+                    self.DrawShapeReversed(file, self.canvas.drawnShapes[i].lines)
+                    continue
+                if (abs(self.position[0] - shapeEndPosition[0]) <= self.mergeDistance and abs(self.position[1] - shapeEndPosition[1]) <= self.mergeDistance):
+                    self.DrawShape(file, self.canvas.drawnShapes[i].lines)
+                    continue
+                self.MoveTo(file, shapeStartPosition)
+                self.DrawShape(file, self.canvas.drawnShapes[i].lines)
             self.MoveToolUp(file)
             self.MoveToHome(file)
-            file.write("<S0>" + "\n") #file stop command
             file.close()
 
-    def WriteShape(self, file, lines):
-        for i in range(len(lines)):
-            if (i == len(lines) - 1):
-                if (self.canvas.drawnShapes[i + 1] is None):
-                    return
-                        
-                return 
-            self.WriteMeriCodeLine(file, lines[i].x0, lines[i].y0, lines[i].x1, lines[i].y1)
+    def MoveTo(self, file, position):
+        self.MoveToolUp(file)
+        file.write("<M0 X" + str(position[0]) + " Y" + str(position[1]) + ">" + "\n")
+        self.position = position
+        self.MoveToolDown(file)
 
+    def DrawShape(self, file, lines):
+        for line in range(len(lines)):
+            self.WriteMeriCodeLine(file, lines[line].x0, lines[line].y0, lines[line].x1, lines[line].y1)
+
+    def DrawShapeReversed(self, file, lines):
+        for line in reversed(lines):
+            self.WriteMeriCodeLine(file, line.x0, line.y0, line.x1, line.y1)
 
     def WriteMeriCodeLine(self, file, x0, y0, x1, y1):
         if (abs(self.position[0] - x0) <= self.mergeDistance and abs(self.position[1] - y0) <= self.mergeDistance):
