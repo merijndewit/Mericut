@@ -2,4 +2,5 @@
 .svg
 .vscode/
 __pycache__
-Test/*
+pc/Test/*
+.vs/
