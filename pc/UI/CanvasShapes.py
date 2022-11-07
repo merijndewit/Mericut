@@ -18,6 +18,9 @@ class CanvasCircle():
     def SetColor(self, color):
         self.canvas.itemconfig(self.circle, outline=color)
 
+    def Delete(self):
+        self.canvas.delete(self.circle)
+
 class CanvasLine():
     def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1, dash=None):
         self.x0 = x0

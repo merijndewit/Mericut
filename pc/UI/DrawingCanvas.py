@@ -21,6 +21,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.bind('<MouseWheel>', self.Scroll)
         self.bind('<ButtonRelease-1>',self.Released)
         self.bind('<Motion>', self.Motion)
+        self.bind("<Configure>", self.on_resize)
 
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
@@ -35,6 +36,15 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
+
+    def on_resize(self,event):
+        width = event.width
+        height = event.height
+
+        self.config(width=width, height=height)
+        self.RedrawShapes()
+        self.RedrawGrid()
+        #self.scale("all",0,0,wscale,hscale)
 
 
     def Scroll(self, event):
