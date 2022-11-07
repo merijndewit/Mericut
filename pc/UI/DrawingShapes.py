@@ -31,6 +31,12 @@ class Line(Shapes):
     def Update(self):
         self.lines[0].Move(self.canvas.canvasScale, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1])
 
+    def GetStartPosition(self):
+        return self.nodes[0].position
+
+    def GetEndPosition(self):
+        return self.nodes[1].position
+
 class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
     def __init__(self, canvas, nodes, draw = True):
         self.canvas = canvas
@@ -47,17 +53,25 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
         startNode = [0, 0]
         endNode = [0, 0]
         self.DrawHelpLines(useOldLines)
-        for i in range(21):
+        resolution = int(math.dist(self.nodes[0].position, self.nodes[2].position) / 3) + 1
+        for i in range(resolution + 1):
             if i == 0:
-                startNode = VectorMath.QuadraticBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, i / 20)
+                startNode = VectorMath.QuadraticBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, i / resolution)
                 continue
-            endNode = VectorMath.QuadraticBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, i / 20)
-            if useOldLines:
+            endNode = VectorMath.QuadraticBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, i / resolution)
+            if useOldLines and len(self.lines) >= resolution:
                 self.lines[i - 1].Move(self.canvas.canvasScale, startNode[0], startNode[1], endNode[0], endNode[1])
             else:
                 self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.GRIDCOLOR, 3))
 
             startNode = endNode
+
+        if len(self.lines) > resolution:
+            toDelete = len(self.lines) - resolution
+            print(toDelete)
+            for i in range(resolution, len(self.lines)):
+                self.lines[i].Delete()
+            del self.lines[len(self.lines) - toDelete:]
 
     def DrawHelpLines(self, useOldLines = False):
         if useOldLines:
@@ -69,6 +83,12 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
 
     def Update(self):
         self.Draw(True)
+
+    def GetStartPosition(self):
+        return self.nodes[0].position
+
+    def GetEndPosition(self):
+        return self.nodes[2].position
 
 class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
     def __init__(self, canvas, nodes, draw = True):
@@ -86,17 +106,25 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
         startNode = [0, 0]
         endNode = [0, 0]
         self.DrawHelpLines(useOldLines)
-        for i in range(21):
+        resolution = int(math.dist(self.nodes[0].position, self.nodes[3].position) / 3) + 1
+        for i in range(resolution + 1):
             if i == 0:
-                startNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / 20)
+                startNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / resolution)
                 continue
-            endNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / 20)
-            if useOldLines:
+            endNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / resolution)
+            if useOldLines and len(self.lines) >= resolution:
                 self.lines[i - 1].Move(self.canvas.canvasScale, startNode[0], startNode[1], endNode[0], endNode[1])
             else:
                 self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.GRIDCOLOR, 3))
 
             startNode = endNode
+
+        if len(self.lines) > resolution:
+            toDelete = len(self.lines) - resolution
+            print(toDelete)
+            for i in range(resolution, len(self.lines)):
+                self.lines[i].Delete()
+            del self.lines[len(self.lines) - toDelete:]
 
     def DrawHelpLines(self, useOldLines = False):
         if useOldLines:
@@ -108,6 +136,12 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
 
     def Update(self):
         self.Draw(True)
+
+    def GetStartPosition(self):
+        return self.nodes[0].position
+
+    def GetEndPosition(self):
+        return self.nodes[3].position
 
 class Arc(Shapes): #takes 3 nodes [start, control, end]
     def __init__(self, canvas, nodes, draw = True):
@@ -136,13 +170,10 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
         height = 2*r
         startAngle = (math.degrees(math.atan2(y0-y2, x0-x2)))
         endAngle = (math.degrees(math.atan2(y1-y2, x1-x2)))
-        if (startAngle < 0):
-            startAngle = 180 + (180 - abs(startAngle))
 
-        if (endAngle < 0):
-            endAngle = 180 + (180 - abs(endAngle))
+        angle = startAngle - abs(startAngle + endAngle) * -t
 
-        angle = endAngle + abs((startAngle * t) - abs(endAngle * t))
+        #angle = endAngle + ((startAngle * t) - (endAngle * t))
         print(startAngle , endAngle, abs(startAngle - endAngle))
 
         xP = x2 + r * math.cos(angle * math.pi / 180)
