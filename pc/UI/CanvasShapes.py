@@ -41,3 +41,6 @@ class CanvasLine():
         self.x1 = x1
         self.y1 = y1 
         self.canvas.coords(self.canvasLine, int(x0 * scale), int(y0 * scale), int(x1 * scale), int(y1 * scale))
+
+    def Delete(self):
+        self.canvas.delete(self.canvasLine)
