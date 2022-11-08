@@ -1,14 +1,17 @@
 class Colors():
     #Backgrounds
-    BGCOLOR = "#e7f9fc"
-    BGFRAME = "#FFFFFF"
-    CANVASBACKGROUND = "#FFFFFF"
+    BGCOLOR = "#F0F2F0"
+    BGFRAME = "#F0F2F0"
+    BGHEADERFRAME = "#f1d3a1"
+    CANVASBACKGROUND = "#F0F2F0"
     #Buttons
-    BUTTON = "#BAD1F6"
-    BUTTONHOVER = "#A3F0CE"
+    BUTTON = "#8cb4c4"
+    BUTTONHOVER = "#8cb4c4"
     BUTTONTEXT = "#000000"
+    BUTTONNOTSELECTED = "#F0F2F0"
     #Text
     TEXT = "#000000"
+    HEADERTEXT = "#927F6F"
     DISCONNECTEDTEXT = "#EE6868"
     CONNECTEDTEXT = "#ADDB81"
     #Canvas
@@ -16,3 +19,8 @@ class Colors():
     COLISIONNODE = "#ea8015"
     COLISIONMERGEDNODE = "#ff2020"
     HELPLINES = "#c9bba7"
+    PAPERBACKGROUNDCANVAS = "#FAEEDB"
+    #backgrounds
+    PAPERBACKGROUND = "#e3dbd9"
+    PAPERHOVERCOLOR = "#D2D2D4"
+    PAPERTEXT = "#1c2426"

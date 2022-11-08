@@ -10,7 +10,7 @@ def LoadSVG(canvas):
     path_strings = [path.getAttribute('d') for path
                     in doc.getElementsByTagName('path')]
     doc.unlink()
-    scale = 0.25
+    scale = 0.25 / 3
     yOffset = 0
 
     for path_string in path_strings:

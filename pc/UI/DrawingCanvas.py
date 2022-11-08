@@ -21,12 +21,13 @@ class DrawingCanvas(tkinter.Canvas):
         self.bind('<MouseWheel>', self.Scroll)
         self.bind('<ButtonRelease-1>',self.Released)
         self.bind('<Motion>', self.Motion)
-        self.bind("<Configure>", self.on_resize)
+        self.bind("<Configure>", self.ResizedWindow)
 
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.drawnShapes = []
         self.lastCollidedNode = None
+        self.background = None
 
         self.pixelsPerMM = 10
         self.canvasScale = 1
@@ -37,15 +38,41 @@ class DrawingCanvas(tkinter.Canvas):
         self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
 
-    def on_resize(self,event):
+    def ResizedWindow(self,event):
         width = event.width
         height = event.height
 
         self.config(width=width, height=height)
-        self.RedrawShapes()
+        if self.background is not None:
+            self.background.SetScale(self.canvasScale)
         self.RedrawGrid()
+        self.RedrawShapes()
+
         #self.scale("all",0,0,wscale,hscale)
 
+    def SetBackground(self, background = "", customSize = None):
+        width = 0
+        height = 0
+        color = "#000000"
+        if customSize is not None:
+            width = customSize[0]
+            height = customSize[1]
+            color = Colors.PAPERBACKGROUNDCANVAS
+        elif background == "A4":
+            width = 210
+            height = 297
+            color = Colors.PAPERBACKGROUNDCANVAS
+        elif background == "A5":
+            width = 148.5
+            height = 210
+            color = Colors.PAPERBACKGROUNDCANVAS
+        elif background == "A6":
+            width = 105
+            height = 148.5
+            color = Colors.PAPERBACKGROUNDCANVAS
+        self.background = CanvasShapes.CanvasRectangle(width, height, self)
+        self.background.SetColor(color)
+        
 
     def Scroll(self, event):
         self.pixelsPerMM += (-1*(event.delta/120)) * 2
@@ -53,8 +80,11 @@ class DrawingCanvas(tkinter.Canvas):
         if self.pixelsPerMM <= 0:
             self.pixelsPerMM = 2
             self.canvasScale = self.pixelsPerMM / 10
-        self.RedrawShapes()
+        if self.background is not None:
+            self.background.SetScale(self.canvasScale)
         self.RedrawGrid()
+        self.RedrawShapes()
+
 
     def RedrawGrid(self):
         self.canvasGrid.ReDraw(int(10 * self.canvasScale))

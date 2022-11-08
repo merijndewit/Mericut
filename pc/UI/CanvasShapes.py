@@ -21,6 +21,31 @@ class CanvasCircle():
     def Delete(self):
         self.canvas.delete(self.circle)
 
+class CanvasRectangle():
+    def __init__(self, width, height, canvas):
+        self.width = width
+        self.height = height
+        self.x = 0
+        self.y = 0
+        self.canvas = canvas
+        self.rectangle = None
+        self.Draw()
+
+    def Draw(self):
+        self.rectangle = self.canvas.create_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, fill=Colors.COLISIONNODE)
+    
+    def SetScale(self, scale):
+        self.canvas.coords(self.rectangle, int(self.x * scale), int(self.y * scale), int((self.x + self.width) * scale), int((self.y + self.height) * scale))
+
+    def Move(self, x, y):
+        self.canvas.coords(self.rectangle, x, y, x + self.width, y + self.height)
+
+    def SetColor(self, color):
+        self.canvas.itemconfig(self.rectangle, fill=color)
+
+    def Delete(self):
+        self.canvas.delete(self.rectangle)
+
 class CanvasLine():
     def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1, dash=None):
         self.x0 = x0
