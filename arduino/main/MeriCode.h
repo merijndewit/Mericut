@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Movement.h"
+#include "RingBuffer.h"
 
 class MeriCode
 {
@@ -13,17 +14,18 @@ class MeriCode
     Movement movement;
 
   private:
-    void executeMeriCode(char* meriCodeCharacters);
+    bool executeMeriCode(char* meriCodeCharacters);
     void completedMericodeInBuffer();
+    void executeNextCommand();
     void receivedInvalidCode();
-    void executeDcode(char* dCharacters);
-    void executeMcode(char* dCharacters);
+    bool executeDcode(char* dCharacters);
+    bool executeMcode(char* dCharacters);
     void M0(char* characters);
     float GetNumberAfterCharacter(char* characterNumbers);
-    int maxItemsInBuffer = 5;
-    char* meriCodeBuffer[5];
-    int itemsInBuffer = 0;
+    RingBuffer ringBuffer;
     bool moving = false;
+    bool askedForMeriCode = false;
+    int itemsInBuffer = 0;
 };
 
 #endif

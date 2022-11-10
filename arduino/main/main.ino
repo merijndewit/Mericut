@@ -11,7 +11,7 @@ Machine machine;
 
 void setup() 
 {
-    Serial.begin(115200);
+    Serial.begin(921600);
 }
 
 void loop() 
@@ -28,7 +28,6 @@ void checkSerial()
     char startMarker = '<';
     char endMarker = '>';
     char data;
- 
     while (Serial.available() > 0 && newData == false) {
         data = Serial.read();
         if (receiving == true) {
@@ -44,6 +43,7 @@ void checkSerial()
                 receiving = false;
                 ndx = 0;
                 newData = true;
+                addData(receivedChars);
             }
         }
 
@@ -53,10 +53,15 @@ void checkSerial()
     }
 }
 
+void addData(char* data)
+{
+    machine.AddMeriCodeToBuffer(data);
+}
+
 void checkData() 
 {
     if (newData == true) {
-        machine.AddMeriCodeToBuffer(receivedChars);
+        
         newData = false;
     }
 }

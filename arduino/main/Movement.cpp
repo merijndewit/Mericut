@@ -16,9 +16,9 @@ Movement::Movement()
 
 void Movement::SetDefaultSpeed()
 {
-    xStepper.setMaxSpeed(2000);
-    yStepper.setMaxSpeed(2000);
-    yyStepper.setMaxSpeed(2000);
+    xStepper.setMaxSpeed(2500);
+    yStepper.setMaxSpeed(2500);
+    yyStepper.setMaxSpeed(2500);
     zStepper.setMaxSpeed(MAXSTEPPERSPEED);
     xStepper.setAcceleration(STEPPERACCELERATION);
     yStepper.setAcceleration(STEPPERACCELERATION);
@@ -29,25 +29,19 @@ void Movement::SetDefaultSpeed()
 
 void Movement::SetTargetPosition(float x, float y, float z)
 {
-    xMoving = false;
-    yMoving = false;
+    xyMoving = false;
     zMoving = false;
 
     long xyPositions[3] = {long(targetPosition[0]), long(targetPosition[1]), long(targetPosition[1])};
 
-
+    isMovingToTarget = true;
     //SyncMovementXY(x, y);
-
-    if (isMovingToTarget)
-    {
-        return;
-    }
     if (!isnan(x))
     {
         targetPosition[0] = (x * XSTEPPERMM) * MICROSTEPPING;
         xyPositions[0] = long((x * XSTEPPERMM) * MICROSTEPPING);
         //xStepper.moveTo((x * XSTEPPERMM) * MICROSTEPPING);
-        xMoving = true;
+        xyMoving = true;
     }
     if (!isnan(y))
     {
@@ -57,7 +51,7 @@ void Movement::SetTargetPosition(float x, float y, float z)
         xyPositions[2] = long((y * YSTEPPERMM) * MICROSTEPPING);
 
         targetPosition[1] = (y * YSTEPPERMM) * MICROSTEPPING;
-        yMoving = true;
+        xyMoving = true;
     }    
     if (!isnan(z))
     {
@@ -65,17 +59,19 @@ void Movement::SetTargetPosition(float x, float y, float z)
         targetPosition[2] = z;
         zMoving = true;
     }
-    steppers.moveTo(xyPositions);
-    isMovingToTarget = true;
+    if (xyMoving)
+    {
+        steppers.moveTo(xyPositions);
+    }
 }
 
 void Movement::Move()
 {
     int moved = 0;
 
-    if(xMoving)
+    if(xyMoving)
     {
-        xMoving = steppers.run();
+        xyMoving = steppers.run();
         moved++;
     }
 
@@ -88,5 +84,9 @@ void Movement::Move()
     if (moved == 0)
     {
         isMovingToTarget = false;
+    }
+    else
+    {
+        isMovingToTarget = true;
     }
 }

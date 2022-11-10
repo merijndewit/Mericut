@@ -4,7 +4,6 @@
 
 MeriCode::MeriCode()
 {
-
 }
 
 void MeriCode::Run()
@@ -12,10 +11,10 @@ void MeriCode::Run()
     if (moving)
     {
         movement.Move();
-        if (!movement.IsMovingToTarget())
+        if (movement.IsMovingToTarget() == false)
         {
-            completedMericodeInBuffer();
             moving = false;
+            completedMericodeInBuffer();
         }
     }
 }
@@ -27,69 +26,94 @@ void MeriCode::receivedInvalidCode()
 
 void MeriCode::addMeriCode(char* meriCodeCharacters)
 {
-    meriCodeBuffer[itemsInBuffer++] = meriCodeCharacters;
-    executeMeriCode(meriCodeBuffer[0]);
-    if (!moving)
+    askedForMeriCode = false;
+    ringBuffer.put(meriCodeCharacters);
+    itemsInBuffer++;
+    executeNextCommand();
+    if (itemsInBuffer < 6)
     {
-        completedMericodeInBuffer();
+        askedForMeriCode = true;
+        Serial.println("<C1>");
     }
 }
 
 void MeriCode::completedMericodeInBuffer()
 {
-    meriCodeBuffer + 1;
-    itemsInBuffer--;
-    Serial.println("<C1>"); //ask for next command
+    if (!askedForMeriCode)
+    {
+        askedForMeriCode = true;
+        Serial.println("<C1>");
+    }
+    executeNextCommand();
 }
 
-void MeriCode::executeMeriCode(char* meriCodeCharacters)
+void MeriCode::executeNextCommand()
 {
+    if (itemsInBuffer != 0 && moving == false)
+    {
+        char* nextCommand = ringBuffer.get();
+        itemsInBuffer--;
+        bool isCompleted = executeMeriCode(nextCommand);
+        if (isCompleted)
+        {
+            completedMericodeInBuffer();
+        }
+    }
+}
+
+// returns true if mericode could be completed in one call
+// returns false if mericode coudn't be completed in a single call like setting the next target position
+// invalid mericode returns true
+bool MeriCode::executeMeriCode(char* meriCodeCharacters)
+{
+    bool couldComplete = true;
     switch (meriCodeCharacters[0]) //get first character of mericode
     {
         case 'D':
         {
             char* substr = meriCodeCharacters + 1;
-            executeDcode(substr++);
+            couldComplete = executeDcode(substr++);
         }
             break;
         case 'M':
         {
             char* substr = meriCodeCharacters + 1;
-            executeMcode(substr++);
+            couldComplete = executeMcode(substr++);
         }
             break;
         default:
             receivedInvalidCode();
             break;
     }
+    return couldComplete;
 }
 
-void MeriCode::executeDcode(char* dCharacters)
+bool MeriCode::executeDcode(char* dCharacters)
 {
     switch (dCharacters[0])
     {
         case '0':
             Serial.println("<C0>");
-            break;
+            return true;
         
         default:
             receivedInvalidCode();
-            break;
+            return true;
     }
 }
 
-void MeriCode::executeMcode(char* mCharacters)
+bool MeriCode::executeMcode(char* mCharacters)
 {
     char* substr = mCharacters + 1;
     switch (mCharacters[0])
     {
         case '0':
             M0(substr++);
-            break;
+            return false;
         
         default:
             receivedInvalidCode();
-            break;
+            return true;
     }
 }
 
@@ -116,7 +140,6 @@ void MeriCode::M0(char* characters)
     float y = NAN;
     float z = NAN;
     char* substr = characters + 1;
-    
     for (size_t i = 0; i < 32; i++)
     {
         if(characters[i] == '\x00') 
@@ -140,5 +163,5 @@ void MeriCode::M0(char* characters)
             continue;
         }
     } 
-    this->movement.SetTargetPosition(x, y, z);
+    movement.SetTargetPosition(x, y, z);
 }
