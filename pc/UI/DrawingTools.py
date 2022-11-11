@@ -20,15 +20,15 @@ class Pen(Tool):
         nodePositionX = x / self.parentCanvas.canvasScale
         nodePositionY = y / self.parentCanvas.canvasScale
         if clickedNode == None: #not clicked on any nodes
-            self.nodes.append(Nodes.Node(nodePositionX, nodePositionY))
+            self.nodes.append(Nodes.Node(nodePositionX, nodePositionY, self.parentCanvas.selectedLayer))
         elif (isinstance(clickedNode, Nodes.Node)): #clicked on a node
-            self.nodes.append(Nodes.MergedNode(clickedNode.position, [Nodes.Node(x, y), clickedNode]))
+            self.nodes.append(Nodes.MergedNode(clickedNode.position, [Nodes.Node(x, y, self.parentCanvas.selectedLayer), clickedNode], self.parentCanvas.selectedLayer))
         else: #clicked on a merged node
-            clickedNode.AddNode(Nodes.Node(x, y))
+            clickedNode.AddNode(Nodes.Node(x, y, self.parentCanvas.selectedLayer))
             self.nodes.append(clickedNode)
         if self.clicks == 1:
             line = DrawingShapes.Line(self.nodes, self.parentCanvas)
-            self.parentCanvas.drawnShapes.append(line)
+            self.parentCanvas.selectedLayer.AddShape(line)
             self.clicks = 0
             self.nodes = []
             self.parentCanvas.delete(self.previewLine.canvasLine)
@@ -70,8 +70,8 @@ class QuadraticBezier(Tool):
         return
 
     def DrawCurve(self):
-        curve = DrawingShapes.QuadraticBezier(self.parentCanvas, [Nodes.Node(20, 20), Nodes.Node(30, 30), Nodes.Node(20, 40)])
-        self.parentCanvas.drawnShapes.append(curve)
+        curve = DrawingShapes.QuadraticBezier(self.parentCanvas, [Nodes.Node(20, 20, self.parentCanvas.selectedLayer), Nodes.Node(30, 30, self.parentCanvas.selectedLayer), Nodes.Node(20, 40, self.parentCanvas.selectedLayer)])
+        self.parentCanvas.selectedLayer.AddShape(curve)
 
 class CubicBezier(Tool):
     def __init__(self, parentCanvas):
@@ -85,8 +85,9 @@ class CubicBezier(Tool):
         return
 
     def DrawCurve(self):
-        curve = DrawingShapes.CubicBezier(self.parentCanvas, [Nodes.Node(20, 20), Nodes.Node(30, 30), Nodes.Node(20, 40), Nodes.Node(40, 40)])
-        self.parentCanvas.drawnShapes.append(curve)
+        curve = DrawingShapes.CubicBezier(self.parentCanvas, [Nodes.Node(20, 20, self.parentCanvas.selectedLayer), Nodes.Node(30, 30, self.parentCanvas.selectedLayer), Nodes.Node(20, 40, self.parentCanvas.selectedLayer), Nodes.Node(40, 40, self.parentCanvas.selectedLayer)])
+        self.parentCanvas.selectedLayer.AddShape(curve)
+
 
 class Arc(Tool):
     def __init__(self, parentCanvas):
@@ -100,7 +101,7 @@ class Arc(Tool):
         return
 
     def DrawCurve(self):
-        curve = DrawingShapes.Arc(self.parentCanvas, [Nodes.Node(20, 20), Nodes.Node(30, 30), Nodes.Node(20, 40)])
-        self.parentCanvas.drawnShapes.append(curve)
+        curve = DrawingShapes.Arc(self.parentCanvas, [Nodes.Node(20, 20, self.parentCanvas.selectedLayer), Nodes.Node(30, 30, self.parentCanvas.selectedLayer), Nodes.Node(20, 40, self.parentCanvas.selectedLayer)])
+        self.parentCanvas.selectedLayer.AddShape(curve)
 
 
