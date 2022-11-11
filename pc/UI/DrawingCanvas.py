@@ -7,6 +7,7 @@ import UI.CanvasShapes as CanvasShapes
 import UI.DrawingTools as DrawingTools
 import UI.CanvasSVG as CanvasSVG
 import UI.CanvasToMeriCode as CanvasToMeriCode
+import UI.Layer as Layer
 
 class DrawingCanvas(tkinter.Canvas):
     def __init__(self, parent, *args, **kwargs):
@@ -25,7 +26,8 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
-        self.drawnShapes = []
+        self.selectedLayer = Layer.Layer(self, "layer")
+        self.layers = [self.selectedLayer]
         self.lastCollidedNode = None
         self.background = None
 
@@ -72,6 +74,7 @@ class DrawingCanvas(tkinter.Canvas):
             color = Colors.PAPERBACKGROUNDCANVAS
         self.background = CanvasShapes.CanvasRectangle(width, height, self)
         self.background.SetColor(color)
+        self.background.SetScale(self.canvasScale)
         
 
     def Scroll(self, event):
@@ -84,6 +87,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.background.SetScale(self.canvasScale)
         self.RedrawGrid()
         self.RedrawShapes()
+        self.selectedLayer.CanvasScaleChanged()
 
 
     def RedrawGrid(self):
@@ -104,7 +108,7 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Clicked(self, event):
         x, y = self.Snap(event.x, event.y)
-        self.tool.Clicked(x, y, self.GetNearestNode(8))
+        self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition))
         self.mousePressed = True
 
     def Released(self, event):
@@ -117,30 +121,14 @@ class DrawingCanvas(tkinter.Canvas):
         self.ShowColision ()
 
     def RedrawShapes(self):
-        for i in range(len(self.drawnShapes)):
-            self.drawnShapes[i].Update()
-
-    def GetNearestNode(self, distance):
-        nearestNode = None
-        for i in range(len(self.drawnShapes)):
-            for node in range(len(self.drawnShapes[i].nodes)):
-                nodeDistance = abs(math.dist([self.drawnShapes[i].nodes[node].position[0] * self.canvasScale, self.drawnShapes[i].nodes[node].position[1] * self.canvasScale], self.mousePosition))
-                if nodeDistance > distance:
-                    continue
-                if nearestNode == None:
-                    nearestNode = (i, node, nodeDistance)
-                    continue
-                if nearestNode[2] > nodeDistance:
-                    nearestNode = (i, node, nodeDistance)
-        if nearestNode == None:
-            return None
-        return self.drawnShapes[nearestNode[0]].nodes[nearestNode[1]]
+        for i in range(len(self.layers)):
+            self.layers[i].RedrawShapes()
 
     def CanvasToMeriCode(self):
         CanvasToMeriCode.CanvasToMeriCode(self)
 
     def ShowColision(self):
-        collidingNode = self.GetNearestNode(8)
+        collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
             return
         if collidingNode == None: # mouse is not on a node so hide the colision circle
@@ -151,3 +139,37 @@ class DrawingCanvas(tkinter.Canvas):
 
     def LoadSVG(self):
         CanvasSVG.LoadSVG(self)
+
+    def GetLayerNames(self):
+        names = []
+        for i in range(len(self.layers)):
+            names.append(self.layers[i].name)
+        return names
+
+    def SelectLayer(self, name):
+        for i in range(len(self.layers)):
+            if self.layers[i].name == name:
+                self.selectedLayer.StopResizing()
+                self.selectedLayer = self.layers[i]
+                self.selectedLayer.Resize()
+                return
+
+    def AddLayer(self, name="layer"):
+        number = 0
+        foundName = False
+        while foundName == False:
+            foundName = True
+            for i in range(len(self.layers)):
+                if self.layers[i].name == name:
+                    if name.endswith(str(number - 1)):
+                        name = name[:-1] + str(number)
+                    else:
+                        name += str(number)
+                    number += 1
+                    foundName = False
+                    break
+            
+        newLayer = Layer.Layer(self, name)
+        self.layers.append(newLayer)
+        self.selectedLayer = newLayer
+        self.parent.parent.canvasLayerFrame.AddLayerButton(name)
