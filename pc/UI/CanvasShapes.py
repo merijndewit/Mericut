@@ -12,9 +12,14 @@ class CanvasCircle():
     def Draw(self):
         self.circle = self.canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, outline=Colors.COLISIONNODE, width=2)
     
+    def SetScale(self, scale):
+        self.canvas.coords(self.circle, int(self.x * scale) - self.radius, int(self.y * scale) - self.radius, int(self.x * scale) + self.radius, int(self.y * scale) + self.radius)
+
     def Move(self, x, y):
         self.canvas.coords(self.circle, x - self.radius, y - self.radius, x + self.radius, y + self.radius)
-
+        self.x = x
+        self.y = y
+        
     def SetColor(self, color):
         self.canvas.itemconfig(self.circle, outline=color)
 
