@@ -18,13 +18,18 @@ class Main(customtkinter.CTk):
         self.title("Mericut")
         self.terminating = False
 
+        leftFramesContainer = Frames.LeftFramesContainer(self, self)
         self.callbackMeriCode = CallbackMeriCode(self)
         self.serial = Serial(self)
-        self.connectFrame = Frames.ConnectFrame(self, self)
-        self.MeriCodeFrame = Frames.MeriCodeTestFrame(self, self)
+        self.headerFrame = Frames.HeaderFrame(self, self)
+        self.connectFrame = Frames.ConnectFrame(self, leftFramesContainer)
+        self.MeriCodeFrame = Frames.MeriCodeTestFrame(self, leftFramesContainer)
+        self.meriCodeFrame = Frames.MeriCodeFrame(self, leftFramesContainer)
         self.canvas = Frames.Canvas(self, self)
         self.toolSelect = Frames.ToolSelect(self, self)
-        self.meriCodeFrame = Frames.MeriCodeFrame(self, self)
+        self.backgroundFrame = Frames.BackgroundFrame(self, self)
+        self.canvasLayerFrame = Frames.CanvasLayerFrame(self, self)
+
 
         FileToMeriCode.GetMeriCodeFromTxt()
 
