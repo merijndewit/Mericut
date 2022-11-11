@@ -219,5 +219,36 @@ class BackgroundFrame(customtkinter.CTkFrame):
         self.moveButton = customtkinter.CTkButton(master=self, text="A6", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 13 bold", width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A6"))
         self.moveButton.grid(row=1, column=2, sticky=tkinter.NW)
 
+class CanvasLayerFrame(customtkinter.CTkFrame):
+    def __init__(self, parent, frameParent, *args, **kwargs):
+        customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
+        self.parent = parent
+        self.configure( width=200,
+                        height=300,
+                        corner_radius=4,
+                        fg_color=Colors.BGCOLOR)
 
+        self.grid(row=3, column=2, padx=(5, 5), pady=(5, 5), rowspan=3, sticky=tkinter.NSEW)
+        self.grid_propagate(False)
+        self.posX = 0
+        self.posY = 1
+        self.maxWidth = 3
         
+        self.moveButton = customtkinter.CTkButton(master=self, text="+", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 13 bold", width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.AddLayer())
+        self.moveButton.grid(row=0, column=0, pady=(0, 5), sticky=tkinter.NW)
+
+        layerNames = self.parent.canvas.canvas.GetLayerNames()
+        self.layerButtons = []
+        for i in range(len(layerNames)):
+            self.AddLayerButton(layerNames[i])
+
+            
+    def AddLayerButton(self, name):
+        layerButton = customtkinter.CTkButton(master=self, text=name, fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 11 bold", width=60, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SelectLayer(name))
+        layerButton.grid(row=self.posY, column=self.posX, sticky=tkinter.NW)
+        layerButton.grid_propagate(False)
+        self.layerButtons.append(layerButton)
+        self.posX += 1
+        if self.posX == self.maxWidth:
+            self.posX = 0
+            self.posY += 1
