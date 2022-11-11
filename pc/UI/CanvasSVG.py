@@ -10,35 +10,35 @@ def LoadSVG(canvas):
     path_strings = [path.getAttribute('d') for path
                     in doc.getElementsByTagName('path')]
     doc.unlink()
-    scale = 0.25 / 3
+    scale = 0.10
     yOffset = 0
 
     for path_string in path_strings:
         path = parse_path(path_string)
         for object in path:
             if isinstance(object, Line):
-                node0 = Nodes.Node(object.start.real * scale, (object.start.imag * scale) - yOffset)
-                node1 = Nodes.Node(object.end.real * scale, (object.end.imag * scale) - yOffset)
+                node0 = Nodes.Node(object.start.real * scale, (object.start.imag * scale) - yOffset, canvas.selectedLayer)
+                node1 = Nodes.Node(object.end.real * scale, (object.end.imag * scale) - yOffset, canvas.selectedLayer)
 
                 line = DrawingShapes.Line([node0, node1], canvas)
-                canvas.drawnShapes.append(line)
+                canvas.selectedLayer.drawnShapes.append(line)
+                continue
 
             if isinstance(object, QuadraticBezier):
-                node0 = Nodes.Node(object.start.real * scale, object.start.imag * scale - yOffset)
-                node1 = Nodes.Node(object.control.real * scale, object.control.imag * scale - yOffset)
-                node2 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset)
+                node0 = Nodes.Node(object.start.real * scale, object.start.imag * scale - yOffset, canvas.selectedLayer)
+                node1 = Nodes.Node(object.control.real * scale, object.control.imag * scale - yOffset, canvas.selectedLayer)
+                node2 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset, canvas.selectedLayer)
 
                 curve = DrawingShapes.QuadraticBezier(canvas, [node0, node1, node2])
-                canvas.drawnShapes.append(curve)
+                canvas.selectedLayer.drawnShapes.append(curve)
+                continue
 
             if isinstance(object, CubicBezier):
-                node0 = Nodes.Node(object.start.real * scale, object.start.imag * scale - yOffset)
-                node1 = Nodes.Node(object.control1.real * scale, object.control1.imag * scale - yOffset)
-                node2 = Nodes.Node(object.control2.real * scale, object.control2.imag * scale - yOffset)
-                node3 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset)
+                node0 = Nodes.Node(object.start.real * scale, object.start.imag * scale - yOffset, canvas.selectedLayer)
+                node1 = Nodes.Node(object.control1.real * scale, object.control1.imag * scale - yOffset, canvas.selectedLayer)
+                node2 = Nodes.Node(object.control2.real * scale, object.control2.imag * scale - yOffset, canvas.selectedLayer)
+                node3 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset, canvas.selectedLayer)
 
                 curve = DrawingShapes.CubicBezier(canvas, [node0, node1, node2, node3])
-                canvas.drawnShapes.append(curve)
-
-            
-
+                canvas.selectedLayer.drawnShapes.append(curve)
+                continue
