@@ -4,25 +4,25 @@ class CanvasToMeriCode:
         self.canvas = canvas
         self.mergeDistance = 0.04
         with open('Test/MeriCodeTestFile.txt', "w") as file:
-            for i in range(len(self.canvas.drawnShapes)):
-                shapeStartPosition = self.canvas.drawnShapes[i].GetStartPosition()
-                shapeEndPosition = self.canvas.drawnShapes[i].GetEndPosition()
-                print([shapeStartPosition, shapeEndPosition])
-                if (abs(self.position[0] - shapeStartPosition[0]) <= self.mergeDistance and abs(self.position[1] - shapeStartPosition[1]) <= self.mergeDistance):
-                    self.DrawShapeReversed(file, self.canvas.drawnShapes[i].lines)
-                    continue
-                if (abs(self.position[0] - shapeEndPosition[0]) <= self.mergeDistance and abs(self.position[1] - shapeEndPosition[1]) <= self.mergeDistance):
-                    self.DrawShape(file, self.canvas.drawnShapes[i].lines)
-                    continue
-                self.MoveTo(file, shapeStartPosition)
-                self.DrawShape(file, self.canvas.drawnShapes[i].lines)
+            for layer in range(len(self.canvas.layers)):
+                for i in range(len(self.canvas.layers[layer].drawnShapes)):
+                    shapeStartPosition = self.canvas.layers[layer].drawnShapes[i].GetStartPosition()
+                    shapeEndPosition = self.canvas.layers[layer].drawnShapes[i].GetEndPosition()
+                    if (abs(self.position[0] - shapeStartPosition[0]) <= self.mergeDistance and abs(self.position[1] - shapeStartPosition[1]) <= self.mergeDistance):
+                        self.DrawShapeReversed(file, self.canvas.layers[layer].drawnShapes[i].lines)
+                        continue
+                    if (abs(self.position[0] - shapeEndPosition[0]) <= self.mergeDistance and abs(self.position[1] - shapeEndPosition[1]) <= self.mergeDistance):
+                        self.DrawShape(file, self.canvas.layers[layer].drawnShapes[i].lines)
+                        continue
+                    self.MoveTo(file, shapeStartPosition)
+                    self.DrawShape(file, self.canvas.layers[layer].drawnShapes[i].lines)
             self.MoveToolUp(file)
             self.MoveToHome(file)
             file.close()
 
     def MoveTo(self, file, position):
         self.MoveToolUp(file)
-        file.write("<M0 X" + str(position[0]) + " Y" + str(position[1]) + ">" + "\n")
+        file.write("<M0 X" + str(round(position[0], 4)) + " Y" + str(round(position[1], 4)) + ">" + "\n")
         self.position = position
         self.MoveToolDown(file)
 
@@ -36,17 +36,17 @@ class CanvasToMeriCode:
 
     def WriteMeriCodeLine(self, file, x0, y0, x1, y1):
         if (abs(self.position[0] - x0) <= self.mergeDistance and abs(self.position[1] - y0) <= self.mergeDistance):
-            file.write("<M0 X" + str(x1) + " Y" + str(y1) + ">" + "\n") #move the tool to the start of the line
+            file.write("<M0 X" + str(round(x1, 4)) + " Y" + str(round(y1, 4)) + ">" + "\n") #move the tool to the start of the line
             self.position = [x1, y1]
             return
         if (abs(self.position[0] - x1) <= self.mergeDistance and abs(self.position[1] - y1) <= self.mergeDistance):
-            file.write("<M0 X" + str(x0) + " Y" + str(y0) + ">" + "\n") #move the tool to the start of the line
+            file.write("<M0 X" + str(round(x0, 4)) + " Y" + str(round(y0, 4)) + ">" + "\n") #move the tool to the start of the line
             self.position = [x0, y0]
             return
         self.MoveToolUp(file)
-        file.write("<M0 X" + str(x0) + " Y" + str(y0) + ">" + "\n") #move the tool to the start of the line
+        file.write("<M0 X" + str(round(x0, 4)) + " Y" + str(round(y0, 4)) + ">" + "\n") #move the tool to the start of the line
         self.MoveToolDown(file)
-        file.write("<M0 X" + str(x1) + " Y" + str(y1) + ">" + "\n") #move the tool to the start of the line
+        file.write("<M0 X" + str(round(x1, 4)) + " Y" + str(round(y1, 4)) + ">" + "\n") #move the tool to the start of the line
         self.position = [x1, y1]
     @staticmethod
     def MoveToolUp(file):
