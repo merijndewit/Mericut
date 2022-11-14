@@ -78,13 +78,13 @@ class Layer():
     
     def Update(self):
         currentWidth = (self.resizeNodes[0].position[0] / self.canvas.canvasScale - self.resizeNodes[1].position[0] / self.canvas.canvasScale)
-        differenceX = (abs(currentWidth - self.startWidth) / self.startWidth)
-        differenceY = (abs(currentWidth - self.startWidth) / self.startWidth)
+        differenceX = ((currentWidth - self.startWidth) / self.startWidth)
+        differenceY = ((currentWidth - self.startWidth) / self.startWidth)
 
         self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
         self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
 
-        #print("difference " + str((differenceX)))
+        print("difference " + str((differenceX)))
 
         self.ApplyScale(differenceX, differenceY)
                 
