@@ -1,6 +1,7 @@
 from cgitb import text
 import customtkinter
 import tkinter
+from PIL import ImageTk, Image  
 
 from UI.Colors import Colors
 from Serial import Serial
@@ -23,7 +24,7 @@ class HeaderFrame(customtkinter.CTkFrame):
         customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
         self.parent = parent
         self.configure( width=200,
-                        height=30,
+                        height=40,
                         corner_radius=4,
                         fg_color=Colors.BGHEADERFRAME)
 
@@ -32,7 +33,13 @@ class HeaderFrame(customtkinter.CTkFrame):
         self.grid_propagate(0)
 
         self.header = customtkinter.CTkLabel(master=self, text="MeriCut", text_color=Colors.TEXT, text_font='Helvetica 13 bold', anchor=tkinter.W)
-        self.header.grid(row=1, column=0, sticky=tkinter.NW, columnspan=2, padx=(5, 0))
+        self.header.grid(row=0, column=2, sticky=tkinter.NW, pady=(6, 0))
+
+        logo = Image.open("images/logo.png")
+        logo = logo.resize((40, 40), Image.ANTIALIAS)
+        tkinterLogo = ImageTk.PhotoImage(logo)
+        self.button = customtkinter.CTkButton(master=self, image=tkinterLogo, text="", fg_color=Colors.BGHEADERFRAME, hover_color=Colors.BGHEADERFRAME, text_font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())
+        self.button.grid(row=0, column=0, sticky=tkinter.W, padx=(5, 5))
 
 class ConnectFrame(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):
