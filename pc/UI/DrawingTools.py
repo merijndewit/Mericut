@@ -16,7 +16,7 @@ class Pen(Tool):
         super().__init__(parentCanvas)
         self.previewLine = None
 
-    def Clicked(self, x, y, clickedNode):
+    def Clicked(self, x, y, clickedNode, clickedLayer):
         nodePositionX = x / self.parentCanvas.canvasScale
         nodePositionY = y / self.parentCanvas.canvasScale
         if clickedNode == None: #not clicked on any nodes
@@ -46,8 +46,9 @@ class Pen(Tool):
             return
 
 class Move(Tool):
-    def Clicked(self, x, y, clickedNode):
+    def Clicked(self, x, y, clickedNode, clickedLayer):
         self.clickedNode = clickedNode
+        self.clickedLayer = clickedLayer
 
     def Hover(self, x, y):
         nodePositionX = x / self.parentCanvas.canvasScale
@@ -56,6 +57,9 @@ class Move(Tool):
             self.clickedNode.position = [nodePositionX, nodePositionY]
             self.clickedNode.UpdateShape()
             return
+        elif self.parentCanvas.mousePressed and self.clickedLayer:
+            self.parentCanvas.selectedLayer.Move([x, y])
+
         self.clickedNode = None
 
 class QuadraticBezier(Tool):
@@ -63,7 +67,7 @@ class QuadraticBezier(Tool):
         super().__init__(parentCanvas)
         self.previewLine = None
 
-    def Clicked(self, x, y, clickedNode):
+    def Clicked(self, x, y, clickedNode, clickedLayer):
         self.DrawCurve()
 
     def Hover(self, x, y):
@@ -78,7 +82,7 @@ class CubicBezier(Tool):
         super().__init__(parentCanvas)
         self.previewLine = None
 
-    def Clicked(self, x, y, clickedNode):
+    def Clicked(self, x, y, clickedNode, clickedLayer):
         self.DrawCurve()
 
     def Hover(self, x, y):
@@ -94,7 +98,7 @@ class Arc(Tool):
         super().__init__(parentCanvas)
         self.previewLine = None
 
-    def Clicked(self, x, y, clickedNode):
+    def Clicked(self, x, y, clickedNode, clickedLayer):
         self.DrawCurve()
 
     def Hover(self, x, y):

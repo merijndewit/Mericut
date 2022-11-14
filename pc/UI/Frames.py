@@ -238,17 +238,41 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
         self.moveButton.grid(row=0, column=0, pady=(0, 5), sticky=tkinter.NW)
 
         layerNames = self.parent.canvas.canvas.GetLayerNames()
-        self.layerButtons = []
+        self.layerFrames = []
         for i in range(len(layerNames)):
             self.AddLayerButton(layerNames[i])
 
             
     def AddLayerButton(self, name):
-        layerButton = customtkinter.CTkButton(master=self, text=name, fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 11 bold", width=60, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SelectLayer(name))
-        layerButton.grid(row=self.posY, column=self.posX, sticky=tkinter.NW)
-        layerButton.grid_propagate(False)
-        self.layerButtons.append(layerButton)
+        layerFrame = LayerButtonFrame(self, self, name)
+        layerFrame.grid(row=self.posY, column=self.posX, sticky=tkinter.NW)
+        layerFrame.grid_propagate(False)
+        self.layerFrames.append(layerFrame)
         self.posX += 1
         if self.posX == self.maxWidth:
             self.posX = 0
             self.posY += 1
+
+class LayerButtonFrame(customtkinter.CTkFrame):
+    def __init__(self, parent, frameParent, name, *args, **kwargs):
+        customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
+        self.parent = parent
+        self.name = name
+        self.configure( width=60,
+                        height=70,
+                        corner_radius=4,
+                        fg_color=Colors.PAPERBACKGROUND)
+
+        self.grid(row=0, column=0, padx=(0, 5), pady=(5, 0), sticky=tkinter.NSEW)
+        self.grid_propagate(False)
+        self.button = customtkinter.CTkButton(master=self, text=name, fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, width=60, height=70, text_color=Colors.BUTTONTEXT, corner_radius=4, command= lambda: self.SelectLayer())
+        self.button.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), rowspan=4, columnspan=3, sticky=tkinter.NSEW)
+
+        self.selectbutton = customtkinter.CTkButton(master=self, text="↔", fg_color=Colors.BUTTON, hover_color=Colors.PAPERHOVERCOLOR, width=12, height=12, text_color=Colors.BUTTONTEXT, command= lambda: self.TransformLayer())
+        self.selectbutton.grid(row=3, column=0, padx=(0, 0), pady=(0, 0), sticky=tkinter.SW)
+
+    def SelectLayer(self):
+        self.parent.parent.canvas.canvas.SelectLayer(self.name)
+
+    def TransformLayer(self):
+        self.parent.parent.canvas.canvas.TransformLayer(self.name)

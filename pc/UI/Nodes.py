@@ -36,7 +36,7 @@ class Node():
 
 class MergedNode():
     def __init__(self, position, nodesToMerge, layer):
-        self.position = [position[0] / layer.scale, [1] / layer.scale]
+        self.position = [position[0] / layer.scale, position[1] / layer.scale]
         self.shapes = []
         self.offsetPosition = [0, 0]
         

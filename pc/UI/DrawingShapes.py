@@ -72,7 +72,6 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
 
         if len(self.lines) > resolution:
             toDelete = len(self.lines) - resolution
-            print(toDelete)
             for i in range(resolution, len(self.lines)):
                 self.lines[i].Delete()
             del self.lines[len(self.lines) - toDelete:]
@@ -125,7 +124,6 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
 
         if len(self.lines) > resolution:
             toDelete = len(self.lines) - resolution
-            print(toDelete)
             for i in range(resolution, len(self.lines)):
                 self.lines[i].Delete()
             del self.lines[len(self.lines) - toDelete:]
@@ -181,10 +179,6 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
         if endAngle < 0:
             endAngle += 180
     
-
-        print(startAngle , endAngle, angle)
-        if t == 1:
-            print("new cycle")
         xP = x2 + r * math.cos(angle * math.pi / 180)
         yP = y2 + r * math.sin(angle * math.pi / 180)
 

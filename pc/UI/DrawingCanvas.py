@@ -110,7 +110,7 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Clicked(self, event):
         x, y = self.Snap(event.x, event.y)
-        self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition))
+        self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition), self.selectedLayer.IsColliding([x, y]))
         self.mousePressed = True
 
     def Released(self, event):
@@ -157,7 +157,16 @@ class DrawingCanvas(tkinter.Canvas):
             if self.layers[i].name == name:
                 self.selectedLayer.StopResizing()
                 self.selectedLayer = self.layers[i]
-                self.selectedLayer.Resize()
+                return
+
+    def TransformLayer(self, name):
+        for i in range(len(self.layers)):
+            if self.layers[i].name == name:
+                self.selectedLayer = self.layers[i]
+                if self.selectedLayer.resizing:
+                    self.selectedLayer.StopResizing()
+                    return
+                self.selectedLayer.StartResizing()
                 return
 
     def AddLayer(self, name="layer"):
