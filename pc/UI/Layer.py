@@ -51,10 +51,14 @@ class Layer():
     def AddShape(self, shape):
         self.drawnShapes.append(shape)
 
-    def ApplyScale(self, differenceX, differenceY):
+    def ApplyScale(self, side, differenceX, differenceY):
         for shape in range(len(self.drawnShapes)):
             for node in range(len(self.drawnShapes[shape].nodes)):
-                self.drawnShapes[shape].nodes[node].SetScale(differenceX, self.resizeNodes[0].position[0], differenceY, self.resizeNodes[0].position[1])
+                if side: #resizing from right
+                    self.drawnShapes[shape].nodes[node].SetScale(differenceX, self.resizeNodes[0].position[0], differenceY, self.resizeNodes[0].position[1])
+                    continue
+                self.drawnShapes[shape].nodes[node].SetScale(differenceX, self.resizeNodes[1].position[0], differenceY, self.resizeNodes[1].position[1])
+
         self.RedrawShapes()
     
     def GetBorderPositions(self):
@@ -74,19 +78,27 @@ class Layer():
                     minY = position[1]
                 elif position[1] > maxY:
                     maxY = position[1]
-        return [[minX - 5, minY - 5], [maxX + 5, maxY + 5]]
+        return [[minX, minY], [maxX, maxY]]
     
     def Update(self):
-        currentWidth = (self.resizeNodes[0].position[0] / self.canvas.canvasScale - self.resizeNodes[1].position[0] / self.canvas.canvasScale)
+        currentWidth = (self.resizeNodes[0].position[0] / self.canvas.canvasScale) - (self.resizeNodes[1].position[0] / self.canvas.canvasScale)
+        currentHeight = (self.resizeNodes[0].position[1] / self.canvas.canvasScale) - (self.resizeNodes[1].position[1] / self.canvas.canvasScale)
         differenceX = ((currentWidth - self.startWidth) / self.startWidth)
-        differenceY = ((currentWidth - self.startWidth) / self.startWidth)
-
+        differenceY = ((currentHeight - self.startHeight) / self.startHeight)
+        side = False
+        tolerance = 0.04
+        if abs(self.sizeShapes[0].x / self.canvas.canvasScale - self.resizeNodes[0].position[0]) <= tolerance and abs(self.sizeShapes[0].y / self.canvas.canvasScale - self.resizeNodes[0].position[1]) <= tolerance:
+            side = True
+            print("true")
         self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
         self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
 
-        print("difference " + str((differenceX)))
+        if True:
+            self.ApplyScale(side, differenceX, differenceX)
+            return
 
-        self.ApplyScale(differenceX, differenceY)
+        self.ApplyScale(side, differenceX, differenceY)
+        
                 
     def Resize(self):
         self.StopResizing()
@@ -95,11 +107,11 @@ class Layer():
         self.resizeNodes[1] = (Node(nodePositions[1][0], nodePositions[1][1], self))
         self.resizeNodes[0].SetShape(self)
         self.resizeNodes[1].SetShape(self)
-        self.sizeShapes.append(CanvasCircle(self.resizeNodes[0].position[0], self.resizeNodes[0].position[1], 5, self.canvas))
-        self.sizeShapes.append(CanvasCircle(self.resizeNodes[1].position[0], self.resizeNodes[1].position[1], 5, self.canvas))
+        self.sizeShapes.append(CanvasCircle(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale, 5, self.canvas))
+        self.sizeShapes.append(CanvasCircle(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale, 5, self.canvas))
         self.resizing = True
-        self.startWidth = (self.resizeNodes[0].position[0] - self.resizeNodes[1].position[0])
-        self.startHeight = (self.resizeNodes[0].position[0] - self.resizeNodes[1].position[0])
+        self.startWidth = (self.resizeNodes[0].position[0] / self.canvas.canvasScale - self.resizeNodes[1].position[0] / self.canvas.canvasScale)
+        self.startHeight = (self.resizeNodes[0].position[0] / self.canvas.canvasScale - self.resizeNodes[1].position[0] / self.canvas.canvasScale)
 
 
     def StopResizing(self):
@@ -113,5 +125,7 @@ class Layer():
             return    
         for i in range(len(self.sizeShapes)):
             self.sizeShapes[i].SetScale(self.canvas.canvasScale)
+        self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
+        self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
 
 

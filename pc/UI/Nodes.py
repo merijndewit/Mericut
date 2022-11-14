@@ -3,7 +3,7 @@ from UI.Colors import Colors
 
 class Node():
     def __init__(self, x, y, layer):
-        self.position = [x / layer.scale, y / layer.scale]
+        self.position = [x, y]
         self.offsetPosition = [0, 0]
         self.connectedNodes = []
         self.shape = None

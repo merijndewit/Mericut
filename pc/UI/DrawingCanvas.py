@@ -40,6 +40,8 @@ class DrawingCanvas(tkinter.Canvas):
         self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
 
+        self.lastSnapPosition = [0, 0]
+
     def ResizedWindow(self,event):
         width = event.width
         height = event.height
@@ -116,9 +118,13 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Motion(self, event):            
         x, y = self.Snap(event.x, event.y)
+        if [x, y] == self.lastSnapPosition:
+            return
+
+        self.lastSnapPosition = [x, y]
         self.mousePosition = [x, y]
         self.tool.Hover(x, y)
-        self.ShowColision ()
+        self.ShowColision()
 
     def RedrawShapes(self):
         for i in range(len(self.layers)):
