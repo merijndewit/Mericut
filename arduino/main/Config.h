@@ -1,11 +1,6 @@
 #define MICROSTEPPING 16
 // Stepper driver pins
 
-//21 - 22 y
-//19 - 18 y
-//5 - 17 t
-//16 - 4 z
-//15 - 2 x
 #define XDRIVERDIRECTIONPIN 15
 #define XDRIVERSTEPPIN 2
 
@@ -14,18 +9,19 @@
 #define YYDRIVERDIRECTIONPIN 19
 #define YYDRIVERSTEPPIN 18
 
-#define ZDRIVERDIRECTIONPIN 5
-#define ZDRIVERSTEPPIN 17
+#define ZDRIVERDIRECTIONPIN 16
+#define ZDRIVERSTEPPIN 4
 
-#define TDRIVERDIRECTIONPIN 4
-#define TDRIVERSTEPPIN 16
+#define TDRIVERDIRECTIONPIN 5
+#define TDRIVERSTEPPIN 17
 
-//Node: without microstepping
+//Note: without microstepping
 #define XSTEPPERMM 5
 #define YSTEPPERMM 11.14
+#define TSTEPPERDEG 0.3769
 
 #define MICROSTEPPING 16
 
-#define MAXSTEPPERSPEED 8000
+#define MAXSTEPPERSPEED 2000
 #define STEPPERACCELERATION 12000
 

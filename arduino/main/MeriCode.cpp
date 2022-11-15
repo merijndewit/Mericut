@@ -139,6 +139,7 @@ void MeriCode::M0(char* characters)
     float x = NAN;
     float y = NAN;
     float z = NAN;
+    float t = NAN;
     char* substr = characters + 1;
     for (size_t i = 0; i < 32; i++)
     {
@@ -162,6 +163,11 @@ void MeriCode::M0(char* characters)
             z = GetNumberAfterCharacter(substr + i);
             continue;
         }
+        if (characters[i] == 'T')
+        {
+            t = GetNumberAfterCharacter(substr + i);
+            continue;
+        }
     } 
-    movement.SetTargetPosition(x, y, z);
+    movement.SetTargetPosition(x, y, z, t);
 }
