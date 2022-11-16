@@ -151,6 +151,9 @@ class Layer():
         return False
 
     def Move(self, position):
+        position[0] /= self.canvas.canvasScale
+        position[1] /= self.canvas.canvasScale
+
         if self.lastMovedPositionX == None:
             self.lastMovedPositionX = position[0]
             self.lastMovedPositionY = position[1]

@@ -110,7 +110,7 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Clicked(self, event):
         x, y = self.Snap(event.x, event.y)
-        self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition), self.selectedLayer.IsColliding([x, y]))
+        self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition), self.selectedLayer.IsColliding([x / self.canvasScale, y / self.canvasScale]))
         self.mousePressed = True
 
     def Released(self, event):
