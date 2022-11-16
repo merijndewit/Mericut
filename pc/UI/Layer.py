@@ -7,8 +7,10 @@ class Layer():
         self.name = name
         self.canvas = canvas
         self.drawnShapes = [] 
-        self.resizeNodes = [None, None]
-        self.sizeShapes = []
+        self.resizeNodes = [Node(-100, -100, self), Node(-100, -100, self)]
+        self.sizeShapes = [CanvasCircle(-100, -100, 5, self.canvas), CanvasCircle(-100, -100, 5, self.canvas)]
+        self.resizeNodes[0].SetShape(self)
+        self.resizeNodes[1].SetShape(self)
         self.resizing = False
 
         #resizing borders
@@ -28,37 +30,31 @@ class Layer():
 
     def GetCollidingNode(self, distance, canvasScale, mousePosition):
         nearestNode = None
-        nodesToCheck = [self.resizeNodes[1]]
-        if self.resizing: #check Nodes
-            for node in range(len(nodesToCheck)):
-                nodeDistance = abs(math.dist([nodesToCheck[node].position[0] * canvasScale, nodesToCheck[node].position[1] * canvasScale], mousePosition))
-                if nodeDistance > distance:
-                    continue
-                if nearestNode == None:
-                    nearestNode = (node,nodeDistance)
-                    continue
-                if nearestNode[1] > nodeDistance:
-                    nearestNode = (node,nodeDistance)
+        nodesToCheck = []
+        if self.resizing: 
+            nodesToCheck = [self.resizeNodes[1]]
+        else:
+            for i in range(len(self.drawnShapes)): #check shapes
+                for node in range(len(self.drawnShapes[i].nodes)):
+                    nodesToCheck.append(self.drawnShapes[i].nodes[node])
+
+        for node in range(len(nodesToCheck)):
+            nodeDistance = abs(math.dist([nodesToCheck[node].position[0] * canvasScale, nodesToCheck[node].position[1] * canvasScale], mousePosition))
+            if nodeDistance > distance:
+                continue
             if nearestNode == None:
-                return None
-            return nodesToCheck[nearestNode[0]]
-            
-        for i in range(len(self.drawnShapes)): #check shapes
-            for node in range(len(self.drawnShapes[i].nodes)):
-                nodeDistance = abs(math.dist([self.drawnShapes[i].nodes[node].position[0] * canvasScale, self.drawnShapes[i].nodes[node].position[1] * canvasScale], mousePosition))
-                if nodeDistance > distance:
-                    continue
-                if nearestNode == None:
-                    nearestNode = (i, node, nodeDistance)
-                    continue
-                if nearestNode[2] > nodeDistance:
-                    nearestNode = (i, node, nodeDistance)
+                nearestNode = (node,nodeDistance)
+                continue
+            if nearestNode[1] > nodeDistance:
+                nearestNode = (node,nodeDistance)
         if nearestNode == None:
             return None
-        return self.drawnShapes[nearestNode[0]].nodes[nearestNode[1]]
+        return nodesToCheck[nearestNode[0]]
 
     def AddShape(self, shape):
         self.drawnShapes.append(shape)
+        for i in range(len(shape.nodes)):
+            shape.nodes[i].position = [shape.nodes[i].position[0] / self.scale, shape.nodes[i].position[1] / self.scale]
 
     def ApplyScale(self, scaleX, scaleY):
         for shape in range(len(self.drawnShapes)):
@@ -96,55 +92,31 @@ class Layer():
     
     def Update(self):
         currentWidth = self.resizeNodes[0].position[0] - self.resizeNodes[1].position[0]
-        #currentHeight = (self.resizeNodes[0].position[1] / self.canvas.canvasScale) - (self.resizeNodes[1].position[1] / self.canvas.canvasScale)
-        #currentWidth /= self.canvas.canvasScale
         scaleX = (((currentWidth) / self.startWidth) * 100)
         scaleX /= 100
         scaleX -= 1
-        print(scaleX)
-        #scaleY = ((currentHeight - self.startHeight) / self.startHeight)
-        tolerance = 0.04
-
         self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
         self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
-
+        self.scale = scaleX + 1
         self.ApplyScale(scaleX, scaleX)
      
     def StartResizing(self):
-        if self.resizeNodes[0] == None or self.resizeNodes[1] == None:
-            self.StopResizing()
-            nodePositions = self.GetBorderPositions()
-            self.resizeNodes[0] = (Node(nodePositions[0][0], nodePositions[0][1], self))
-            self.resizeNodes[1] = (Node(nodePositions[1][0], nodePositions[1][1], self))
-            self.resizeNodes[0].SetShape(self)
-            self.resizeNodes[1].SetShape(self)
-            self.sizeShapes.append(CanvasCircle(self.resizeNodes[0].position[0], self.resizeNodes[0].position[1], 5, self.canvas))
-            self.sizeShapes.append(CanvasCircle(self.resizeNodes[1].position[0], self.resizeNodes[1].position[1], 5, self.canvas))
-        else:
-            if self.sizeShapes[0] == None or self.sizeShapes[1] == None:
-                self.sizeShapes.append(CanvasCircle(self.resizeNodes[0].position[0], self.resizeNodes[0].position[1], 5, self.canvas))
-                self.sizeShapes.append(CanvasCircle(self.resizeNodes[1].position[0], self.resizeNodes[1].position[1], 5, self.canvas))
-            self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
-            self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
+        nodePositions = self.GetBorderPositions()
+        self.resizeNodes[0].position = [nodePositions[0][0], nodePositions[0][1]]
+        self.resizeNodes[1].position = [nodePositions[1][0], nodePositions[1][1]]
+        self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
+        self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
 
+        self.startWidth = (self.resizeNodes[0].position[0]) - (self.resizeNodes[1].position[0])
+        self.startHeight = (self.resizeNodes[0].position[0]) - (self.resizeNodes[1].position[0])
         self.resizing = True
-        self.startWidth = (self.resizeNodes[0].position[0] / self.canvas.canvasScale) - (self.resizeNodes[1].position[0] / self.canvas.canvasScale)
-        self.startHeight = (self.resizeNodes[0].position[0] / self.canvas.canvasScale - self.resizeNodes[1].position[0] / self.canvas.canvasScale)
 
     def StopResizing(self):
-        for i in range(len(self.sizeShapes)):
-            self.sizeShapes[i].Delete()
-
-        self.sizeShapes = []
+        self.sizeShapes[1].Move(-100, -100)
+        self.sizeShapes[0].Move(-100, -100)
         self.resizing = False
 
     def CanvasScaleChanged(self):
-        #if self.resizing == False:
-        #    return    
-        #for i in range(len(self.sizeShapes)):
-        #    self.sizeShapes[i].SetScale(self.canvas.canvasScale)
-        #if self.resizing:
-        #    self.StartResizing()
         self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
         self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
 
