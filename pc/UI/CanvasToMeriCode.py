@@ -1,10 +1,10 @@
 import math
 class CanvasToMeriCode:
-    def __init__(self, canvas):
+    def __init__(self, canvas, cutting):
         self.position = [0, 0]
         self.canvas = canvas
         self.mergeDistance = 0.04
-        self.cutting = True
+        self.cutting = cutting
         self.toolOffsetRadius = 4
         with open('Test/MeriCodeTestFile.txt', "w") as file:
             for layer in range(len(self.canvas.layers)):
@@ -109,5 +109,4 @@ class CanvasToMeriCode:
         else:
             y = -abs(y)
 
-        print([x, y])
         return [y, x]

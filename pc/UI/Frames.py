@@ -38,7 +38,7 @@ class HeaderFrame(customtkinter.CTkFrame):
         logo = Image.open("images/logo.png")
         logo = logo.resize((40, 40), Image.ANTIALIAS)
         tkinterLogo = ImageTk.PhotoImage(logo)
-        self.button = customtkinter.CTkButton(master=self, image=tkinterLogo, text="", fg_color=Colors.BGHEADERFRAME, hover_color=Colors.BGHEADERFRAME, text_font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())
+        self.button = customtkinter.CTkButton(master=self, image=tkinterLogo, text="", fg_color=Colors.BGHEADERFRAME, hover_color=Colors.BGHEADERFRAME, text_font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())  # type: ignore
         self.button.grid(row=0, column=0, sticky=tkinter.W, padx=(5, 5))
 
 class ConnectFrame(customtkinter.CTkFrame):
@@ -128,12 +128,28 @@ class MeriCodeFrame(customtkinter.CTkFrame):
 
         self.grid(row=2, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
         self.grid_propagate(0)
+        self.cutting = False
 
-        self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.GenerateMeriCode())
-        self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
+        self.drawingText = customtkinter.CTkLabel(master=self, text="Drawing", text_color=Colors.TEXT, text_font='Helvetica 11', anchor=tkinter.W, width=60)
+        self.drawingText.grid(row=0, column=0, sticky=tkinter.W)
+
+        self.slicingSwitch = customtkinter.CTkSwitch(master=self, text="", command= lambda: self.Switched(), progress_color=Colors.BUTTON, button_color=Colors.BGSECCOLOR)
+        self.slicingSwitch.grid(row=0, column=1, sticky=tkinter.W)
+        
+        self.cuttingText = customtkinter.CTkLabel(master=self, text="Cutting", text_color=Colors.TEXT, text_font='Helvetica 11', anchor=tkinter.W)
+        self.cuttingText.grid(row=0, column=2, sticky=tkinter.W)
+
+        self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=200, height=50, text_color=Colors.BUTTONTEXT, command= lambda: self.GenerateMeriCode())
+        self.submitButton.grid(row=1, column=0, columnspan=5, sticky=tkinter.SW)
+
+    def Switched(self):
+        if self.slicingSwitch.get() == 0:
+            self.cutting = False
+        else:
+            self.cutting = True
 
     def GenerateMeriCode(self):
-        self.parent.canvas.canvas.CanvasToMeriCode()
+        self.parent.canvas.canvas.CanvasToMeriCode(self.cutting)
 
 class ToolSelect(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):
