@@ -143,8 +143,8 @@ class DrawingCanvas(tkinter.Canvas):
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
         self.selectUIObject.Move(int(collidingNode.position[0] * self.canvasScale), int(collidingNode.position[1] * self.canvasScale))
 
-    def LoadSVG(self):
-        CanvasSVG.LoadSVG(self)
+    def LoadSVG(self, dir):
+        CanvasSVG.LoadSVG(self, dir)
 
     def GetLayerNames(self):
         names = []

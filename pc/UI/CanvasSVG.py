@@ -5,8 +5,8 @@ from xml.dom import minidom
 import UI.Nodes as Nodes
 import UI.DrawingShapes as DrawingShapes
 
-def LoadSVG(canvas):
-    doc = minidom.parse('Test/svg.svg')
+def LoadSVG(canvas, dir):
+    doc = minidom.parse(dir)
     path_strings = [path.getAttribute('d') for path
                     in doc.getElementsByTagName('path')]
     doc.unlink()
