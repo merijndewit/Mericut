@@ -15,6 +15,9 @@ class Movement
         void Move();
         void SetTargetPosition(float x, float y, float z, float t);
         bool IsMovingToTarget() {return isMovingToTarget;}
+        void SetNormalSpeed();
+        void SetTravelSpeed();
+        void SetCustomSpeed();
 
     private:
         float position[4] = {0, 0, 0, 0};
@@ -32,7 +35,6 @@ class Movement
         MultiStepper steppers;
         
         void SyncMovementXY(float x, float y);
-        void SetDefaultSpeed();
 };
 
 #endif

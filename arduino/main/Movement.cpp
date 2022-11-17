@@ -11,23 +11,31 @@ Movement::Movement()
     steppers.addStepper(xStepper);
     steppers.addStepper(yStepper);
     steppers.addStepper(yyStepper);
-    SetDefaultSpeed();
-}
-
-void Movement::SetDefaultSpeed()
-{
-    xStepper.setMaxSpeed(400);
-    yStepper.setMaxSpeed(400);
-    yyStepper.setMaxSpeed(400);
-    zStepper.setMaxSpeed(MAXSTEPPERSPEED);
-    tStepper.setMaxSpeed(MAXSTEPPERSPEED);
     xStepper.setAcceleration(STEPPERACCELERATION);
     yStepper.setAcceleration(STEPPERACCELERATION);
     yyStepper.setAcceleration(STEPPERACCELERATION);
     zStepper.setAcceleration(STEPPERACCELERATION);
     tStepper.setAcceleration(STEPPERACCELERATION);
+    SetNormalSpeed();
 }
 
+void Movement::SetNormalSpeed()
+{
+    xStepper.setMaxSpeed(XYMAXSPEED);
+    yStepper.setMaxSpeed(XYMAXSPEED);
+    yyStepper.setMaxSpeed(XYMAXSPEED);
+    zStepper.setMaxSpeed(ZMAXSPEED);
+    tStepper.setMaxSpeed(TMAXSPEED);
+}
+
+void Movement::SetTravelSpeed()
+{
+    xStepper.setMaxSpeed(XYMAXTRAVELSPEED);
+    yStepper.setMaxSpeed(XYMAXTRAVELSPEED);
+    yyStepper.setMaxSpeed(XYMAXTRAVELSPEED);
+    zStepper.setMaxSpeed(ZMAXTRAVELSPEED);
+    tStepper.setMaxSpeed(TMAXTRAVELSPEED);
+}
 
 void Movement::SetTargetPosition(float x, float y, float z, float t)
 {

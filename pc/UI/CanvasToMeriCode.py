@@ -24,7 +24,7 @@ class CanvasToMeriCode:
 
     def TravelTo(self, file, position):
         self.MoveToolUp(file)
-        self.MoveXY(file, position[0], position[1], 4)
+        self.TravelXY(file, position[0], position[1], 4)
         self.position = position
 
     def DrawShape(self, file, lines):
@@ -79,6 +79,10 @@ class CanvasToMeriCode:
         self.MoveToolDown(file)
     def MoveXY(self, file, x, y, ndigits):
         file.write("<M0 X" + str(round(x, ndigits)) + " Y" + str(round(y, ndigits)) + ">" + "\n")
+        self.position = [x, y]
+
+    def TravelXY(self, file, x, y, ndigits):
+        file.write("<M1 X" + str(round(x, ndigits)) + " Y" + str(round(y, ndigits)) + ">" + "\n")
         self.position = [x, y]
 
     def RotateTool(self, file, degrees, ndigits):

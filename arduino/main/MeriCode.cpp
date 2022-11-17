@@ -108,6 +108,12 @@ bool MeriCode::executeMcode(char* mCharacters)
     switch (mCharacters[0])
     {
         case '0':
+            movement.SetNormalSpeed();
+            M0(substr++);
+            return false;
+
+        case '1':
+            movement.SetTravelSpeed();
             M0(substr++);
             return false;
         
