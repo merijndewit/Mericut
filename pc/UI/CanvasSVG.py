@@ -1,5 +1,5 @@
 from svg.path import parse_path
-from svg.path.path import Line, CubicBezier, QuadraticBezier
+from svg.path.path import Line, CubicBezier, QuadraticBezier, Arc
 from xml.dom import minidom
 
 import UI.Nodes as Nodes
@@ -41,4 +41,12 @@ def LoadSVG(canvas, dir):
 
                 curve = DrawingShapes.CubicBezier(canvas, [node0, node1, node2, node3])
                 canvas.selectedLayer.drawnShapes.append(curve)
+                continue
+
+            if isinstance(object, Arc):
+                node0 = Nodes.Node(object.start.real * scale, object.start.imag * scale - yOffset, canvas.selectedLayer)
+                node1 = Nodes.Node(object.center * scale, object.center.imag * scale - yOffset, canvas.selectedLayer)
+                node2 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset, canvas.selectedLayer)
+                arc = DrawingShapes.Arc(canvas, [node0, node1, node2])
+                canvas.selectedLayer.drawnShapes.append(arc)
                 continue

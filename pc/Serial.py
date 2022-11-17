@@ -24,7 +24,7 @@ class Serial:
     def Connect(self):
         if self.selectedComPort == None:
             return 
-        self.connectedDevice = serial.Serial(port=self.selectedComPort, baudrate=115200, timeout=.1)
+        self.connectedDevice = serial.Serial(port=self.selectedComPort, baudrate=921600, timeout=.1)
         self.StartListeningToSerial()
 
     def TestConnection(self):

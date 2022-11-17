@@ -19,4 +19,3 @@ class CallbackMeriCode:
             self.parent.connectFrame.SetConnectionStatus(True)    
         elif callbackCode[0] == '1':
             self.parent.serial.SendMeriCodeList()
-            print("Send another line")

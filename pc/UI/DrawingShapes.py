@@ -157,13 +157,25 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
         if draw:
             self.Draw()
 
+class Arc(Shapes): #takes 3 nodes [start, control, end]
+    def __init__(self, canvas, nodes, draw = True):
+        self.canvas = canvas
+        self.nodes = nodes
+        self.lines = []
+        self.helpLines = []
+        for i in range(len(self.nodes)):
+            self.nodes[i].SetShape(self)
+
+        if draw:
+            self.Draw()
+
     def GetArcPoint(self, t):
-        x0 = self.nodes[0].GetPositionX()
-        y0 = self.nodes[0].GetPositionY()
-        x1 = self.nodes[2].GetPositionX()
-        y1 = self.nodes[2].GetPositionY()
-        x2 = self.nodes[1].GetPositionX()
-        y2 = self.nodes[1].GetPositionY()
+        x0 = self.nodes[0].position[0]
+        y0 = self.nodes[0].position[1]
+        x1 = self.nodes[2].position[0]
+        y1 = self.nodes[2].position[1]
+        x2 = self.nodes[1].position[0]
+        y2 = self.nodes[1].position[1]
 
         r = math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0))
         x = x0-r
@@ -172,53 +184,40 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
         height = 2*r
         startAngle = (math.degrees(math.atan2(y0-y2, x0-x2)))
         endAngle = (math.degrees(math.atan2(y1-y2, x1-x2)))
-        angle = endAngle + ((startAngle * t) - (endAngle * t))
 
-        if startAngle < 0:
-            startAngle += 180
-        if endAngle < 0:
-            endAngle += 180
-    
+        if (startAngle < 0):
+            startAngle = 180 + (180 - abs(startAngle))
+
+        if (endAngle < 0):
+            endAngle = 180 + (180 - abs(endAngle))
+        if False: #direction
+            tmp = startAngle
+            startAngle = endAngle
+            endAngle = tmp
+            angle = 0
+        
+        if startAngle < endAngle:
+            startAngle += 360
+        degrees = startAngle - endAngle
+        angle = endAngle + (degrees * t)
+
+
+        if angle > 360:
+            angle -= 360
         xP = x2 + r * math.cos(angle * math.pi / 180)
         yP = y2 + r * math.sin(angle * math.pi / 180)
 
-
-        normalizedEndAngle = 0
-        FullCircleAngle = 2 * math.pi
-        if (startAngle < endAngle):
-            normalizedEndAngle = endAngle
-        
-        else:
-            normalizedEndAngle = endAngle + FullCircleAngle
-
-        angleRange = normalizedEndAngle - startAngle
-        if angleRange > FullCircleAngle:
-            angleRange = FullCircleAngle
-        else:
-            angleRange = angleRange
-
-        step = angleRange / 20
-        currentAngle = startAngle
-
-        points = []
-        while (currentAngle <= normalizedEndAngle):
-            x = x2 + r * math.cos(currentAngle)
-            y = y2 + r * math.sin(currentAngle)
-            points.append([x, y])
-            currentAngle += step
-
-        return points
+        return [xP, yP]
 
     def Draw(self, useOldLines = False):
         startNode = [0, 0]
         endNode = [0, 0]
         self.DrawHelpLines(useOldLines)
-        points = self.GetArcPoint(0.1)
-        for i in range(20):
+        for i in range(21):
             if i == 0:
-                startNode = points[0]
+                startNode = self.GetArcPoint(i / 20)
                 continue
-            endNode = points[i]
+            endNode = self.GetArcPoint(i / 20)
             if useOldLines:
                 self.lines[i - 1].Move(self.canvas.canvasScale, startNode[0], startNode[1], endNode[0], endNode[1])
             else:
@@ -228,11 +227,11 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
 
     def DrawHelpLines(self, useOldLines = False):
         if useOldLines:
-            self.helpLines[0].Move(self.canvas.canvasScale, self.nodes[0].GetPositionX(), self.nodes[0].GetPositionY(), self.nodes[1].GetPositionX(), self.nodes[1].GetPositionY())
-            self.helpLines[1].Move(self.canvas.canvasScale, self.nodes[2].GetPositionX(), self.nodes[2].GetPositionY(), self.nodes[1].GetPositionX(), self.nodes[1].GetPositionY())
+            self.helpLines[0].Move(self.canvas.canvasScale, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1])
+            self.helpLines[1].Move(self.canvas.canvasScale, self.nodes[2].position[0], self.nodes[2].position[1], self.nodes[1].position[0], self.nodes[1].position[1])
             return
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionX(), self.nodes[0].GetPositionY(), self.nodes[1].GetPositionX(), self.nodes[1].GetPositionY(), Colors.HELPLINES, 2, (2, 2)))
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[2].GetPositionX(), self.nodes[2].GetPositionY(), self.nodes[1].GetPositionX(), self.nodes[1].GetPositionY(), Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas, self.nodes[0].position[0], self.nodes[0].position[1], self.nodes[1].position[0], self.nodes[1].position[1], Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas, self.nodes[2].position[0], self.nodes[2].position[1], self.nodes[1].position[0], self.nodes[1].position[1], Colors.HELPLINES, 2, (2, 2)))
 
     def Update(self):
         self.Draw(True)

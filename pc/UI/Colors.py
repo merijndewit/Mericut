@@ -1,12 +1,13 @@
 class Colors():
     #Backgrounds
     BGCOLOR = "#F0F2F0"
+    BGSECCOLOR = "#548C9C"
     BGFRAME = "#F0F2F0"
     BGHEADERFRAME = "#f1d3a1"
     CANVASBACKGROUND = "#F0F2F0"
     #Buttons
-    BUTTON = "#8cb4c4"
-    BUTTONHOVER = "#8cb4c4"
+    BUTTON = "#e3dbd9"
+    BUTTONHOVER = "#e3dbd9"
     BUTTONTEXT = "#000000"
     BUTTONNOTSELECTED = "#F0F2F0"
     #Text
