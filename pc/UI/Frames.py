@@ -190,9 +190,11 @@ class ToolSelect(customtkinter.CTkFrame):
 
         self.loadSVGButton = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.LoadSVG(self.filename))
         self.loadSVGButton.grid(row=0, column=5, sticky='e')
+        self.saveSVGButton = customtkinter.CTkButton(master=self, text="Save SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SaveSVG())
+        self.saveSVGButton.grid(row=0, column=6, sticky='e')
 
         self.fileSelecting = customtkinter.CTkButton(master=self, text="..", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.SelectFile())
-        self.fileSelecting.grid(row=0, column=6, sticky='e')
+        self.fileSelecting.grid(row=0, column=7, sticky='e')
 
         self.SelectTool(Pen, self.penButton)
 

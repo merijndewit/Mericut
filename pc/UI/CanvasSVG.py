@@ -1,11 +1,13 @@
 from svg.path import parse_path
-from svg.path.path import Line, CubicBezier, QuadraticBezier, Arc
 from xml.dom import minidom
+
 
 import UI.Nodes as Nodes
 import UI.DrawingShapes as DrawingShapes
+from UI.Layer import Layer
 
 def LoadSVG(canvas, dir):
+    from svg.path.path import Line, CubicBezier, QuadraticBezier, Arc
     doc = minidom.parse(dir)
     path_strings = [path.getAttribute('d') for path
                     in doc.getElementsByTagName('path')]
@@ -50,3 +52,18 @@ def LoadSVG(canvas, dir):
                 arc = DrawingShapes.Arc(canvas, [node0, node1, node2])
                 canvas.selectedLayer.drawnShapes.append(arc)
                 continue
+
+def SaveSVG(canvas):
+    from svgpathtools import Path, Line, QuadraticBezier, CubicBezier, Arc, paths2svg
+    pathSegments = []
+    path = Path()
+    for i in range(len(canvas.layers)):
+        layer :Layer = canvas.layers[i]
+        for shape in range(len(layer.drawnShapes)):
+            if isinstance(layer.drawnShapes[shape], DrawingShapes.Line):
+                startPosition = layer.drawnShapes[shape].nodes[0].GetPosition()
+                endPosition = layer.drawnShapes[shape].nodes[1].GetPosition()
+                line = Line(complex(startPosition[0], startPosition[1]), complex(endPosition[0], endPosition[1]))
+                path.append(line)
+
+    paths2svg.disvg(path, filename="test.svg", openinbrowser=False)

@@ -146,6 +146,9 @@ class DrawingCanvas(tkinter.Canvas):
     def LoadSVG(self, dir):
         CanvasSVG.LoadSVG(self, dir)
 
+    def SaveSVG(self):
+        CanvasSVG.SaveSVG(self)
+
     def GetLayerNames(self):
         names = []
         for i in range(len(self.layers)):

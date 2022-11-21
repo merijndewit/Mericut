@@ -3,7 +3,7 @@ class CanvasToMeriCode:
     def __init__(self, canvas, cutting):
         self.position = [0, 0]
         self.canvas = canvas
-        self.mergeDistance = 0.04
+        self.mergeDistance = 0.05
         self.cutting = cutting
         self.toolOffsetRadius = 4
         with open('Test/MeriCodeTestFile.txt', "w") as file:
@@ -69,13 +69,13 @@ class CanvasToMeriCode:
 
     
     def MoveToolUp(self, file):
-        file.write("<M0 Z" + str(10) + ">" + "\n")
+        file.write("<M0 Z" + str(20) + ">" + "\n")
 
     def MoveToolDown(self, file):
         file.write("<M0 Z" + str(0) + ">" + "\n")
     
     def MoveToHome(self, file):
-        file.write("<M0 X0 Y0 T0>" + "\n") #move the tool in the material
+        file.write("<M0 X0 Y0 T0>" + "\n")
         self.MoveToolDown(file)
     def MoveXY(self, file, x, y, ndigits):
         file.write("<M0 X" + str(round(x, ndigits)) + " Y" + str(round(y, ndigits)) + ">" + "\n")
