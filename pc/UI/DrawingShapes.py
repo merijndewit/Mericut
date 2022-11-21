@@ -152,18 +152,7 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
         self.nodes = nodes
         self.lines = []
         self.helpLines = []
-        for i in range(len(self.nodes)):
-            self.nodes[i].SetShape(self)
-        
-        if draw:
-            self.Draw()
-
-class Arc(Shapes): #takes 3 nodes [start, control, end]
-    def __init__(self, canvas, nodes, draw = True):
-        self.canvas = canvas
-        self.nodes = nodes
-        self.lines = []
-        self.helpLines = []
+        self.radius = 0
         for i in range(len(self.nodes)):
             self.nodes[i].SetShape(self)
 
@@ -179,6 +168,7 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
         y2 = self.nodes[1].position[1]
 
         r = math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0))
+        self.radius = r
         x = x0-r
         y = y0-r
         width = 2*r

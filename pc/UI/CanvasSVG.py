@@ -65,5 +65,18 @@ def SaveSVG(canvas):
                 endPosition = layer.drawnShapes[shape].nodes[1].GetPosition()
                 line = Line(complex(startPosition[0], startPosition[1]), complex(endPosition[0], endPosition[1]))
                 path.append(line)
+            if isinstance(layer.drawnShapes[shape], DrawingShapes.QuadraticBezier):
+                startPosition = layer.drawnShapes[shape].nodes[0].GetPosition()
+                controlPosition = layer.drawnShapes[shape].nodes[1].GetPosition()
+                endPosition = layer.drawnShapes[shape].nodes[2].GetPosition()
+                line = QuadraticBezier(complex(startPosition[0], startPosition[1]), complex(controlPosition[0], controlPosition[1]), complex(endPosition[0], endPosition[1]))
+                path.append(line)
+            if isinstance(layer.drawnShapes[shape], DrawingShapes.CubicBezier):
+                startPosition = layer.drawnShapes[shape].nodes[0].GetPosition()
+                control0Position = layer.drawnShapes[shape].nodes[1].GetPosition()
+                control1Position = layer.drawnShapes[shape].nodes[2].GetPosition()
+                endPosition = layer.drawnShapes[shape].nodes[3].GetPosition()
+                line = CubicBezier(complex(startPosition[0], startPosition[1]), complex(control0Position[0], control0Position[1]), complex(control1Position[0], control1Position[1]), complex(endPosition[0], endPosition[1]))
+                path.append(line)
 
     paths2svg.disvg(path, filename="test.svg", openinbrowser=False)
