@@ -8,9 +8,6 @@ bool compareFloats(float A, float B, float tolerance = 0.05f)
 
 Movement::Movement()
 {
-    steppers.addStepper(xStepper);
-    steppers.addStepper(yStepper);
-    steppers.addStepper(yyStepper);
     xStepper.setAcceleration(STEPPERACCELERATION);
     yStepper.setAcceleration(STEPPERACCELERATION);
     yyStepper.setAcceleration(STEPPERACCELERATION);
@@ -21,7 +18,6 @@ Movement::Movement()
 
 void Movement::SetNormalSpeed()
 {
-    topSpeed = XYMAXSPEED;
     xStepper.setMaxSpeed(XYMAXSPEED);
     yStepper.setMaxSpeed(XYMAXSPEED);
     yyStepper.setMaxSpeed(XYMAXSPEED);
@@ -31,7 +27,6 @@ void Movement::SetNormalSpeed()
 
 void Movement::SetTravelSpeed()
 {
-    topSpeed = XYMAXSPEED;
     xStepper.setMaxSpeed(XYMAXTRAVELSPEED);
     yStepper.setMaxSpeed(XYMAXTRAVELSPEED);
     yyStepper.setMaxSpeed(XYMAXTRAVELSPEED);
@@ -41,118 +36,70 @@ void Movement::SetTravelSpeed()
 
 void Movement::SetTargetPosition(float x, float y, float z, float t)
 {
-    xyMoving = false;
+    xMoving = false;
+    yMoving = false;
     zMoving = false;
     tMoving = false;
-    moveX = false;
-    moveY = false;
-
-    long xyPositions[3] = {long(targetPosition[0]), long(targetPosition[1]), long(targetPosition[1])};
 
     isMovingToTarget = true;
-    //SyncMovementXY(x, y);
+
     if (!isnan(x))
     {
-        targetPosition[0] = (x * XSTEPPERMM) * MICROSTEPPING;
-        xyPositions[0] = long((x * XSTEPPERMM) * MICROSTEPPING);
-        //xStepper.moveTo((x * XSTEPPERMM) * MICROSTEPPING);
-        xyMoving = true;
-        moveX = true;
+        targetPosition[0] = (long)(x * XSTEPPERMM * MICROSTEPPING);
+        xMoving = true;
+        xStepper.moveTo((long)(x * XSTEPPERMM * MICROSTEPPING));
     }
     if (!isnan(y))
     {
-        //yStepper.moveTo((y * YSTEPPERMM) * MICROSTEPPING);
-        //yyStepper.moveTo((y * YSTEPPERMM) * MICROSTEPPING);
-        xyPositions[1] = long((y * YSTEPPERMM) * MICROSTEPPING);
-        xyPositions[2] = long((y * YSTEPPERMM) * MICROSTEPPING);
-
-        targetPosition[1] = (y * YSTEPPERMM) * MICROSTEPPING;
-        xyMoving = true;
-        moveY = true;
+        targetPosition[1] = (long)(y * YSTEPPERMM * MICROSTEPPING);
+        yMoving = true;
+        yStepper.moveTo((long)(y * YSTEPPERMM * MICROSTEPPING));
+        yyStepper.moveTo((long)(y * YSTEPPERMM * MICROSTEPPING));
     }    
+    MoveXY();
     if (!isnan(z))
     {
         zStepper.moveTo(z * MICROSTEPPING);
-        targetPosition[2] = z;
+        //targetPosition[2] = z;
         zMoving = true;
     }
     if (!isnan(t))
     {
         tStepper.moveTo((t * TSTEPPERDEG) * MICROSTEPPING);
-        targetPosition[3] = t;
+        //targetPosition[3] = t;
         tMoving = true;
     }
-    if (xyMoving)
-    {
-        steppers.moveTo(xyPositions);
-    }
-
-    angle = atan2(targetPosition[1] - position[1],targetPosition[0] - position[0]);
-    cosAngle = cos(angle);
-    sinAngle = sin(angle);
-    currentTime = millis();
 }
 
 void Movement::MoveXY()
 {
-    oldTime = currentTime;
-    currentTime = millis();
-    float deltaTime = (currentTime - oldTime) / 1000;
-    float decelDistance = pow(velocity, 2) / (2 * acceleration);
-    float deltaX = targetPosition[0] - position[0];
-    float deltaY = targetPosition[1] - position[1];
-    float distance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
-    if (distance > decelDistance)
-    {
-        velocity = min(velocity + acceleration * deltaTime, topSpeed);
-    }
-    else
-    { 
-        velocity = max(velocity - acceleration * deltaTime, 0.0f);
-    }
-    xStepper.setSpeed(velocity * cosAngle);
-    yStepper.setSpeed(velocity * sinAngle);
-    yyStepper.setSpeed(velocity * sinAngle);
-    xStepper.runSpeed();
-    yStepper.runSpeed();
-    yyStepper.runSpeed();
-    position[0] = float(xStepper.currentPosition());
-    position[1] = float(yStepper.currentPosition());
+    long distance[2] = {};
+    distance[0] = abs(targetPosition[0] - xStepper.currentPosition());
+    distance[1] = abs(targetPosition[1] - yStepper.currentPosition());
 
-    if (moveX && lastReachedPosition[0] < targetPosition[0])
-    {
-      if (position[0] >= targetPosition[0])
+    if(distance[0] >= distance[1]){
+        xStepper.setMaxSpeed(XYMAXSPEED);    
+        xStepper.setAcceleration(XYMAXSPEED);
+        if (distance[1] == 0)
         {
-          moveX = false;
+            return;
         }
+        yStepper.setMaxSpeed((float)(ceil(XYMAXSPEED * distance[1]/distance[0])));    
+        yStepper.setAcceleration((float)(ceil(XYMAXSPEED * distance[1]/distance[0])));    
+        yyStepper.setMaxSpeed((float)(ceil(XYMAXSPEED * distance[1]/distance[0])));    
+        yyStepper.setAcceleration((float)(ceil(XYMAXSPEED * distance[1]/distance[0])));   
     }
-    else
-    {
-        if (position[0] <= targetPosition[0])
+    else{
+        yStepper.setMaxSpeed(XYMAXSPEED);    
+        yStepper.setAcceleration(XYMAXSPEED);    
+        yyStepper.setMaxSpeed(XYMAXSPEED);    
+        yyStepper.setAcceleration(XYMAXSPEED); 
+        if (distance[0] == 0)
         {
-          moveX = false;
+            return;
         }
-    }
-  
-    if (moveY && lastReachedPosition[1] < targetPosition[1])
-    {
-      if (position[1] >= targetPosition[1])
-        {
-          moveY = false;
-        }
-    }
-    else
-    {
-        if (position[1] <= targetPosition[1])
-        {
-            moveY = false;
-        }
-    }
-
-    if (!moveX && !moveY)
-    {
-        lastReachedPosition[0] = position[0];
-        lastReachedPosition[1] = position[1];
+        xStepper.setMaxSpeed((float)(ceil(XYMAXSPEED * distance[0]/distance[1])));    
+        xStepper.setAcceleration((float)(ceil(XYMAXSPEED * distance[0]/distance[1])));    
     }
 }
 
@@ -160,9 +107,15 @@ void Movement::Move()
 {
     int moved = 0;
 
-    if(moveX || moveY)
-    {
-        MoveXY();
+    if(xMoving)
+    {   
+        xMoving = xStepper.run();
+        moved++;
+    }
+    if(yMoving)
+    {   
+        yyStepper.run();
+        yMoving = yStepper.run();
         moved++;
     }
 

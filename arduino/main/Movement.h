@@ -22,10 +22,11 @@ class Movement
     private:
         void MoveXY();
         float position[4] = {0, 0, 0, 0};
-        float targetPosition[4] = {0, 0, 0, 0};
+        long targetPosition[4] = {0, 0, 0, 0};
         float lastReachedPosition[4] = {0, 0, 0, 0};
         bool isMovingToTarget = false;
-        bool xyMoving = false;
+        bool xMoving = false;
+        bool yMoving = false;
         bool zMoving = false;
         bool tMoving = false;
 
@@ -34,19 +35,6 @@ class Movement
         AccelStepper yyStepper = AccelStepper(1, YYDRIVERSTEPPIN, YYDRIVERDIRECTIONPIN);
         AccelStepper zStepper = AccelStepper(1, ZDRIVERSTEPPIN, ZDRIVERDIRECTIONPIN);
         AccelStepper tStepper = AccelStepper(1, TDRIVERSTEPPIN, TDRIVERDIRECTIONPIN);
-        MultiStepper steppers;
-        
-        float acceleration = 8000;
-        float velocity = 0;
-        float topSpeed = 200;
-        float currentTime = 0;
-        float oldTime = 0;
-        bool moveX = false;
-        bool moveY = false;
-
-        float angle = 0;
-        float cosAngle = 0;
-        float sinAngle = 0;
 };
 
 #endif
