@@ -6,7 +6,6 @@
 
 #include <AccelStepper.h>
 #include <MultiStepper.h>
-#include <vector>
 
 class Movement
 {
@@ -20,13 +19,9 @@ class Movement
         void SetCustomSpeed();
 
     private:
-        void MoveXY();
-        float position[4] = {0, 0, 0, 0};
-        long targetPosition[4] = {0, 0, 0, 0};
-        float lastReachedPosition[4] = {0, 0, 0, 0};
+        float targetPosition[4] = {0, 0, 0, 0};
         bool isMovingToTarget = false;
-        bool xMoving = false;
-        bool yMoving = false;
+        bool xyMoving = false;
         bool zMoving = false;
         bool tMoving = false;
 
@@ -35,6 +30,7 @@ class Movement
         AccelStepper yyStepper = AccelStepper(1, YYDRIVERSTEPPIN, YYDRIVERDIRECTIONPIN);
         AccelStepper zStepper = AccelStepper(1, ZDRIVERSTEPPIN, ZDRIVERDIRECTIONPIN);
         AccelStepper tStepper = AccelStepper(1, TDRIVERSTEPPIN, TDRIVERDIRECTIONPIN);
+        MultiStepper steppers;
 };
 
 #endif
