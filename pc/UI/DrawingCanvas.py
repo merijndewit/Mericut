@@ -118,11 +118,8 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Motion(self, event):            
         x, y = self.Snap(event.x, event.y)
-        if [x, y] == self.lastSnapPosition:
-            return
-
         self.lastSnapPosition = [x, y]
-        self.mousePosition = [x, y]
+        self.mousePosition = [event.x, event.y]
         self.tool.Hover(x, y)
         self.ShowColision()
 
@@ -141,7 +138,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.selectUIObject.Move(-20, -20)
             return
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
-        self.selectUIObject.Move(int(collidingNode.position[0] * self.canvasScale), int(collidingNode.position[1] * self.canvasScale))
+        self.selectUIObject.Move(int(collidingNode.GetPositionX() * self.canvasScale), int(collidingNode.GetPositionY() * self.canvasScale))
 
     def LoadSVG(self, dir):
         CanvasSVG.LoadSVG(self, dir)

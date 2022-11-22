@@ -2,9 +2,8 @@ from UI.Colors import Colors
 
 
 class Node():
-    def __init__(self, x, y, layer):
+    def __init__(self, x, y):
         self.position = [x, y]
-        self.offsetPosition = [0, 0]
         self.connectedNodes = []
         self.shape = None
     
@@ -18,37 +17,44 @@ class Node():
         self.shape = shape
 
     def SetScale(self, scaleX, refX, scaleY, refY):
-        self.offsetPosition = [(self.position[0] - refX) * scaleX, (self.position[1] - refY) * scaleY]
+        self.position[0] += (self.position[0] - refX) * scaleX
+        self.position[1] += (self.position[1] - refY) * scaleY
+        
         self.UpdateShape()
+
+    def ApplyOffsetPosition(self, x, y):
+        self.position[0] += x
+        self.position[1] += y
 
     def GetPosition(self):
         return [self.GetPositionX(), self.GetPositionY()]
 
     def GetPositionY(self):
-        return self.position[1] + self.offsetPosition[1]
+        return self.position[1]
 
     def GetPositionX(self):
-        return self.position[0] + self.offsetPosition[0]
+        return self.position[0]
     
     @staticmethod
     def GetColisionColor():
         return Colors.COLISIONNODE
 
 class MergedNode():
-    def __init__(self, position, nodesToMerge, layer):
-        self.position = [position[0] / layer.scale, position[1] / layer.scale]
+    def __init__(self, position, nodesToMerge):
+        self.position = [position[0], position[1]]
         self.shapes = []
-        self.offsetPosition = [0, 0]
+        self.amountNodesMerged = 1
         
         for i in range(len(nodesToMerge)):
             self.AddNode(nodesToMerge[i])
 
     def AddNode(self, nodeToAdd):
         shape = nodeToAdd.GetShape()
-        self.shapes.append(shape)
         if shape == None:
             return
+        self.shapes.append(shape)
         shape.ReplaceNode(nodeToAdd, self)
+        self.amountNodesMerged += 1
 
     def UpdateShape(self):
         for i in range(len(self.shapes)):
@@ -60,17 +66,23 @@ class MergedNode():
         self.shapes.append(shape)
 
     def SetScale(self, scaleX, refX, scaleY, refY):
-        self.offsetPosition = [(self.position[0] - refX) * scaleX, (self.position[1] - refY) * scaleY]
+        self.position[0] += ((self.position[0] - refX) * scaleX) / self.amountNodesMerged
+        self.position[1] += ((self.position[1] - refY) * scaleY) / self.amountNodesMerged
+        print(self.amountNodesMerged)
         self.UpdateShape()
+
+    def ApplyOffsetPosition(self, x, y):
+        self.position[0] += x / self.amountNodesMerged
+        self.position[1] += y / self.amountNodesMerged
 
     def GetPosition(self):
         return [self.GetPositionX(), self.GetPositionY()]
 
     def GetPositionY(self):
-        return self.position[1] + self.offsetPosition[1]
+        return self.position[1]
 
     def GetPositionX(self):
-        return self.position[0] + self.offsetPosition[0]
+        return self.position[0]
 
     @staticmethod
     def GetColisionColor():

@@ -4,10 +4,13 @@ from UI.CanvasShapes import CanvasCircle
 
 class Layer():
     def __init__(self, canvas, name):
+        #scaling for shapes only assigned to this layer
+        self.scale = 1
+        
         self.name = name
         self.canvas = canvas
         self.drawnShapes = [] 
-        self.resizeNodes = [Node(-100, -100, self), Node(-100, -100, self)]
+        self.resizeNodes = [Node(-100, -100), Node(-100, -100)]
         self.sizeShapes = [CanvasCircle(-100, -100, 5, self.canvas), CanvasCircle(-100, -100, 5, self.canvas)]
         self.resizeNodes[0].SetShape(self)
         self.resizeNodes[1].SetShape(self)
@@ -16,10 +19,7 @@ class Layer():
         #resizing borders
         self.startWidth = 0
         self.startHeight = 0
-
-        #scaling for shapes only assigned to this layer
-        self.scale = 1
-
+ 
         #moving
         self.lastMovedPositionX = None
         self.lastMovedPositionY = None
@@ -28,7 +28,7 @@ class Layer():
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Update()
 
-    def GetCollidingNode(self, distance, canvasScale, mousePosition):
+    def GetCollidingNode(self, distance :float, canvasScale :float, mousePosition :list):
         nearestNode = None
         nodesToCheck = []
         if self.resizing: 
@@ -39,7 +39,7 @@ class Layer():
                     nodesToCheck.append(self.drawnShapes[i].nodes[node])
 
         for node in range(len(nodesToCheck)):
-            nodeDistance = abs(math.dist([nodesToCheck[node].position[0] * canvasScale, nodesToCheck[node].position[1] * canvasScale], mousePosition))
+            nodeDistance = abs(math.dist([nodesToCheck[node].GetPositionX() * canvasScale, nodesToCheck[node].GetPositionY() * canvasScale], mousePosition))
             if nodeDistance > distance:
                 continue
             if nearestNode == None:
@@ -99,6 +99,7 @@ class Layer():
         self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
         self.scale = scaleX + 1
         self.ApplyScale(scaleX, scaleX)
+        self.StartResizing()
      
     def StartResizing(self):
         nodePositions = self.GetBorderPositions()
