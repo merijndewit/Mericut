@@ -41,6 +41,13 @@ class Line(Shapes):
     def GetEndPosition(self):
         return self.nodes[1].GetPosition()
 
+    def Delete(self):
+        for i in range(len(self.lines)):
+            self.lines[i].Delete()
+
+        self.lines = []
+
+
 class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
     def __init__(self, canvas, nodes, draw = True):
         self.canvas = canvas
@@ -92,6 +99,12 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
 
     def GetEndPosition(self):
         return self.nodes[2].GetPosition()
+
+    def Delete(self):
+        for i in range(len(self.lines)):
+            self.lines[i].Delete()
+
+        self.lines = []
 
 class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
     def __init__(self, canvas, nodes, draw = True):
@@ -145,6 +158,12 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
 
     def GetEndPosition(self):
         return self.nodes[3].GetPosition()
+
+    def Delete(self):
+        for i in range(len(self.lines)):
+            self.lines[i].Delete()
+
+        self.lines = []
 
 class Arc(Shapes): #takes 3 nodes [start, control, end]
     def __init__(self, canvas, nodes, draw = True):
@@ -226,3 +245,9 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
 
     def Update(self):
         self.Draw(True)
+
+    def Delete(self):
+        for i in range(len(self.lines)):
+            self.lines[i].Delete()
+
+        self.lines = []

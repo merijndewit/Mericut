@@ -188,3 +188,16 @@ class DrawingCanvas(tkinter.Canvas):
         self.layers.append(newLayer)
         self.selectedLayer = newLayer
         self.parent.parent.canvasLayerFrame.AddLayerButton(name)
+
+    def DeleteLayer(self, name):
+        for i in range(len(self.layers)):
+            if self.layers[i].name == name:
+                self.layers[i].Delete()
+                self.layers.remove(self.layers[i])
+                break
+
+        if len(self.layers) == 0:
+            self.AddLayer()
+            return
+        self.selectedLayer = self.layers[0]
+            

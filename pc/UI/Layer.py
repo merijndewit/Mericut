@@ -28,6 +28,12 @@ class Layer():
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Update()
 
+    def Delete(self):
+        for i in range(len(self.drawnShapes)):
+            self.drawnShapes[i].Delete()
+
+        self.drawnShapes = []
+
     def GetCollidingNode(self, distance :float, canvasScale :float, mousePosition :list):
         nearestNode = None
         nodesToCheck = []

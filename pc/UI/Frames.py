@@ -1,4 +1,3 @@
-from cgitb import text
 import customtkinter
 import tkinter
 from tkinter import filedialog
@@ -265,8 +264,6 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
 
         self.grid(row=3, column=2, padx=(5, 5), pady=(5, 5), rowspan=3, sticky=tkinter.NSEW)
         self.grid_propagate(False)
-        self.posX = 0
-        self.posY = 1
         self.maxWidth = 3
         
         self.moveButton = customtkinter.CTkButton(master=self, text="+", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 13 bold", width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.AddLayer())
@@ -279,14 +276,16 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
 
             
     def AddLayerButton(self, name):
+        posX = len(self.layerFrames) % 3
+        posY = int(len(self.layerFrames) / 3) + 1
+        if posX == self.maxWidth:
+            posX = 0
+            posY += 1
+
         layerFrame = LayerButtonFrame(self, self, name)
-        layerFrame.grid(row=self.posY, column=self.posX, sticky=tkinter.NW)
-        layerFrame.grid_propagate(False)
+        layerFrame.grid(row=posY, column=posX, sticky=tkinter.NW)
+        #layerFrame.grid_propagate(False)
         self.layerFrames.append(layerFrame)
-        self.posX += 1
-        if self.posX == self.maxWidth:
-            self.posX = 0
-            self.posY += 1
 
 class LayerButtonFrame(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, name, *args, **kwargs):
@@ -306,8 +305,15 @@ class LayerButtonFrame(customtkinter.CTkFrame):
         self.selectbutton = customtkinter.CTkButton(master=self, text="↔", fg_color=Colors.BUTTON, hover_color=Colors.PAPERHOVERCOLOR, width=12, height=12, text_color=Colors.BUTTONTEXT, command= lambda: self.TransformLayer())
         self.selectbutton.grid(row=3, column=0, padx=(0, 0), pady=(0, 0), sticky=tkinter.SW)
 
+        self.deletebutton = customtkinter.CTkButton(master=self, text="x", fg_color=Colors.BUTTON, hover_color=Colors.PAPERHOVERCOLOR, width=12, height=12, text_color=Colors.BUTTONTEXT, command= lambda: self.DeleteLayer())
+        self.deletebutton.grid(row=3, column=1, padx=(0, 0), pady=(0, 0), sticky=tkinter.SW)
+
     def SelectLayer(self):
         self.parent.parent.canvas.canvas.SelectLayer(self.name)
 
     def TransformLayer(self):
         self.parent.parent.canvas.canvas.TransformLayer(self.name)
+
+    def DeleteLayer(self):
+        self.parent.parent.canvas.canvas.DeleteLayer(self.name)
+        self.destroy()

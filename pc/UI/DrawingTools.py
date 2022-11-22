@@ -23,7 +23,7 @@ class Pen(Tool):
             self.nodes.append(Nodes.Node(nodePositionX, nodePositionY))
         elif (isinstance(clickedNode, Nodes.Node)): #clicked on a node
             #self.nodes.append(Nodes.MergedNode(clickedNode.position, [clickedNode, Nodes.Node(nodePositionX, nodePositionY)]))
-            self.nodes.append(Nodes.Node(nodePositionX, nodePositionY))
+            self.nodes.append(Nodes.Node(clickedNode.GetPositionX(), clickedNode.GetPositionY()))
         else: #clicked on a merged node
             clickedNode.AddNode(Nodes.Node(x, y))
             self.nodes.append(clickedNode)

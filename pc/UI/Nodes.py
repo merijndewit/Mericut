@@ -68,7 +68,6 @@ class MergedNode():
     def SetScale(self, scaleX, refX, scaleY, refY):
         self.position[0] += ((self.position[0] - refX) * scaleX) / self.amountNodesMerged
         self.position[1] += ((self.position[1] - refY) * scaleY) / self.amountNodesMerged
-        print(self.amountNodesMerged)
         self.UpdateShape()
 
     def ApplyOffsetPosition(self, x, y):
