@@ -74,9 +74,10 @@ class DrawingCanvas(tkinter.Canvas):
             width = 105
             height = 148.5
             color = Colors.PAPERBACKGROUNDCANVAS
-        self.background = CanvasShapes.CanvasRectangle(width, height, self)
+        self.background = CanvasShapes.CanvasRectangle(width, height, self, tags="background")
         self.background.SetColor(color)
         self.background.SetScale(self.canvasScale)
+        self.tag_lower("background")
         
 
     def Scroll(self, event):
