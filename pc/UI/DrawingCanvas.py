@@ -58,6 +58,8 @@ class DrawingCanvas(tkinter.Canvas):
         width = 0
         height = 0
         color = "#000000"
+        if self.background is not None:
+            self.background.Delete()
         if customSize is not None:
             width = customSize[0]
             height = customSize[1]
