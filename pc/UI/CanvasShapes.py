@@ -38,7 +38,7 @@ class CanvasRectangle():
         self.Draw()
 
     def Draw(self):
-        self.rectangle = self.canvas.create_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, fill=Colors.COLISIONNODE, tags=(self.tag))
+        self.rectangle = self.canvas.create_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, fill=Colors.COLISIONNODE, tags=(self.tag), width=0)
     
     def SetScale(self, scale):
         self.canvas.coords(self.rectangle, int(self.x * scale), int(self.y * scale), int((self.x + self.width) * scale), int((self.y + self.height) * scale))

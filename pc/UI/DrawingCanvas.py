@@ -33,6 +33,8 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.pixelsPerMM = 10
         self.canvasScale = 1
+        self.xOffset = 0
+        self.yOffset = 0
 
         self.mousePressed = False
         self.snap = True
@@ -80,7 +82,13 @@ class DrawingCanvas(tkinter.Canvas):
         self.background.SetColor(color)
         self.background.SetScale(self.canvasScale)
         self.tag_lower("background")
-        
+
+    def MoveView(self, x, y):
+        self.xOffset += x
+        self.yOffset += y
+        self.RedrawGrid()
+        self.RedrawShapes()
+        self.selectedLayer.CanvasScaleChanged()
 
     def Scroll(self, event):
         self.pixelsPerMM += (-1*(event.delta/120)) * 2
@@ -113,6 +121,8 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Clicked(self, event):
         x, y = self.Snap(event.x, event.y)
+        x -= self.xOffset
+        y -= self.yOffset
         self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition), self.selectedLayer.IsColliding([x / self.canvasScale, y / self.canvasScale]))
         self.mousePressed = True
 
@@ -121,8 +131,10 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Motion(self, event):            
         x, y = self.Snap(event.x, event.y)
+        x -= self.xOffset
+        y -= self.yOffset
         self.lastSnapPosition = [x, y]
-        self.mousePosition = [event.x, event.y]
+        self.mousePosition = [event.x - self.xOffset, event.y - self.yOffset]
         self.tool.Hover(x, y)
         self.ShowColision()
 
@@ -141,7 +153,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.selectUIObject.Move(-20, -20)
             return
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
-        self.selectUIObject.Move(int(collidingNode.GetPositionX() * self.canvasScale), int(collidingNode.GetPositionY() * self.canvasScale))
+        self.selectUIObject.Move(int((collidingNode.GetPositionX() * self.canvasScale) + self.xOffset), int((collidingNode.GetPositionY() * self.canvasScale) + self.yOffset))
 
     def LoadSVG(self, dir):
         CanvasSVG.LoadSVG(self, dir)

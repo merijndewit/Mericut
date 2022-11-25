@@ -33,7 +33,7 @@ class Line(Shapes):
         self.lines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionX(), self.nodes[0].GetPositionY(), self.nodes[1].GetPositionX(), self.nodes[1].GetPositionY(), Colors.GRIDCOLOR, 3))
 
     def Update(self):
-        self.lines[0].Move(self.canvas.canvasScale, self.nodes[0].GetPositionX(), self.nodes[0].GetPositionY(), self.nodes[1].GetPositionX(), self.nodes[1].GetPositionY())
+        self.lines[0].Move(self.canvas.canvasScale, self.nodes[0].GetPositionX() + self.canvas.xOffset, self.nodes[0].GetPositionY() + self.canvas.yOffset, self.nodes[1].GetPositionX() + self.canvas.xOffset, self.nodes[1].GetPositionY() + self.canvas.yOffset)
 
     def GetStartPosition(self):
         return self.nodes[0].GetPosition()

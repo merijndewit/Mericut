@@ -17,8 +17,8 @@ class Pen(Tool):
         self.previewLine = None
 
     def Clicked(self, x, y, clickedNode, clickedLayer):
-        nodePositionX = x / self.parentCanvas.canvasScale
-        nodePositionY = y / self.parentCanvas.canvasScale
+        nodePositionX = (x / self.parentCanvas.canvasScale)
+        nodePositionY = (y / self.parentCanvas.canvasScale)
         if clickedNode == None: #not clicked on any nodes
             self.nodes.append(Nodes.Node(nodePositionX, nodePositionY))
         elif (isinstance(clickedNode, Nodes.Node)): #clicked on a node
@@ -49,10 +49,17 @@ class Pen(Tool):
 class Move(Tool):
     def __init__(self, parentCanvas):
         super().__init__(parentCanvas)
+        self.clickedPosition = [0, 0]
+        self.lastMoved = [0, 0]
+        self.clickedOffset = [0, 0]
+
 
     def Clicked(self, x, y, clickedNode, clickedLayer):
         self.clickedNode = clickedNode
         self.clickedLayer = clickedLayer
+        self.clickedPosition = [x, y]
+        self.lastMoved = [0, 0]
+        self.clickedOffset = [self.parentCanvas.xOffset, self.parentCanvas.yOffset]
 
     def Hover(self, x, y):
         nodePositionX = x / self.parentCanvas.canvasScale
@@ -63,7 +70,8 @@ class Move(Tool):
             return
         elif self.parentCanvas.mousePressed and self.clickedLayer:
             self.parentCanvas.selectedLayer.Move([x, y])
-
+        elif self.parentCanvas.mousePressed:
+            self.parentCanvas.MoveView((x - self.clickedPosition[0]), (y - self.clickedPosition[1]))
         self.clickedNode = None
 
 class QuadraticBezier(Tool):

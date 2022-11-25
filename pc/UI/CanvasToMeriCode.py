@@ -20,6 +20,7 @@ class CanvasToMeriCode:
                     self.DrawShape(file, self.canvas.layers[layer].drawnShapes[i].lines)
             self.MoveToolUp(file)
             self.MoveToHome(file)
+
             file.close()
 
     def TravelTo(self, file, position):
