@@ -27,13 +27,23 @@ class Node():
         self.position[1] += y
 
     def GetPosition(self):
-        return [self.GetPositionX(), self.GetPositionY()]
+        return self.position
+
+    def GetPositionX(self):
+        return self.position[0]
 
     def GetPositionY(self):
         return self.position[1]
 
-    def GetPositionX(self):
-        return self.position[0]
+    def GetPositionOnCanvas(self, canvas):
+        return [self.GetPositionOnCanvasX(canvas), self.GetPositionOnCanvasY(canvas)]
+
+    def GetPositionOnCanvasX(self, canvas):
+        return (self.position[0] * canvas.canvasScale) + canvas.xOffset
+
+    def GetPositionOnCanvasY(self, canvas):
+        return (self.position[1] * canvas.canvasScale) + canvas.yOffset
+ 
     
     @staticmethod
     def GetColisionColor():
