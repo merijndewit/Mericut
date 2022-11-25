@@ -153,7 +153,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.selectUIObject.Move(-20, -20)
             return
         self.selectUIObject.SetColor(collidingNode.GetColisionColor())
-        self.selectUIObject.Move(int((collidingNode.GetPositionX() * self.canvasScale) + self.xOffset), int((collidingNode.GetPositionY() * self.canvasScale) + self.yOffset))
+        self.selectUIObject.Move(collidingNode.GetPositionOnCanvasX(self), collidingNode.GetPositionOnCanvasY(self))
 
     def LoadSVG(self, dir):
         CanvasSVG.LoadSVG(self, dir)
@@ -215,4 +215,10 @@ class DrawingCanvas(tkinter.Canvas):
             self.AddLayer()
             return
         self.selectedLayer = self.layers[0]
+
+    def CanvasPosXToNormalPosX(self, x):
+        return (x / self.canvasScale) - self.xOffset
+    
+    def CanvasPosYToNormalPosY(self, y):
+        return (y / self.canvasScale) - self.yOffset
             
