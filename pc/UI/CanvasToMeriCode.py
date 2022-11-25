@@ -2,10 +2,11 @@ import math
 class CanvasToMeriCode:
     def __init__(self, canvas, cutting):
         self.position = [0, 0]
+        self.rotation = 0
         self.canvas = canvas
         self.mergeDistance = 0.05
         self.cutting = cutting
-        self.toolOffsetRadius = 4
+        self.toolOffsetRadius = 3.5
         with open('Test/MeriCodeTestFile.txt', "w") as file:
             for layer in range(len(self.canvas.layers)):
                 for i in range(len(self.canvas.layers[layer].drawnShapes)):
@@ -30,31 +31,35 @@ class CanvasToMeriCode:
 
     def DrawShape(self, file, lines):
         for line in range(len(lines)):
-            self.WriteMeriCodeLine(file, lines[line].x0, lines[line].y0, lines[line].x1, lines[line].y1)
+            self.WriteMeriCodeLine(file, self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0), self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1))
 
     def DrawShapeReversed(self, file, lines):
         for line in reversed(lines):
-            self.WriteMeriCodeLine(file, line.x0, line.y0, line.x1, line.y1)
+            self.WriteMeriCodeLine(file, self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0), self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1))
 
     def WriteMeriCodeLine(self, file, x0, y0, x1, y1):
         if (abs(self.position[0] - x0) <= self.mergeDistance and abs(self.position[1] - y0) <= self.mergeDistance): #check if first point of line is equal with the current position
             #create line from start to end
             offset = [0, 0]
             if self.cutting:
-                self.MoveToolUp(file)
-                self.RotateTool(file, self.GetAngle(y0 - y1, x0 - x1), 4)
-                offset = self.GetOffsetPosition(self.toolOffsetRadius, self.GetAngle(y0 - y1, x0 - x1))
-                self.MoveToolDown(file)
+                angle = self.GetAngle(y0 - y1, x0 - x1)
+                offset = self.GetOffsetPosition(self.toolOffsetRadius, angle)
+                if abs(self.rotation - angle) >= 0.25:
+                    self.MoveToolUp(file)
+                    self.RotateTool(file, angle, 4)
+                    self.MoveToolDown(file)
             self.MoveXY(file, x1 + offset[0], y1 + offset[1], 4)
             return
 
         if (abs(self.position[0] - x1) <= self.mergeDistance and abs(self.position[1] - y1) <= self.mergeDistance): #check if the last point of the line is equal to the current position
             offset = [0, 0]
             if self.cutting:
-                self.MoveToolUp(file)
-                self.RotateTool(file, self.GetAngle(y1 - y0, x1 - x0), 4)
-                offset = self.GetOffsetPosition(self.toolOffsetRadius, self.GetAngle(y1 - y0, x1 - x0))
-                self.MoveToolDown(file)
+                angle = self.GetAngle(y1 - y0, x1 - x0)
+                offset = self.GetOffsetPosition(self.toolOffsetRadius, angle)
+                if abs(self.rotation - angle) >= 0.25:
+                    self.MoveToolUp(file)
+                    self.RotateTool(file, angle, 4)
+                    self.MoveToolDown(file)
             self.MoveXY(file, x0 + offset[0], y0 + offset[1], 4)
             return
 
@@ -88,6 +93,7 @@ class CanvasToMeriCode:
 
     def RotateTool(self, file, degrees, ndigits):
         file.write("<M0 T" + str(round(degrees, ndigits)) + ">" + "\n")
+        self.rotation = round(degrees, ndigits)
 
     @staticmethod
     def GetAngle(point0, point1):
