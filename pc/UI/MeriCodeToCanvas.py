@@ -1,6 +1,7 @@
 from MeriCode.FileToMeriCode import FileToMeriCode
 import UI.CanvasShapes as CanvasShapes
 import re
+import math
 
 class MeriCodeToCanvas:
     def __init__(self, layer, cutting):
@@ -8,7 +9,7 @@ class MeriCodeToCanvas:
         self.rotation = 0
         self.layer = layer
         self.cutting = cutting
-        self.toolOffsetRadius = 3.5
+        self.toolOffsetRadius = 3.75
         self.zUpPosition = 20
 
     def DrawMeriCode(self):
@@ -43,13 +44,22 @@ class MeriCodeToCanvas:
 
         if re.search('T', meriCode) is not None:
             self.rotation = float(re.search('T([0-9.-]+)', meriCode)[1])
-        print(x, self.position[0])
+        
         if x == self.position[0] and y == self.position[1]:
             return
+
+        if self.cutting:
+            offsetPosition = self.GetOffsetPosition(self.toolOffsetRadius, self.rotation)
+            if x != None:
+                x -= offsetPosition[0]
+
+            if y != None:
+                y -= offsetPosition[1]
 
         travel = False   
         if self.position[2] == self.zUpPosition:
             travel = True
+
         self.DrawLine([x, y], travel)
 
         self.position[0] = x
@@ -59,6 +69,23 @@ class MeriCodeToCanvas:
         color = "#FF0000"
         if travel: 
             color = "#00FF00"
-        print(color)
         self.layer.AddShape(CanvasShapes.CanvasLine(self.layer.canvas, self.position[0], self.position[1], nextPosition[0], nextPosition[1], color, scaleWithCanvas=True))
             
+    @staticmethod
+    def GetOffsetPosition(radius, angle):
+        invert = True
+        angle = math.radians(angle)
+
+        x = radius * math.sin(angle)
+        if invert and x < 0:
+            x = abs(x)
+        else:
+            x = -abs(x)
+
+        y = radius * math.cos(angle)
+        if invert and y < 0:
+            y = abs(y)
+        else:
+            y = -abs(y)
+
+        return [y, x]

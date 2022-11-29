@@ -1,4 +1,5 @@
 import math
+import UI.CanvasShapes as CanvasShapes
 class CanvasToMeriCode:
     def __init__(self, canvas, cutting):
         self.position = [0, 0]
@@ -6,7 +7,7 @@ class CanvasToMeriCode:
         self.canvas = canvas
         self.mergeDistance = 0.05
         self.cutting = cutting
-        self.toolOffsetRadius = 3.5
+        self.toolOffsetRadius = 3.75
         with open('Test/MeriCodeTestFile.txt', "w") as file:
             for layer in range(len(self.canvas.layers)):
                 for i in range(len(self.canvas.layers[layer].drawnShapes)):
@@ -42,24 +43,20 @@ class CanvasToMeriCode:
             #create line from start to end
             offset = [0, 0]
             if self.cutting:
-                angle = self.GetAngle(y0 - y1, x0 - x1)
-                offset = self.GetOffsetPosition(self.toolOffsetRadius, angle)
-                if abs(self.rotation - angle) >= 0.25:
-                    self.MoveToolUp(file)
-                    self.RotateTool(file, angle, 4)
-                    self.MoveToolDown(file)
+                self.MoveToolUp(file)
+                self.RotateTool(file, self.GetAngle(y0 - y1, x0 - x1), 4)
+                offset = self.GetOffsetPosition(self.toolOffsetRadius, self.GetAngle(y0 - y1, x0 - x1))
+                self.MoveToolDown(file)
             self.MoveXY(file, x1 + offset[0], y1 + offset[1], 4)
             return
 
         if (abs(self.position[0] - x1) <= self.mergeDistance and abs(self.position[1] - y1) <= self.mergeDistance): #check if the last point of the line is equal to the current position
             offset = [0, 0]
             if self.cutting:
-                angle = self.GetAngle(y1 - y0, x1 - x0)
-                offset = self.GetOffsetPosition(self.toolOffsetRadius, angle)
-                if abs(self.rotation - angle) >= 0.25:
-                    self.MoveToolUp(file)
-                    self.RotateTool(file, angle, 4)
-                    self.MoveToolDown(file)
+                self.MoveToolUp(file)
+                self.RotateTool(file, self.GetAngle(y1 - y0, x1 - x0), 4)
+                offset = self.GetOffsetPosition(self.toolOffsetRadius, self.GetAngle(y1 - y0, x1 - x0))
+                self.MoveToolDown(file)
             self.MoveXY(file, x0 + offset[0], y0 + offset[1], 4)
             return
 
