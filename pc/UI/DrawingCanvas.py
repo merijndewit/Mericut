@@ -8,6 +8,7 @@ import UI.DrawingTools as DrawingTools
 import UI.CanvasSVG as CanvasSVG
 import UI.CanvasToMeriCode as CanvasToMeriCode
 import UI.Layer as Layer
+import UI.MeriCodeToCanvas as MeriCodeToCanvas
 
 class DrawingCanvas(tkinter.Canvas):
     def __init__(self, parent, *args, **kwargs):
@@ -221,4 +222,8 @@ class DrawingCanvas(tkinter.Canvas):
     
     def CanvasPosYToNormalPosY(self, y):
         return (y / self.canvasScale) - self.yOffset
-            
+
+    def ShowMeriCode(self):
+        self.AddLayer("Movement")
+        mericodeToCanvas = MeriCodeToCanvas.MeriCodeToCanvas(self.selectedLayer, False)
+        mericodeToCanvas.DrawMeriCode()

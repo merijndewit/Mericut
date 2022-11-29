@@ -142,6 +142,9 @@ class MeriCodeFrame(customtkinter.CTkFrame):
         self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=200, height=50, text_color=Colors.BUTTONTEXT, command= lambda: self.GenerateMeriCode())
         self.submitButton.grid(row=1, column=0, columnspan=5, sticky=tkinter.SW)
 
+        self.submitButton = customtkinter.CTkButton(master=self, text="Show MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=200, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.ShowMeriCode())
+        self.submitButton.grid(row=2, column=0, columnspan=5, sticky=tkinter.SW)
+
     def Switched(self):
         if self.slicingSwitch.get() == 0:
             self.cutting = False
