@@ -1,6 +1,7 @@
 import math
 from UI.Nodes import Node
 from UI.CanvasShapes import CanvasCircle
+import UI.CanvasShapes as CanvasShapes
 
 class Layer():
     def __init__(self, canvas, name):
@@ -9,7 +10,8 @@ class Layer():
         
         self.name = name
         self.canvas = canvas
-        self.drawnShapes = [] 
+        self.drawnShapes = [] #drawn by user
+        self.canvasShapes = [] #drawn by program
         self.resizeNodes = [Node(-100, -100), Node(-100, -100)]
         self.sizeShapes = [CanvasCircle(-100, -100, 5, self.canvas), CanvasCircle(-100, -100, 5, self.canvas)]
         self.resizeNodes[0].SetShape(self)
@@ -28,11 +30,19 @@ class Layer():
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Update()
 
+        for i in range(len(self.canvasShapes)):
+            self.canvasShapes[i].Update()
+
     def Delete(self):
         for i in range(len(self.drawnShapes)):
             self.drawnShapes[i].Delete()
 
+        for i in range(len(self.canvasShapes)):
+            self.canvasShapes[i].Delete()
+
         self.drawnShapes = []
+        self.canvasShapes = []
+
 
     def GetCollidingNode(self, distance :float, canvasScale :float, mousePosition :list):
         nearestNode = None
@@ -58,7 +68,11 @@ class Layer():
         return nodesToCheck[nearestNode[0]]
 
     def AddShape(self, shape):
+        if isinstance(shape, CanvasShapes.CanvasShapes):
+            self.canvasShapes.append(shape)
+            return
         self.drawnShapes.append(shape)
+
         for i in range(len(shape.nodes)):
             shape.nodes[i].position = [shape.nodes[i].position[0] / self.scale, shape.nodes[i].position[1] / self.scale]
 
@@ -124,6 +138,8 @@ class Layer():
         self.resizing = False
 
     def CanvasScaleChanged(self):
+        if self.resizing == False:
+            return
         self.sizeShapes[0].Move(self.resizeNodes[0].position[0] * self.canvas.canvasScale, self.resizeNodes[0].position[1] * self.canvas.canvasScale)
         self.sizeShapes[1].Move(self.resizeNodes[1].position[0] * self.canvas.canvasScale, self.resizeNodes[1].position[1] * self.canvas.canvasScale)
 
