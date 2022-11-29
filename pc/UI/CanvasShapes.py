@@ -1,6 +1,9 @@
 from UI.Colors import Colors
+class CanvasShapes():
+    def __init__(self):
+        pass
 
-class CanvasCircle():
+class CanvasCircle(CanvasShapes):
     def __init__(self, x, y, radius, canvas):
         self.x = x
         self.y = y 
@@ -26,7 +29,7 @@ class CanvasCircle():
     def Delete(self):
         self.canvas.delete(self.circle)
 
-class CanvasRectangle():
+class CanvasRectangle(CanvasShapes):
     def __init__(self, width, height, canvas, tags=""):
         self.width = width
         self.height = height
@@ -52,8 +55,8 @@ class CanvasRectangle():
     def Delete(self):
         self.canvas.delete(self.rectangle)
 
-class CanvasLine():
-    def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1, dash=None):
+class CanvasLine(CanvasShapes):
+    def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1, dash=None, scaleWithCanvas=False):
         self.x0 = x0
         self.y0 = y0 
         self.x1 = x1
@@ -62,19 +65,29 @@ class CanvasLine():
         self.color = color
         self.width = width
         self.dash = dash
+        self.scaleWithCanvas = scaleWithCanvas
 
         self.canvasLine = None
         self.Draw()
 
     def Draw(self):
+        if self.scaleWithCanvas:
+            self.canvasLine = self.canvas.create_line(self.x0 * self.canvas.canvasScale, self.y0 * self.canvas.canvasScale, self.x1 * self.canvas.canvasScale, self.y1 * self.canvas.canvasScale, fill=self.color, width=self.width, dash=self.dash)
+            return
         self.canvasLine = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1, fill=self.color, width=self.width, dash=self.dash)
-    
+        
     def Move(self, x0, y0, x1, y1):
         self.x0 = x0
         self.y0 = y0 
         self.x1 = x1
         self.y1 = y1 
+        if self.scaleWithCanvas:
+            self.canvas.coords(self.canvasLine, x0 * self.canvas.canvasScale, y0 * self.canvas.canvasScale, x1 * self.canvas.canvasScale, y1 * self.canvas.canvasScale)
+            return
         self.canvas.coords(self.canvasLine, x0, y0, x1, y1)
 
     def Delete(self):
         self.canvas.delete(self.canvasLine)
+
+    def Update(self):
+        self.canvas.coords(self.canvasLine, self.x0 * self.canvas.canvasScale, self.y0 * self.canvas.canvasScale, self.x1 * self.canvas.canvasScale, self.y1 * self.canvas.canvasScale)
