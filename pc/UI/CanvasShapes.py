@@ -30,11 +30,11 @@ class CanvasCircle(CanvasShapes):
         self.canvas.delete(self.circle)
 
 class CanvasRectangle(CanvasShapes):
-    def __init__(self, width, height, canvas, tags=""):
+    def __init__(self, position :list, width, height, canvas, tags=""):
         self.width = width
         self.height = height
-        self.x = 0
-        self.y = 0
+        self.x = position[0]
+        self.y = position[1]
         self.canvas = canvas
         self.rectangle = None
         self.tag = tags
@@ -43,8 +43,10 @@ class CanvasRectangle(CanvasShapes):
     def Draw(self):
         self.rectangle = self.canvas.create_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, fill=Colors.COLISIONNODE, tags=(self.tag), width=0)
     
-    def SetScale(self, scale):
-        self.canvas.coords(self.rectangle, int(self.x * scale), int(self.y * scale), int((self.x + self.width) * scale), int((self.y + self.height) * scale))
+    def Update(self, position, scale):
+        self.x = position[0]
+        self.y = position[1]
+        self.canvas.coords(self.rectangle, int(self.x), int(self.y), int((self.width * scale) + self.x), int((self.height * scale) + self.y))
 
     def Move(self, x, y):
         self.canvas.coords(self.rectangle, x, y, x + self.width, y + self.height)
@@ -72,7 +74,7 @@ class CanvasLine(CanvasShapes):
 
     def Draw(self):
         if self.scaleWithCanvas:
-            self.canvasLine = self.canvas.create_line(self.x0 * self.canvas.canvasScale, self.y0 * self.canvas.canvasScale, self.x1 * self.canvas.canvasScale, self.y1 * self.canvas.canvasScale, fill=self.color, width=self.width, dash=self.dash)
+            self.canvasLine = self.canvas.create_line((self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset, fill=self.color, width=self.width, dash=self.dash)
             return
         self.canvasLine = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1, fill=self.color, width=self.width, dash=self.dash)
         
@@ -82,7 +84,7 @@ class CanvasLine(CanvasShapes):
         self.x1 = x1
         self.y1 = y1 
         if self.scaleWithCanvas:
-            self.canvas.coords(self.canvasLine, x0 * self.canvas.canvasScale, y0 * self.canvas.canvasScale, x1 * self.canvas.canvasScale, y1 * self.canvas.canvasScale)
+            self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset)
             return
         self.canvas.coords(self.canvasLine, x0, y0, x1, y1)
 
@@ -90,4 +92,4 @@ class CanvasLine(CanvasShapes):
         self.canvas.delete(self.canvasLine)
 
     def Update(self):
-        self.canvas.coords(self.canvasLine, self.x0 * self.canvas.canvasScale, self.y0 * self.canvas.canvasScale, self.x1 * self.canvas.canvasScale, self.y1 * self.canvas.canvasScale)
+        self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset)

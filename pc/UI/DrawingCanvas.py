@@ -40,7 +40,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.mousePressed = False
         self.snap = True
 
-        self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM)
+        self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.xOffset, self.yOffset)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
 
         self.lastSnapPosition = [0, 0]
@@ -51,7 +51,8 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.config(width=width, height=height)
         if self.background is not None:
-            self.background.SetScale(self.canvasScale)
+            self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
+
         self.RedrawGrid()
         self.RedrawShapes()
 
@@ -79,9 +80,9 @@ class DrawingCanvas(tkinter.Canvas):
             width = 105
             height = 148.5
             color = Colors.PAPERBACKGROUNDCANVAS
-        self.background = CanvasShapes.CanvasRectangle(width, height, self, tags="background")
+        self.background = CanvasShapes.CanvasRectangle([self.xOffset, self.yOffset], width, height, self, tags="background")
         self.background.SetColor(color)
-        self.background.SetScale(self.canvasScale)
+        self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
         self.tag_lower("background")
 
     def MoveView(self, x, y):
@@ -90,6 +91,8 @@ class DrawingCanvas(tkinter.Canvas):
         self.RedrawGrid()
         self.RedrawShapes()
         self.selectedLayer.CanvasScaleChanged()
+        if self.background is not None:
+            self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
 
     def Scroll(self, event):
         self.pixelsPerMM += (-1*(event.delta/120)) * 2
@@ -98,14 +101,14 @@ class DrawingCanvas(tkinter.Canvas):
             self.pixelsPerMM = 2
             self.canvasScale = self.pixelsPerMM / 10
         if self.background is not None:
-            self.background.SetScale(self.canvasScale)
+            self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
         self.RedrawGrid()
         self.RedrawShapes()
         self.selectedLayer.CanvasScaleChanged()
 
 
     def RedrawGrid(self):
-        self.canvasGrid.ReDraw(int(10 * self.canvasScale))
+        self.canvasGrid.ReDraw(int(10 * self.canvasScale), self.xOffset, self.yOffset)
 
     def SetTool(self, tool):
         self.tool = tool(self)
@@ -114,10 +117,10 @@ class DrawingCanvas(tkinter.Canvas):
         if self.snap:
             x += int(1 * self.canvasScale) 
             y += int(1 * self.canvasScale) 
-            x = int(x / (self.canvasScale * 5))
-            x = int(x * (self.canvasScale * 5))
-            y = int(y / (self.canvasScale * 5))
-            y = int(y * (self.canvasScale * 5))
+            x = int(x / (self.canvasScale * 1))
+            x = int(x * (self.canvasScale * 1))
+            y = int(y / (self.canvasScale * 1))
+            y = int(y * (self.canvasScale * 1))
         return x, y
 
     def Clicked(self, event):
