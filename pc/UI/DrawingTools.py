@@ -39,11 +39,13 @@ class Pen(Tool):
         self.clicks += 1
 
     def Hover(self, x, y):
+        x = (x + self.parentCanvas.xOffset)
+        y = (y + self.parentCanvas.yOffset)
         if self.clicks == 1:
             if self.previewLine == None:
                 self.previewLine = CanvasShapes.CanvasLine(self.parentCanvas, self.nodes[0].GetPositionOnCanvasX(self.parentCanvas), self.nodes[0].GetPositionOnCanvasY(self.parentCanvas), (x / self.parentCanvas.canvasScale) + self.parentCanvas.xOffset, (y / self.parentCanvas.canvasScale) + self.parentCanvas.yOffset)
                 return
-            self.previewLine.Move(self.nodes[0].GetPositionOnCanvasX(self.parentCanvas), self.nodes[0].GetPositionOnCanvasY(self.parentCanvas), (x) - self.parentCanvas.xOffset, (y) - self.parentCanvas.yOffset)
+            self.previewLine.Move(self.nodes[0].GetPositionOnCanvasX(self.parentCanvas), self.nodes[0].GetPositionOnCanvasY(self.parentCanvas), (x), (y))
             return
 
 class Move(Tool):
