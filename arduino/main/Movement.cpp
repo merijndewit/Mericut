@@ -11,10 +11,11 @@ Movement::Movement()
     steppers.addStepper(xStepper);
     steppers.addStepper(yStepper);
     steppers.addStepper(yyStepper);
+    steppers.addStepper(tStepper);
     xStepper.setAcceleration(STEPPERACCELERATION);
     yStepper.setAcceleration(STEPPERACCELERATION);
     yyStepper.setAcceleration(STEPPERACCELERATION);
-    zStepper.setAcceleration(STEPPERACCELERATION);
+    zStepper.setAcceleration(ZACCELERATION);
     tStepper.setAcceleration(STEPPERACCELERATION);
     SetNormalSpeed();
 }
@@ -39,30 +40,26 @@ void Movement::SetTravelSpeed()
 
 void Movement::SetTargetPosition(float x, float y, float z, float t)
 {
-    xyMoving = false;
+    xytMoving = false;
     zMoving = false;
-    tMoving = false;
 
-    long xyPositions[3] = {long(targetPosition[0]), long(targetPosition[1]), long(targetPosition[1])};
+    long xyPositions[4] = {long(targetPosition[0]), long(targetPosition[1]), long(targetPosition[1]), long(targetPosition[3])};
 
     isMovingToTarget = true;
-    //SyncMovementXY(x, y);
+
     if (!isnan(x))
     {
         targetPosition[0] = (x * XSTEPPERMM) * MICROSTEPPING;
         xyPositions[0] = long((x * XSTEPPERMM) * MICROSTEPPING);
-        //xStepper.moveTo((x * XSTEPPERMM) * MICROSTEPPING);
-        xyMoving = true;
+        xytMoving = true;
     }
     if (!isnan(y))
     {
-        //yStepper.moveTo((y * YSTEPPERMM) * MICROSTEPPING);
-        //yyStepper.moveTo((y * YSTEPPERMM) * MICROSTEPPING);
         xyPositions[1] = long((y * YSTEPPERMM) * MICROSTEPPING);
         xyPositions[2] = long((y * YSTEPPERMM) * MICROSTEPPING);
 
         targetPosition[1] = (y * YSTEPPERMM) * MICROSTEPPING;
-        xyMoving = true;
+        xytMoving = true;
     }    
     if (!isnan(z))
     {
@@ -72,11 +69,11 @@ void Movement::SetTargetPosition(float x, float y, float z, float t)
     }
     if (!isnan(t))
     {
-        tStepper.moveTo((t * TSTEPPERDEG) * MICROSTEPPING);
-        targetPosition[3] = t;
-        tMoving = true;
+        targetPosition[3] = ((t * TSTEPPERDEG) * MICROSTEPPING);
+        xyPositions[3] = long((t * TSTEPPERDEG) * MICROSTEPPING);
+        xytMoving = true;
     }
-    if (xyMoving)
+    if (xytMoving)
     {
         steppers.moveTo(xyPositions);
     }
@@ -86,20 +83,15 @@ void Movement::Move()
 {
     int moved = 0;
 
-    if(xyMoving)
+    if(xytMoving)
     {
-        xyMoving = steppers.run();
+        xytMoving = steppers.run();
         moved++;
     }
 
     if(zMoving)
     {
         zMoving = zStepper.run();
-        moved++;
-    }
-    if(tMoving)
-    {
-        tMoving = tStepper.run();
         moved++;
     }
 

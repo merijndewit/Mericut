@@ -21,10 +21,9 @@ class Movement
     private:
         float targetPosition[4] = {0, 0, 0, 0};
         bool isMovingToTarget = false;
-        bool xyMoving = false;
+        bool xytMoving = false;
         bool zMoving = false;
-        bool tMoving = false;
-
+        
         AccelStepper xStepper = AccelStepper(1, XDRIVERSTEPPIN, XDRIVERDIRECTIONPIN);
         AccelStepper yStepper = AccelStepper(1, YDRIVERSTEPPIN, YDRIVERDIRECTIONPIN);
         AccelStepper yyStepper = AccelStepper(1, YYDRIVERSTEPPIN, YYDRIVERDIRECTIONPIN);
