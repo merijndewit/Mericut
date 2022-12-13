@@ -227,6 +227,12 @@ class DrawingCanvas(tkinter.Canvas):
         return (y / self.canvasScale) - self.yOffset
 
     def ShowMeriCode(self, cutting :bool):
-        self.AddLayer("Movement")
+        for i in range(len(self.layers)):
+            if self.layers[i].name == "Movement":
+                self.layers[i].Delete()
+                break
+        else:
+            self.AddLayer("Movement")
+            
         mericodeToCanvas = MeriCodeToCanvas.MeriCodeToCanvas(self.selectedLayer, cutting)
         mericodeToCanvas.DrawMeriCode()
