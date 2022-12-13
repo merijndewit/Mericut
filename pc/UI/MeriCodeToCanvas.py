@@ -4,31 +4,42 @@ import re
 import math
 
 class MeriCodeToCanvas:
-    def __init__(self, layer, cutting):
+    def __init__(self):
         self.position = [0.0, 0.0, 0.0] #x, y and z
         self.rotation = 0
-        self.layer = layer
-        self.cutting = cutting
+        self.layer = None
+        self.cutting = False
         self.toolOffsetRadius = 3.75
         self.zUpPosition = 20
+        self.lines = []
 
-    def DrawMeriCode(self):
+    def DrawMeriCode(self, layer, cutting):
+        self.layer = layer
+        self.cutting = cutting
         file = FileToMeriCode.GetMeriCodeFromTxt()
+        self.lines = []
         for i in range(len(file)):
             start = '<'
             end = '>'
-            self.ExecuteCallbackCode(file[i][file[i].find(start)+len(start):file[i].rfind(end)])
+            self.__ExecuteCallbackCode__(file[i][file[i].find(start)+len(start):file[i].rfind(end)])
 
-    def ExecuteCallbackCode(self, meriCode :str):
+    def ShowSingleMeriCodeLine(self, line :int):
+        if len(self.lines) == 0 or len(self.lines) - 1 < line:
+            return
+        self.lines[line].Draw()
+        self.layer.AddShape(self.lines[line])
+        print(self.lines[line])
+
+    def __ExecuteCallbackCode__(self, meriCode :str):
         if meriCode[0] == 'M':
-            self.ExecuteMcode(meriCode[1:])
+            self.__ExecuteMcode__(meriCode[1:])
 
-    def ExecuteMcode(self, meriCode :str):
+    def __ExecuteMcode__(self, meriCode :str):
         number = re.search(r'\d+', meriCode).group()
         if number == '0' or number == '1':
-            self.Move(meriCode[2:])
+            self.__Move__(meriCode[2:])
 
-    def Move(self, meriCode :str):
+    def __Move__(self, meriCode :str):
         x = self.position[0]
         y = self.position[1]
         z = self.position[2]
@@ -49,7 +60,7 @@ class MeriCodeToCanvas:
             return
 
         if self.cutting:
-            offsetPosition = self.GetOffsetPosition(self.toolOffsetRadius, self.rotation)
+            offsetPosition = self.__GetOffsetPosition__(self.toolOffsetRadius, self.rotation)
             if x != None:
                 x -= offsetPosition[0]
 
@@ -60,19 +71,21 @@ class MeriCodeToCanvas:
         if self.position[2] == self.zUpPosition:
             travel = True
 
-        self.DrawLine([x, y], travel)
+        self.__DrawLine__([x, y], travel)
 
         self.position[0] = x
         self.position[1] = y
 
-    def DrawLine(self, nextPosition, travel :bool):
+    def __DrawLine__(self, nextPosition, travel :bool):
         color = "#FF0000"
         if travel: 
             color = "#00FF00"
-        self.layer.AddShape(CanvasShapes.CanvasLine(self.layer.canvas, self.position[0], self.position[1], nextPosition[0], nextPosition[1], color, scaleWithCanvas=True))
+        line = CanvasShapes.CanvasLine(self.layer.canvas, self.position[0], self.position[1], nextPosition[0], nextPosition[1], color, scaleWithCanvas=True)
+        self.lines.append(line)
+        self.layer.AddShape(line)
             
     @staticmethod
-    def GetOffsetPosition(radius, angle):
+    def __GetOffsetPosition__(radius, angle):
         invert = True
         angle = math.radians(angle)
 

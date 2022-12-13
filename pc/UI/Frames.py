@@ -129,6 +129,7 @@ class MeriCodeFrame(customtkinter.CTkFrame):
         self.grid(row=2, column=0, padx=(0, 0), pady=(5, 0), sticky=tkinter.NW)
         self.grid_propagate(0)
         self.cutting = False
+        self.line = 0
 
         self.drawingText = customtkinter.CTkLabel(master=self, text="Drawing", text_color=Colors.TEXT, text_font='Helvetica 11', anchor=tkinter.W, width=60)
         self.drawingText.grid(row=0, column=0, sticky=tkinter.W)
@@ -142,8 +143,14 @@ class MeriCodeFrame(customtkinter.CTkFrame):
         self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=200, height=50, text_color=Colors.BUTTONTEXT, command= lambda: self.GenerateMeriCode())
         self.submitButton.grid(row=1, column=0, columnspan=5, sticky=tkinter.SW)
 
-        self.showButton = customtkinter.CTkButton(master=self, text="Show MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=200, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.ShowMeriCode(self.cutting))
-        self.showButton.grid(row=2, column=0, columnspan=5, sticky=tkinter.SW)
+        self.showButton = customtkinter.CTkButton(master=self, text="<",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(-1))
+        self.showButton.grid(row=2, column=0, sticky=tkinter.W)
+
+        self.showButton = customtkinter.CTkButton(master=self, text="Show MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=125, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.ShowMeriCode(self.cutting))
+        self.showButton.grid(row=2, column=0, columnspan=2, padx=(30, 5), sticky=tkinter.W)
+
+        self.showButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(1))
+        self.showButton.grid(row=2, column=2, sticky=tkinter.W)
 
     def Switched(self):
         if self.slicingSwitch.get() == 0:
@@ -153,6 +160,10 @@ class MeriCodeFrame(customtkinter.CTkFrame):
 
     def GenerateMeriCode(self):
         self.parent.canvas.canvas.CanvasToMeriCode(self.cutting)
+
+    def ShowNextLine(self, incresement):
+        self.parent.canvas.canvas.ShowSingleMeriCodeLine(self.line)
+        self.line += incresement
 
 class ToolSelect(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):

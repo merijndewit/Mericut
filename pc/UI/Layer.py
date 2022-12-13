@@ -55,7 +55,7 @@ class Layer():
                     nodesToCheck.append(self.drawnShapes[i].nodes[node])
 
         for node in range(len(nodesToCheck)):
-            nodeDistance = abs(math.dist([(nodesToCheck[node].GetPositionOnCanvasX(self.canvas)), (nodesToCheck[node].GetPositionOnCanvasY(self.canvas))], mousePosition))
+            nodeDistance = abs(math.dist([(nodesToCheck[node].GetPositionOnCanvasX(self.canvas)) + self.canvas.xOffset, (nodesToCheck[node].GetPositionOnCanvasY(self.canvas)) + self.canvas.yOffset], mousePosition))
             if nodeDistance > distance:
                 continue
             if nearestNode == None:

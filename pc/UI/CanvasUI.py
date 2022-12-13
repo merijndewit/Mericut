@@ -15,9 +15,9 @@ class CanvasGrid():
 
         offsetX = self.xOffset % self.cellSize - self.cellSize
         offsetY = self.yOffset % self.cellSize - self.cellSize
-        for i in range(-1, int(self.canvas.winfo_reqwidth() / self.cellSize)):
+        for i in range(int(self.canvas.winfo_reqwidth() / self.cellSize) + 1):
             self.canvasLines.append(self.canvas.create_line((i * self.cellSize) + offsetX, 0 + offsetY, (i * self.cellSize) + offsetX, self.canvas.winfo_reqheight() + offsetY, fill=color, width=1))
-        for i in range(-1, int(self.canvas.winfo_reqheight() / self.cellSize)):
+        for i in range(int(self.canvas.winfo_reqheight() / self.cellSize) + 1):
             self.canvasLines.append(self.canvas.create_line(0 + offsetX, (i * self.cellSize) + offsetY, self.canvas.winfo_reqwidth() + offsetX, (i * self.cellSize) + offsetY, fill=color, width=1))
 
     def DeleteGrid(self):

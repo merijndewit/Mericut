@@ -28,6 +28,7 @@ class DrawingCanvas(tkinter.Canvas):
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.selectedLayer = Layer.Layer(self, "layer")
+        self.mericodeToCanvas = MeriCodeToCanvas.MeriCodeToCanvas()
         self.layers = [self.selectedLayer]
         self.lastCollidedNode = None
         self.background = None
@@ -230,9 +231,20 @@ class DrawingCanvas(tkinter.Canvas):
         for i in range(len(self.layers)):
             if self.layers[i].name == "Movement":
                 self.layers[i].Delete()
+                self.SelectLayer("Movement")
                 break
         else:
             self.AddLayer("Movement")
-            
-        mericodeToCanvas = MeriCodeToCanvas.MeriCodeToCanvas(self.selectedLayer, cutting)
-        mericodeToCanvas.DrawMeriCode()
+
+        self.mericodeToCanvas.DrawMeriCode(self.selectedLayer, cutting)
+
+    def ShowSingleMeriCodeLine(self, line :int):
+        for i in range(len(self.layers)):
+            if self.layers[i].name == "Movement":
+                self.layers[i].Delete()
+                self.SelectLayer("Movement")
+                break
+        else:
+            self.AddLayer("Movement")
+
+        self.mericodeToCanvas.ShowSingleMeriCodeLine(line)
