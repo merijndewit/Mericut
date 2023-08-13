@@ -3,6 +3,17 @@ import atexit
 
 #mericut
 import UI.Frames as Frames
+
+import UI.ProgramFrames.HeaderFrame as HeaderFrame
+import UI.ProgramFrames.ConnectFrame as ConnectFrame
+import UI.ProgramFrames.MericodeTestFrame as MericodeTestFrame
+import UI.ProgramFrames.MeriCodeFrame as MeriCodeFrame
+import UI.ProgramFrames.ToolSelectFrame as ToolSelect
+import UI.ProgramFrames.CanvasFrame as Canvas
+import UI.ProgramFrames.CanvasLayerFrame as CanvasLayerFrame
+import UI.ProgramFrames.BackgroundFrame as BackgroundFrame
+import UI.ProgramFrames.MericodeInfoFrame as MeriCodeInfoFrame
+
 from Serial import Serial
 
 from UI.Colors import Colors
@@ -21,15 +32,15 @@ class Main(customtkinter.CTk):
         leftFramesContainer = Frames.LeftFramesContainer(self, self)
         self.callbackMeriCode = CallbackMeriCode(self)
         self.serial = Serial(self)
-        self.headerFrame = Frames.HeaderFrame(self, self)
-        self.connectFrame = Frames.ConnectFrame(self, leftFramesContainer)
-        self.MeriCodeFrame = Frames.MeriCodeTestFrame(self, leftFramesContainer)
-        self.meriCodeFrame = Frames.MeriCodeFrame(self, leftFramesContainer)
-        self.canvas = Frames.Canvas(self, self)
-        self.toolSelect = Frames.ToolSelect(self, self)
-        self.backgroundFrame = Frames.BackgroundFrame(self, self)
-        self.canvasLayerFrame = Frames.CanvasLayerFrame(self, self)
-        self.mericodeInfo = Frames.MericodeInfo(self, self)
+        self.headerFrame = HeaderFrame.HeaderFrame(self, self)
+        self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
+        self.meriCodeTestFrame = MericodeTestFrame.MeriCodeTestFrame(self, leftFramesContainer)
+        self.meriCodeFrame = MeriCodeFrame.MeriCodeFrame(self, leftFramesContainer)
+        self.canvas = Canvas.Canvas(self, self)
+        self.toolSelect = ToolSelect.ToolSelect(self, self)
+        self.backgroundFrame = BackgroundFrame.BackgroundFrame(self, self)
+        self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
+        self.mericodeInfo = MeriCodeInfoFrame.MericodeInfo(self, self)
 
 
         FileToMeriCode.GetMeriCodeFromTxt()

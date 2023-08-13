@@ -6,9 +6,9 @@ import UI.CanvasUI as CanvasUI
 import UI.CanvasShapes as CanvasShapes
 import UI.DrawingTools as DrawingTools
 import UI.CanvasSVG as CanvasSVG
-import UI.CanvasToMeriCode as CanvasToMeriCode
+import MeriCode.CanvasToMeriCode as CanvasToMeriCode
 import UI.Layer as Layer
-import UI.MeriCodeToCanvas as MeriCodeToCanvas
+import MeriCode.MeriCodeToCanvas as MeriCodeToCanvas
 
 class DrawingCanvas(tkinter.Canvas):
     def __init__(self, parent, *args, **kwargs):
