@@ -29,11 +29,12 @@ class Main(customtkinter.CTk):
         self.toolSelect = Frames.ToolSelect(self, self)
         self.backgroundFrame = Frames.BackgroundFrame(self, self)
         self.canvasLayerFrame = Frames.CanvasLayerFrame(self, self)
+        self.mericodeInfo = Frames.MericodeInfo(self, self)
 
 
         FileToMeriCode.GetMeriCodeFromTxt()
 
-        self.mainloop();
+        self.mainloop()
 
     def OnExit(self):
         self.terminating = True

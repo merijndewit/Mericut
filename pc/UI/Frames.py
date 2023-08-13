@@ -32,13 +32,13 @@ class HeaderFrame(customtkinter.CTkFrame):
         self.columnconfigure(2, weight=1)
         self.grid_propagate(0)
 
-        self.header = customtkinter.CTkLabel(master=self, text="MeriCut", text_color=Colors.TEXT, text_font='Helvetica 13 bold', anchor=tkinter.W)
+        self.header = customtkinter.CTkLabel(master=self, text="MeriCut", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.header.grid(row=0, column=2, sticky=tkinter.NW, pady=(6, 0))
 
         logo = Image.open("images/logo.png")
-        logo = logo.resize((40, 40), Image.ANTIALIAS)
+        logo = logo.resize((40, 40))
         tkinterLogo = ImageTk.PhotoImage(logo)
-        self.button = customtkinter.CTkButton(master=self, image=tkinterLogo, text="", fg_color=Colors.BGHEADERFRAME, hover_color=Colors.BGHEADERFRAME, text_font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())  # type: ignore
+        self.button = customtkinter.CTkButton(master=self, image=tkinterLogo, text="", fg_color=Colors.BGHEADERFRAME, hover_color=Colors.BGHEADERFRAME, font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())  # type: ignore
         self.button.grid(row=0, column=0, sticky=tkinter.W, padx=(5, 5))
 
 class ConnectFrame(customtkinter.CTkFrame):
@@ -56,10 +56,10 @@ class ConnectFrame(customtkinter.CTkFrame):
         def ComPortSelected(choice):
             self.parent.serial.selectedComPort = choice
 
-        self.connectionStatusText = customtkinter.CTkLabel(master=self, text="Status: ", text_color=Colors.TEXT, text_font='Helvetica 11 bold', anchor=tkinter.W)
+        self.connectionStatusText = customtkinter.CTkLabel(master=self, text="Status: ", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.connectionStatusText.grid(row=1, column=0, sticky=tkinter.NW, columnspan=2)
 
-        self.connectionStatus = customtkinter.CTkLabel(master=self, text_font='Helvetica 11 bold')
+        self.connectionStatus = customtkinter.CTkLabel(master=self, font=("", 11))
         self.connectionStatus.grid(row=1, column=1, sticky=tkinter.NW, columnspan=2)
         self.SetConnectionStatus(False)
 
@@ -71,14 +71,14 @@ class ConnectFrame(customtkinter.CTkFrame):
         self.comPortOption.grid(row=2, column=0, sticky=tkinter.NW, columnspan=2)
 
 
-        self.previewButton = customtkinter.CTkButton(master=self, text="↻",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: SetAvailableComPorts(Serial.GetPortNames()))
+        self.previewButton = customtkinter.CTkButton(master=self, text="↻",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: SetAvailableComPorts(Serial.GetPortNames()))
         self.previewButton.grid(row=2, column=2, sticky=tkinter.NW)
 
-        self.connectButton = customtkinter.CTkButton(master=self, text="Connect",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=70, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.Connect())
+        self.connectButton = customtkinter.CTkButton(master=self, text="Connect",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=70, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.Connect())
         self.connectButton.grid(row=3, column=0, sticky=tkinter.W)
         self.connectButton.grid_propagate(0)
 
-        self.testConnectionButton = customtkinter.CTkButton(master=self, text="Test",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=70, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())
+        self.testConnectionButton = customtkinter.CTkButton(master=self, text="Test",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=70, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())
         self.testConnectionButton.grid(row=3, column=1, sticky=tkinter.W)
         self.testConnectionButton.grid_propagate(0)
 
@@ -104,10 +104,10 @@ class MeriCodeTestFrame(customtkinter.CTkFrame):
         self.entry = customtkinter.CTkEntry(master=self, placeholder_text="MeriCode", width=120, height=25, border_width=2, corner_radius=10, text_color=Colors.BUTTONTEXT)
         self.entry.grid(row=0, column=0, sticky=tkinter.NW, columnspan=2)
         
-        self.submitButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: SendEntryString())
+        self.submitButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: SendEntryString())
         self.submitButton.grid(row=0, column=2, sticky=tkinter.NW)
 
-        self.sendTestFile = customtkinter.CTkButton(master=self, text="Send File",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=100, height=28, text_color=Colors.BUTTONTEXT, command= lambda: StartSendingFile())
+        self.sendTestFile = customtkinter.CTkButton(master=self, text="Send File",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=100, height=28, text_color=Colors.BUTTONTEXT, command= lambda: StartSendingFile())
         self.sendTestFile.grid(row=1, column=0, sticky=tkinter.NW, columnspan=1)
 
         def StartSendingFile():
@@ -131,25 +131,25 @@ class MeriCodeFrame(customtkinter.CTkFrame):
         self.cutting = False
         self.line = 0
 
-        self.drawingText = customtkinter.CTkLabel(master=self, text="Drawing", text_color=Colors.TEXT, text_font='Helvetica 11', anchor=tkinter.W, width=60)
+        self.drawingText = customtkinter.CTkLabel(master=self, text="Drawing", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W, width=60)
         self.drawingText.grid(row=0, column=0, sticky=tkinter.W)
 
         self.slicingSwitch = customtkinter.CTkSwitch(master=self, text="", command= lambda: self.Switched(), progress_color=Colors.BUTTON, button_color=Colors.BGSECCOLOR)
         self.slicingSwitch.grid(row=0, column=1, sticky=tkinter.W)
         
-        self.cuttingText = customtkinter.CTkLabel(master=self, text="Cutting", text_color=Colors.TEXT, text_font='Helvetica 11', anchor=tkinter.W)
+        self.cuttingText = customtkinter.CTkLabel(master=self, text="Cutting", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.cuttingText.grid(row=0, column=2, sticky=tkinter.W)
 
-        self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=200, height=50, text_color=Colors.BUTTONTEXT, command= lambda: self.GenerateMeriCode())
+        self.submitButton = customtkinter.CTkButton(master=self, text="Generate MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=200, height=50, text_color=Colors.BUTTONTEXT, command= lambda: self.GenerateMeriCode())
         self.submitButton.grid(row=1, column=0, columnspan=5, sticky=tkinter.SW)
 
-        self.showButton = customtkinter.CTkButton(master=self, text="<",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(-1))
+        self.showButton = customtkinter.CTkButton(master=self, text="<",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(-1))
         self.showButton.grid(row=2, column=0, sticky=tkinter.W)
 
-        self.showButton = customtkinter.CTkButton(master=self, text="Show MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=125, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.ShowMeriCode(self.cutting))
+        self.showButton = customtkinter.CTkButton(master=self, text="Show MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=125, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.ShowMeriCode(self.cutting))
         self.showButton.grid(row=2, column=0, columnspan=2, padx=(30, 5), sticky=tkinter.W)
 
-        self.showButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(1))
+        self.showButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(1))
         self.showButton.grid(row=2, column=2, sticky=tkinter.W)
 
     def Switched(self):
@@ -160,6 +160,9 @@ class MeriCodeFrame(customtkinter.CTkFrame):
 
     def GenerateMeriCode(self):
         self.parent.canvas.canvas.CanvasToMeriCode(self.cutting)
+        canvasToMericode = self.parent.canvas.canvas.canvasToMericode
+        self.parent.mericodeInfo.setAmountOfLines(canvasToMericode.lines)
+        self.parent.mericodeInfo.setAmountOfTravels(canvasToMericode.travels)
 
     def ShowNextLine(self, incresement):
         self.parent.canvas.canvas.ShowSingleMeriCodeLine(self.line)
@@ -182,51 +185,49 @@ class ToolSelect(customtkinter.CTkFrame):
         from UI.DrawingTools import Pen, Move, QuadraticBezier, CubicBezier, Arc
 
         moveImage = Image.open("images/Select.png")
-        moveImage = moveImage.resize((32, 32), Image.ANTIALIAS)
+        moveImage = moveImage.resize((32, 32))
         tkinterMoveImage = ImageTk.PhotoImage(moveImage)
 
-        self.moveButton = customtkinter.CTkButton(master=self, image=tkinterMoveImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.moveButton = customtkinter.CTkButton(master=self, image=tkinterMoveImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.moveButton.configure(command= lambda: self.SelectTool(Move, self.moveButton))
         self.moveButton.grid(row=0, column=0, sticky=tkinter.W)
 
         lineImage = Image.open("images/Line.png")
-        lineImage = lineImage.resize((32, 32), Image.ANTIALIAS)
+        lineImage = lineImage.resize((32, 32))
         tkinterLineImage = ImageTk.PhotoImage(lineImage)
         
-        self.penButton = customtkinter.CTkButton(master=self, image=tkinterLineImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.penButton = customtkinter.CTkButton(master=self, image=tkinterLineImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.penButton.configure(command= lambda: self.SelectTool(Pen, self.penButton))
         self.penButton.grid(row=0, column=1, sticky=tkinter.W)
 
         qBezierImage = Image.open("images/Qbezier.png")
-        qBezierImage = qBezierImage.resize((32, 32), Image.ANTIALIAS)
+        qBezierImage = qBezierImage.resize((32, 32))
         tkinterqBezierImage = ImageTk.PhotoImage(qBezierImage)
 
-        self.bezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.bezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.bezierButton.configure(command= lambda: self.SelectTool(QuadraticBezier, self.bezierButton))
         self.bezierButton.grid(row=0, column=2, sticky=tkinter.W)
 
         cBezierImage = Image.open("images/Cbezier.png")
-        cBezierImage = cBezierImage.resize((32, 32), Image.ANTIALIAS)
+        cBezierImage = cBezierImage.resize((32, 32))
         tkinterqBezierImage = ImageTk.PhotoImage(cBezierImage)
 
-        self.cubicBezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.cubicBezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.cubicBezierButton.configure(command= lambda: self.SelectTool(CubicBezier, self.cubicBezierButton))
         self.cubicBezierButton.grid(row=0, column=3, sticky=tkinter.W)
 
         arcImage = Image.open("images/Arc.png")
-        arcImage = arcImage.resize((32, 32), Image.ANTIALIAS)
+        arcImage = arcImage.resize((32, 32))
         tkinterArcImage = ImageTk.PhotoImage(arcImage)
 
-        self.arcButton = customtkinter.CTkButton(master=self, image=tkinterArcImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.arcButton = customtkinter.CTkButton(master=self, image=tkinterArcImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
         self.arcButton.configure(command= lambda: self.SelectTool(Arc, self.arcButton))
         self.arcButton.grid(row=0, column=4, sticky=tkinter.W)
 
-        self.loadSVGButton = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.LoadSVG(self.filename))
-        self.loadSVGButton.grid(row=0, column=5, sticky='e')
-        self.saveSVGButton = customtkinter.CTkButton(master=self, text="Save SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SaveSVG())
+        self.saveSVGButton = customtkinter.CTkButton(master=self, text="Save SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SaveSVG())
         self.saveSVGButton.grid(row=0, column=6, sticky='e')
 
-        self.fileSelecting = customtkinter.CTkButton(master=self, text="..", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, text_font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.SelectFile())
+        self.fileSelecting = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.SelectFile())
         self.fileSelecting.grid(row=0, column=7, sticky='e')
 
         self.SelectTool(Move, self.moveButton)
@@ -235,6 +236,7 @@ class ToolSelect(customtkinter.CTkFrame):
     def SelectFile(self):
         filetypes = (('svg files', '*.svg'), ('All files', '*.*'))
         self.filename = filedialog.askopenfilename(title='Open a file', initialdir='/', filetypes=filetypes)
+        self.parent.canvas.canvas.LoadSVG(self.filename)
 
     def SelectTool(self, name, button):
         if button == self.lastDisabledButton:
@@ -275,16 +277,16 @@ class BackgroundFrame(customtkinter.CTkFrame):
         self.grid(row=1, column=2, padx=(5, 5), pady=(5, 5), rowspan=3, sticky=tkinter.NSEW)
         self.grid_propagate(False)
 
-        self.header = customtkinter.CTkLabel(master=self, text="Backgrounds", text_color=Colors.TEXT, text_font='Helvetica 11', anchor=tkinter.W)
+        self.header = customtkinter.CTkLabel(master=self, text="Backgrounds", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.header.grid(row=0, column=0, sticky=tkinter.NW, columnspan=2, padx=(5, 0))
 
-        self.moveButton = customtkinter.CTkButton(master=self, text="A4", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 13 bold", width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A4"))
+        self.moveButton = customtkinter.CTkButton(master=self, text="A4", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A4"))
         self.moveButton.grid(row=1, column=0, sticky=tkinter.NW)
 
-        self.moveButton = customtkinter.CTkButton(master=self, text="A5", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 13 bold", width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A5"))
+        self.moveButton = customtkinter.CTkButton(master=self, text="A5", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A5"))
         self.moveButton.grid(row=1, column=1, sticky=tkinter.NW)
 
-        self.moveButton = customtkinter.CTkButton(master=self, text="A6", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 13 bold", width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A6"))
+        self.moveButton = customtkinter.CTkButton(master=self, text="A6", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A6"))
         self.moveButton.grid(row=1, column=2, sticky=tkinter.NW)
 
 class CanvasLayerFrame(customtkinter.CTkFrame):
@@ -292,15 +294,15 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
         customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
         self.parent = parent
         self.configure( width=200,
-                        height=300,
+                        height=120,
                         corner_radius=4,
                         fg_color=Colors.BGCOLOR)
 
-        self.grid(row=3, column=2, padx=(5, 5), pady=(5, 5), rowspan=3, sticky=tkinter.NSEW)
+        self.grid(row=3, column=2, padx=(5, 5), pady=(5, 5), rowspan=1, sticky=tkinter.NSEW)
         self.grid_propagate(False)
         self.maxWidth = 3
         
-        self.moveButton = customtkinter.CTkButton(master=self, text="+", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, text_font="Helvetica 13 bold", width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.AddLayer())
+        self.moveButton = customtkinter.CTkButton(master=self, text="+", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.AddLayer())
         self.moveButton.grid(row=0, column=0, pady=(0, 5), sticky=tkinter.NW)
 
         layerNames = self.parent.canvas.canvas.GetLayerNames()
@@ -320,6 +322,37 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
         layerFrame.grid(row=posY, column=posX, sticky=tkinter.NW)
         #layerFrame.grid_propagate(False)
         self.layerFrames.append(layerFrame)
+
+class MericodeInfo(customtkinter.CTkFrame):
+    def __init__(self, parent, frameParent, *args, **kwargs):
+        customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
+        self.parent = parent
+        self.configure( width=200,
+                        height=100,
+                        corner_radius=4,
+                        fg_color=Colors.BGCOLOR)
+        
+        self.grid(row=4, column=2, padx=(5, 5), pady=(5, 5), rowspan=1, sticky=tkinter.NSEW)
+        self.grid_propagate(False)
+
+        self.linesText = customtkinter.CTkLabel(master=self, text="Number of lines: ", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.linesText.grid(row=0, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.travelsText = customtkinter.CTkLabel(master=self, text="Number of travels: ", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.travelsText.grid(row=1, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.amountOfLinesText = customtkinter.CTkLabel(master=self, text="-", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.amountOfLinesText.grid(row=0, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.amountOfTravels = customtkinter.CTkLabel(master=self, text="-", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.amountOfTravels.grid(row=1, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+    def setAmountOfLines(self, number):
+        self.amountOfLinesText.configure(text=number)
+
+    def setAmountOfTravels(self, number):
+        self.amountOfTravels.configure(text=number)
+
 
 class LayerButtonFrame(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, name, *args, **kwargs):

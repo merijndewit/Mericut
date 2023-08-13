@@ -46,6 +46,8 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.lastSnapPosition = [0, 0]
 
+        self.canvasToMericode = None
+
     def ResizedWindow(self,event):
         width = event.width
         height = event.height
@@ -148,7 +150,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.layers[i].RedrawShapes()
 
     def CanvasToMeriCode(self, cutting):
-        CanvasToMeriCode.CanvasToMeriCode(self, cutting)
+        self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, cutting)
 
     def ShowColision(self):
         collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)

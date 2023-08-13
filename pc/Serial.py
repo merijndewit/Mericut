@@ -18,7 +18,6 @@ class Serial:
         self.connectedDevice = None
         self.parent = parent
         self.fileIndex = 0
-        self.file = FileToMeriCode.GetMeriCodeFromTxt()
         self.sendingFile = False
 
     def Connect(self):

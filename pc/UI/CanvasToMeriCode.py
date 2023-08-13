@@ -15,6 +15,10 @@ class CanvasToMeriCode:
         self.incresementPerCut = -3
         self.continueLineAngle = 4
 
+        self.travels = 0
+        self.lines = 0
+        self.shapes = 0
+
         with open('Test/MeriCodeTestFile.txt', "w") as file:
             for cut in range(self.numberOfCuts):
                 self.currentCut = cut
@@ -44,14 +48,17 @@ class CanvasToMeriCode:
         self.position = position
 
     def DrawShape(self, file, lines):
+        self.shapes += 1
         for line in range(len(lines)):
             self.WriteMeriCodeLine(file, self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0), self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1))
 
     def DrawShapeReversed(self, file, lines):
+        self.shapes += 1
         for line in reversed(lines):
             self.WriteMeriCodeLine(file, self.canvas.CanvasPosXToNormalPosX(line.x0), self.canvas.CanvasPosYToNormalPosY(line.y0), self.canvas.CanvasPosXToNormalPosX(line.x1), self.canvas.CanvasPosYToNormalPosY(line.y1))
 
     def WriteMeriCodeLine(self, file, x0, y0, x1, y1):
+        self.lines += 1
         offsetTool = [0, 0]
         if self.cutting:
             offsetTool = self.GetOffsetPosition(self.toolOffsetRadius, self.rotation)
@@ -100,6 +107,7 @@ class CanvasToMeriCode:
 
     
     def MoveToolUp(self, file):
+        self.travels += 1
         file.write("<M0 Z" + str(20) + ">" + "\n")
 
     def MoveToolDown(self, file):
