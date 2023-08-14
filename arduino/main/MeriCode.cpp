@@ -54,6 +54,7 @@ void MeriCode::executeNextCommand()
         char* nextCommand = ringBuffer.get();
         itemsInBuffer--;
         bool isCompleted = executeMeriCode(nextCommand);
+        delete nextCommand;
         if (isCompleted)
         {
             completedMericodeInBuffer();
