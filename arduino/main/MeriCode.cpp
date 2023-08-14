@@ -30,7 +30,7 @@ void MeriCode::addMeriCode(char* meriCodeCharacters)
     ringBuffer.put(meriCodeCharacters);
     itemsInBuffer++;
     executeNextCommand();
-    if (itemsInBuffer < 6)
+    if (itemsInBuffer < 10)
     {
         askedForMeriCode = true;
         Serial.println("<C1>");

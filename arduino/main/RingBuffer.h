@@ -1,4 +1,4 @@
-#define BUFLEN 8
+#define BUFLEN 12
 
 #ifndef RingBuffer_h
 #define RingBuffer_h
