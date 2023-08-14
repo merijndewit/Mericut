@@ -51,8 +51,6 @@ class Serial:
 
     def ListenToSerial(self):
         while True:
-
-            #time.sleep(.1)
             try:
                 if(self.connectedDevice.in_waiting > 0):
                     serialString = self.connectedDevice.readline()
