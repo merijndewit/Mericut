@@ -18,8 +18,10 @@ from Serial import Serial
 
 from UI.Colors import Colors
 from Serial import Serial
+
 from MeriCode.CallbackMeriCode import CallbackMeriCode
 from MeriCode.FileToMeriCode import FileToMeriCode
+from MeriCode.MericodeSlicingOptions import MericodeSlicingOptions
 
 class Main(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
@@ -29,9 +31,12 @@ class Main(customtkinter.CTk):
         self.title("Mericut")
         self.terminating = False
 
-        leftFramesContainer = Frames.LeftFramesContainer(self, self)
-        self.callbackMeriCode = CallbackMeriCode(self)
         self.serial = Serial(self)
+        self.callbackMeriCode = CallbackMeriCode(self)
+        self.mericodeSlicingOptions = MericodeSlicingOptions()
+
+        #Frames
+        leftFramesContainer = Frames.LeftFramesContainer(self, self)
         self.headerFrame = HeaderFrame.HeaderFrame(self, self)
         self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
         self.meriCodeTestFrame = MericodeTestFrame.MeriCodeTestFrame(self, leftFramesContainer)
@@ -41,6 +46,7 @@ class Main(customtkinter.CTk):
         self.backgroundFrame = BackgroundFrame.BackgroundFrame(self, self)
         self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
         self.mericodeInfo = MeriCodeInfoFrame.MericodeInfo(self, self)
+
 
 
         FileToMeriCode.GetMeriCodeFromTxt()

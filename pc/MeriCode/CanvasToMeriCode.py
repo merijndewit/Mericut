@@ -1,12 +1,14 @@
 import math
 import UI.CanvasShapes as CanvasShapes
+from MeriCode.MericodeSlicingOptions import MericodeSlicingOptions
 class CanvasToMeriCode:
-    def __init__(self, canvas, cutting):
+    def __init__(self, canvas, slicingOptions : MericodeSlicingOptions):
         self.position = [0, 0]
         self.rotation = 0
         self.canvas = canvas
         self.mergeDistance = 0.7
-        self.cutting = cutting
+        self.slicingOptions = slicingOptions
+        self.cutting = slicingOptions.cutting
         self.toolOffsetRadius = 3.75
         self.numberOfCuts = 1
         self.currentCut = 0
@@ -24,7 +26,9 @@ class CanvasToMeriCode:
                 self.currentCut = cut
 
                 for layer in range(len(self.canvas.layers)):
-                    shapesToDraw = self.CalculateNewPathOrder(self.canvas.layers[layer].drawnShapes)
+                    shapesToDraw = self.canvas.layers[layer].drawnShapes
+                    if self.slicingOptions.calculatePathOrder:
+                        shapesToDraw = self.CalculateNewPathOrder(self.canvas.layers[layer].drawnShapes)
 
                     for i in range(len(shapesToDraw)):
                         shapeEndPosition = shapesToDraw[i].GetEndPosition()

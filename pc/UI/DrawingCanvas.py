@@ -150,7 +150,7 @@ class DrawingCanvas(tkinter.Canvas):
             self.layers[i].RedrawShapes()
 
     def CanvasToMeriCode(self, cutting):
-        self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, cutting)
+        self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, self.parent.parent.mericodeSlicingOptions)
 
     def ShowColision(self):
         collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)

@@ -40,9 +40,9 @@ class MeriCodeFrame(customtkinter.CTkFrame):
 
     def Switched(self):
         if self.slicingSwitch.get() == 0:
-            self.cutting = False
+            self.parent.mericodeSlicingOptions.cutting = False
         else:
-            self.cutting = True
+            self.parent.mericodeSlicingOptions.cutting = True
 
     def GenerateMeriCode(self):
         self.parent.canvas.canvas.CanvasToMeriCode(self.cutting)
