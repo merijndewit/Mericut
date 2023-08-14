@@ -21,14 +21,23 @@ class MericodeInfo(customtkinter.CTkFrame):
         self.travelsText = customtkinter.CTkLabel(master=self, text="Number of travels: ", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.travelsText.grid(row=1, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
 
+        self.shapesText = customtkinter.CTkLabel(master=self, text="Number of shapes: ", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.shapesText.grid(row=2, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
         self.amountOfLinesText = customtkinter.CTkLabel(master=self, text="-", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.amountOfLinesText.grid(row=0, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
 
         self.amountOfTravels = customtkinter.CTkLabel(master=self, text="-", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.amountOfTravels.grid(row=1, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
 
+        self.amountOfShapes = customtkinter.CTkLabel(master=self, text="-", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.amountOfShapes.grid(row=2, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
     def setAmountOfLines(self, number):
         self.amountOfLinesText.configure(text=number)
 
     def setAmountOfTravels(self, number):
         self.amountOfTravels.configure(text=number)
+
+    def setAmountOfShapes(self, number):
+        self.amountOfShapes.configure(text=number)

@@ -49,6 +49,7 @@ class MeriCodeFrame(customtkinter.CTkFrame):
         canvasToMericode = self.parent.canvas.canvas.canvasToMericode
         self.parent.mericodeInfo.setAmountOfLines(canvasToMericode.lines)
         self.parent.mericodeInfo.setAmountOfTravels(canvasToMericode.travels)
+        self.parent.mericodeInfo.setAmountOfShapes(canvasToMericode.shapes)
 
     def ShowNextLine(self, incresement):
         self.parent.canvas.canvas.ShowSingleMeriCodeLine(self.line)

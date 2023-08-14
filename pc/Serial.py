@@ -23,7 +23,7 @@ class Serial:
     def Connect(self):
         if self.selectedComPort == None:
             return 
-        self.connectedDevice = serial.Serial(port=self.selectedComPort, baudrate=921600, timeout=.1)
+        self.connectedDevice = serial.Serial(port=self.selectedComPort, baudrate=921600, timeout=.01)
         self.StartListeningToSerial()
 
     def TestConnection(self):
@@ -52,7 +52,7 @@ class Serial:
     def ListenToSerial(self):
         while True:
 
-            time.sleep(.1)
+            #time.sleep(.1)
             try:
                 if(self.connectedDevice.in_waiting > 0):
                     serialString = self.connectedDevice.readline()

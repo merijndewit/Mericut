@@ -5,7 +5,7 @@ class CanvasToMeriCode:
         self.position = [0, 0]
         self.rotation = 0
         self.canvas = canvas
-        self.mergeDistance = 0.5
+        self.mergeDistance = 0.7
         self.cutting = cutting
         self.toolOffsetRadius = 3.75
         self.numberOfCuts = 1
@@ -27,8 +27,6 @@ class CanvasToMeriCode:
                     shapesToDraw = self.CalculateNewPathOrder(self.canvas.layers[layer].drawnShapes)
 
                     for i in range(len(shapesToDraw)):
-                        print("startPosition: X: " + str(shapesToDraw[i].GetStartPosition()[0]) + "Y: " + str(shapesToDraw[i].GetStartPosition()[1]))
-                        print("endPosition: X: " + str(shapesToDraw[i].GetEndPosition()[0]) + "Y: " + str(shapesToDraw[i].GetEndPosition()[1]))
                         shapeEndPosition = shapesToDraw[i].GetEndPosition()
                         nextShapeEndPosition = [0, 0]
                         nextShapeStartPosition = [0, 0]
@@ -68,7 +66,7 @@ class CanvasToMeriCode:
 
                 shapeStartPosition = shapes[i].GetStartPosition()
                 shapeEndPosition = shapes[i].GetEndPosition()
-                maxMergeDistance = 1
+                maxMergeDistance = 2
                 if abs(shapeStartPosition[0] - currentPosition[0]) <= maxMergeDistance and abs(shapeStartPosition[1] - currentPosition[1]) <= maxMergeDistance:
 
                     currentPosition = shapes[i].GetEndPosition()
@@ -107,15 +105,30 @@ class CanvasToMeriCode:
     def DrawShape(self, file, lines):
         self.shapes += 1
         for line in range(len(lines)):
-            self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)])
+            nextLine = [0, 0]
+
+            if line != len(lines) - 1:
+                nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line + 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line + 1].y0)]
+
+            self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], nextLine)
 
     def DrawShapeReversed(self, file, lines):
         self.shapes += 1
         for line in reversed(range(len(lines))):
-            self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)])
+            nextLine = [0, 0]
+            if line != 0:
+                nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line - 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line - 1].y0)]
 
-    def WriteMeriCodeLine(self, file, lineStart, lineEnd):
+            self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], nextLine)
+
+    def WriteMeriCodeLine(self, file, lineStart, lineEnd, nextLine):
         self.lines += 1
+
+        if nextLine[0] == lineStart[0] and nextLine[1] == lineStart[1]:
+            tmpLine = lineStart
+            lineStart = lineEnd
+            lineEnd = tmpLine
+
         if abs(lineStart[0] - self.position[0]) >= self.mergeDistance and abs(lineStart[1] - self.position[1]) >= self.mergeDistance:
             self.TravelTo(file, [lineStart[0], lineStart[1]])
         self.MoveToolDown(file)
