@@ -71,13 +71,13 @@ class CanvasToMeriCode:
                 shapeStartPosition = shapes[i].GetStartPosition()
                 shapeEndPosition = shapes[i].GetEndPosition()
                 maxMergeDistance = 2
-                if abs(shapeStartPosition[0] - currentPosition[0]) <= maxMergeDistance and abs(shapeStartPosition[1] - currentPosition[1]) <= maxMergeDistance:
+                if math.isclose(shapeStartPosition[0], currentPosition[0], rel_tol=maxMergeDistance) and math.isclose(shapeStartPosition[1], currentPosition[1], rel_tol=maxMergeDistance):
 
                     currentPosition = shapes[i].GetEndPosition()
                     visitedShapesIndex.append(i)
                     newShapeOrder.append(shapes[i])
                     continue
-                elif abs(shapeEndPosition[0] - currentPosition[0]) <= maxMergeDistance and abs(shapeEndPosition[1] - currentPosition[1]) <= maxMergeDistance:
+                elif math.isclose(shapeEndPosition[0], currentPosition[0], rel_tol=maxMergeDistance) and math.isclose(shapeEndPosition[1], currentPosition[1], rel_tol=maxMergeDistance):
 
                     currentPosition = shapes[i].GetStartPosition()
                     visitedShapesIndex.append(i)
