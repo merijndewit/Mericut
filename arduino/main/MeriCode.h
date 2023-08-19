@@ -20,7 +20,9 @@ class MeriCode
     void receivedInvalidCode();
     bool executeDcode(char* dCharacters);
     bool executeMcode(char* dCharacters);
+    bool executeScode(char* dCharacters);
     void M0(char* characters);
+    void S0(char* characters);
     float GetNumberAfterCharacter(char* characterNumbers);
     RingBuffer ringBuffer;
     bool moving = false;

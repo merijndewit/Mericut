@@ -13,12 +13,13 @@ class Movement
 {
     public:
         Movement();
-        void Move();
+        void Update();
         void SetTargetPosition(float x, float y, float z, float t);
         bool IsMovingToTarget() {return isMovingToTarget;}
         void SetNormalSpeed();
         void SetTravelSpeed();
-        void SetCustomSpeed();
+        void SetSpeedXY(float speed);
+        void SetSpeedZ(float speed);
 
     private:
         float targetPosition[4] = {0, 0, 0, 0};

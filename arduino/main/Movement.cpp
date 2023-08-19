@@ -11,19 +11,30 @@ Movement::Movement()
     steppers.addStepper(xStepper);
     steppers.addStepper(yStepper);
     steppers.addStepper(yyStepper);
+
+    steppers.setMaxSpeed(XYMAXSPEED);
+    zStepper.setSpeed(ZMAXSPEED);
     SetNormalSpeed();
 }
 
 void Movement::SetNormalSpeed()
 {
-    zStepper.setSpeed(ZMAXSPEED);
     tStepper.setSpeed(TMAXSPEED);
 }
 
 void Movement::SetTravelSpeed()
 {
-    zStepper.setSpeed(ZMAXTRAVELSPEED);
     tStepper.setSpeed(TMAXTRAVELSPEED);
+}
+
+void Movement::SetSpeedXY(float speed)
+{
+    steppers.setMaxSpeed(speed);
+}
+
+void Movement::SetSpeedZ(float speed)
+{
+    zStepper.setSpeed(speed);
 }
 
 void Movement::SetTargetPosition(float x, float y, float z, float t)
@@ -57,7 +68,7 @@ void Movement::SetTargetPosition(float x, float y, float z, float t)
     }
 }
 
-void Movement::Move()
+void Movement::Update()
 {
     int moved = 0;
 

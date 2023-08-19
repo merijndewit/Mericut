@@ -3,6 +3,7 @@
 MultiStepperi::MultiStepperi()
 {
     this->stepperCount = 0;
+    this->maxSpeed = 100; 
 }
 
 void MultiStepperi::addStepper(Stepperi& stepper)
@@ -21,7 +22,6 @@ void MultiStepperi::setTargetPosition(int stepperPosition, int stepperIndex)
         return;
     }
     this->steppers[stepperIndex]->setTargetPosition(stepperPosition);
-    Serial.println("Set Stepper: " + String(stepperIndex) + "Position: " + String(this->steppers[stepperIndex]->getStepPosition()));
     calculateSpeed();
 }
 
@@ -40,8 +40,8 @@ void MultiStepperi::calculateSpeed()
 
     for (int i = 0; i < this->stepperCount; i++)
     {
-        this->steppers[i]->setSpeed(XYMAXSPEED * (this->steppers[i]->getStepsToGo() / longestDistance));
-        this->steppersMaxSpeed[i] = XYMAXSPEED * (this->steppers[i]->getStepsToGo() / longestDistance);
+        this->steppers[i]->setSpeed(this->maxSpeed * (this->steppers[i]->getStepsToGo() / longestDistance));
+        this->steppersMaxSpeed[i] = this->maxSpeed * (this->steppers[i]->getStepsToGo() / longestDistance);
     }    
 }
 
@@ -61,4 +61,9 @@ bool MultiStepperi::run() //return true when still running
     }   
 
     return running;
+}
+
+void MultiStepperi::setMaxSpeed(float maxSpeed)
+{
+    this->maxSpeed = maxSpeed;
 }

@@ -10,7 +10,7 @@ void MeriCode::Run()
 {
     if (moving)
     {
-        movement.Move();
+        movement.Update();
         if (movement.IsMovingToTarget() == false)
         {
             moving = false;
@@ -82,6 +82,12 @@ bool MeriCode::executeMeriCode(char* meriCodeCharacters)
             couldComplete = executeMcode(substr++);
         }
             break;
+        case 'S':
+        {
+            char* substr = meriCodeCharacters + 1;
+            couldComplete = executeScode(substr++);
+        }
+            break;
         default:
             receivedInvalidCode();
             break;
@@ -117,6 +123,20 @@ bool MeriCode::executeMcode(char* mCharacters)
             movement.SetTravelSpeed();
             M0(substr++);
             return false;
+        
+        default:
+            receivedInvalidCode();
+            return true;
+    }
+}
+bool MeriCode::executeScode(char* sCharacters)
+{
+    char* substr = sCharacters + 1;
+    switch (sCharacters[0])
+    {
+        case '0':
+            S0(substr++);
+            return true;
         
         default:
             receivedInvalidCode();
@@ -177,4 +197,32 @@ void MeriCode::M0(char* characters)
         }
     } 
     movement.SetTargetPosition(x, y, z, t);
+}
+
+void MeriCode::S0(char* characters)
+{
+    float xy = NAN;
+    float z = NAN;
+
+    char* substr = characters + 1;
+    for (size_t i = 0; i < 32; i++)
+    {
+        if(characters[i] == '\x00') 
+        {
+            break;
+        }
+        if (characters[i] == 'X')
+        {
+            xy = GetNumberAfterCharacter(substr + i);
+            movement.SetSpeedXY(xy);
+            continue;
+        }
+        if (characters[i] == 'Z')
+        {
+            z = GetNumberAfterCharacter(substr + i);
+            movement.SetSpeedZ(z);
+
+            continue;
+        }
+    } 
 }

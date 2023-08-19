@@ -13,12 +13,14 @@ class MultiStepperi
         MultiStepperi();
         void addStepper(Stepperi& stepper);
         void setTargetPosition(int stepperPosition, int stepper);
+        void setMaxSpeed(float speed);
         bool run();
+
     private:
         Stepperi* steppers[MAXSTEPPERS]; //max amount of steppers is 5
         int stepperCount;
         float steppersMaxSpeed[MAXSTEPPERS];
-
+        float maxSpeed;
         void calculateSpeed();
 };
 
