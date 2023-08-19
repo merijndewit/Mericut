@@ -6,7 +6,7 @@ class CanvasToMeriCode:
         self.position = [0, 0]
         self.rotation = 0
         self.canvas = canvas
-        self.mergeDistance = 0.7
+        self.mergeDistance = 0.01
         self.slicingOptions = slicingOptions
         self.cutting = slicingOptions.cutting
         self.toolOffsetRadius = 3.75

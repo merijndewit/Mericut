@@ -18,6 +18,7 @@
 //Note: without microstepping
 #define XSTEPPERMM 5
 #define YSTEPPERMM 9.90
+#define ZSTEPPERMM 1
 #define TSTEPPERDEG 0.41
 
 #define MICROSTEPPING 16

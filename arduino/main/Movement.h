@@ -3,6 +3,8 @@
 
 #include "Arduino.h"
 #include "Config.h"
+#include "Stepperi.h"
+#include "MultiStepperi.h"
 
 #include <AccelStepper.h>
 #include <MultiStepper.h>
@@ -24,12 +26,12 @@ class Movement
         bool xytMoving = false;
         bool zMoving = false;
         
-        AccelStepper xStepper = AccelStepper(1, XDRIVERSTEPPIN, XDRIVERDIRECTIONPIN);
-        AccelStepper yStepper = AccelStepper(1, YDRIVERSTEPPIN, YDRIVERDIRECTIONPIN);
-        AccelStepper yyStepper = AccelStepper(1, YYDRIVERSTEPPIN, YYDRIVERDIRECTIONPIN);
-        AccelStepper zStepper = AccelStepper(1, ZDRIVERSTEPPIN, ZDRIVERDIRECTIONPIN);
-        AccelStepper tStepper = AccelStepper(1, TDRIVERSTEPPIN, TDRIVERDIRECTIONPIN);
-        MultiStepper steppers;
+        Stepperi xStepper = Stepperi(XDRIVERSTEPPIN, XDRIVERDIRECTIONPIN);
+        Stepperi yStepper = Stepperi(YDRIVERSTEPPIN, YDRIVERDIRECTIONPIN);
+        Stepperi yyStepper = Stepperi(YYDRIVERSTEPPIN, YYDRIVERDIRECTIONPIN);
+        Stepperi zStepper = Stepperi(ZDRIVERSTEPPIN, ZDRIVERDIRECTIONPIN);
+        Stepperi tStepper = Stepperi(TDRIVERSTEPPIN, TDRIVERDIRECTIONPIN);
+        MultiStepperi steppers;
 };
 
 #endif
