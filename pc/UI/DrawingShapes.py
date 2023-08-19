@@ -103,8 +103,11 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
     def Delete(self):
         for i in range(len(self.lines)):
             self.lines[i].Delete()
-
+            
+        for i in range(len(self.helpLines)):
+            self.helpLines[i].Delete()
         self.lines = []
+        self.helpLines = []
 
 class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
     def __init__(self, canvas, nodes, draw = True):
@@ -163,7 +166,11 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
         for i in range(len(self.lines)):
             self.lines[i].Delete()
 
+        for i in range(len(self.helpLines)):
+            self.helpLines[i].Delete()
+
         self.lines = []
+        self.helpLines = []
 
 class Arc(Shapes): #takes 3 nodes [start, control, end]
     def __init__(self, canvas, nodes, draw = True):
@@ -250,4 +257,8 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
         for i in range(len(self.lines)):
             self.lines[i].Delete()
 
+        for i in range(len(self.helpLines)):
+            self.helpLines[i].Delete()
+
         self.lines = []
+        self.helpLines = []
