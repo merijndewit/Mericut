@@ -1,5 +1,6 @@
 import customtkinter
 import tkinter
+import os
 
 from PIL import ImageTk, Image  
 from tkinter import filedialog
@@ -21,8 +22,9 @@ class ToolSelect(customtkinter.CTkFrame):
 
         self.lastDisabledButton = None
         from UI.DrawingTools import Pen, Move, QuadraticBezier, CubicBezier, Arc
-
-        moveImage = Image.open("images/Select.png")
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        moveImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Select.png")
         moveImage = moveImage.resize((32, 32))
         tkinterMoveImage = ImageTk.PhotoImage(moveImage)
 
@@ -30,7 +32,7 @@ class ToolSelect(customtkinter.CTkFrame):
         self.moveButton.configure(command= lambda: self.SelectTool(Move, self.moveButton))
         self.moveButton.grid(row=0, column=0, sticky=tkinter.W)
 
-        lineImage = Image.open("images/Line.png")
+        lineImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Line.png")
         lineImage = lineImage.resize((32, 32))
         tkinterLineImage = ImageTk.PhotoImage(lineImage)
         
@@ -38,7 +40,7 @@ class ToolSelect(customtkinter.CTkFrame):
         self.penButton.configure(command= lambda: self.SelectTool(Pen, self.penButton))
         self.penButton.grid(row=0, column=1, sticky=tkinter.W)
 
-        qBezierImage = Image.open("images/Qbezier.png")
+        qBezierImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Qbezier.png")
         qBezierImage = qBezierImage.resize((32, 32))
         tkinterqBezierImage = ImageTk.PhotoImage(qBezierImage)
 
@@ -46,7 +48,7 @@ class ToolSelect(customtkinter.CTkFrame):
         self.bezierButton.configure(command= lambda: self.SelectTool(QuadraticBezier, self.bezierButton))
         self.bezierButton.grid(row=0, column=2, sticky=tkinter.W)
 
-        cBezierImage = Image.open("images/Cbezier.png")
+        cBezierImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Cbezier.png")
         cBezierImage = cBezierImage.resize((32, 32))
         tkinterqBezierImage = ImageTk.PhotoImage(cBezierImage)
 
@@ -54,7 +56,7 @@ class ToolSelect(customtkinter.CTkFrame):
         self.cubicBezierButton.configure(command= lambda: self.SelectTool(CubicBezier, self.cubicBezierButton))
         self.cubicBezierButton.grid(row=0, column=3, sticky=tkinter.W)
 
-        arcImage = Image.open("images/Arc.png")
+        arcImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Arc.png")
         arcImage = arcImage.resize((32, 32))
         tkinterArcImage = ImageTk.PhotoImage(arcImage)
 

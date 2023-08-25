@@ -25,3 +25,8 @@ class Colors():
     PAPERBACKGROUND = "#e3dbd9"
     PAPERHOVERCOLOR = "#D2D2D4"
     PAPERTEXT = "#1c2426"
+
+    LINECOLOR = "#eeff8f"
+    QBEZIER = "#91f8ff"
+    CBEZIER = "#edb67b"
+    ARC = "#ed95ad"

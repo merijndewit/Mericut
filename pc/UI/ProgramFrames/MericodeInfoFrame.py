@@ -8,7 +8,7 @@ class MericodeInfo(customtkinter.CTkFrame):
         customtkinter.CTkFrame.__init__(self, frameParent, *args, **kwargs)
         self.parent = parent
         self.configure( width=200,
-                        height=100,
+                        height=200,
                         corner_radius=4,
                         fg_color=Colors.BGCOLOR)
         
@@ -32,6 +32,30 @@ class MericodeInfo(customtkinter.CTkFrame):
 
         self.amountOfShapes = customtkinter.CTkLabel(master=self, text="-", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.amountOfShapes.grid(row=2, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.linesText = customtkinter.CTkLabel(master=self, text="█ ", text_color=Colors.LINECOLOR, font=("", 11), anchor=tkinter.W)
+        self.linesText.grid(row=3, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.lineColorText = customtkinter.CTkLabel(master=self, text="Line", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.lineColorText.grid(row=3, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.linesText = customtkinter.CTkLabel(master=self, text="█ ", text_color=Colors.QBEZIER, font=("", 11), anchor=tkinter.W)
+        self.linesText.grid(row=4, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.lineColorText = customtkinter.CTkLabel(master=self, text="Quadratic Bezier", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.lineColorText.grid(row=4, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.linesText = customtkinter.CTkLabel(master=self, text="█ ", text_color=Colors.CBEZIER, font=("", 11), anchor=tkinter.W)
+        self.linesText.grid(row=5, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.lineColorText = customtkinter.CTkLabel(master=self, text="Cubic Bezier", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.lineColorText.grid(row=5, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.linesText = customtkinter.CTkLabel(master=self, text="█ ", text_color=Colors.ARC, font=("", 11), anchor=tkinter.W)
+        self.linesText.grid(row=6, column=0, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
+
+        self.lineColorText = customtkinter.CTkLabel(master=self, text="Arc", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
+        self.lineColorText.grid(row=6, column=1, sticky=tkinter.NW, columnspan=1, padx=(5, 0))
 
     def setAmountOfLines(self, number):
         self.amountOfLinesText.configure(text=number)

@@ -30,7 +30,7 @@ class Line(Shapes):
         self.Update()
 
     def Draw(self):
-        self.lines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.GRIDCOLOR, 3))
+        self.lines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.LINECOLOR, 3))
 
     def Update(self):
         self.lines[0].Move(self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas))
@@ -73,7 +73,7 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
             if useOldLines and len(self.lines) >= resolution:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
-                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.GRIDCOLOR, 3))
+                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.QBEZIER, 3))
 
             startNode = endNode
 
@@ -141,7 +141,7 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
             if useOldLines and len(self.lines) >= resolution:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
-                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.GRIDCOLOR, 3))
+                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.CBEZIER, 3))
 
             startNode = endNode
 
@@ -238,7 +238,7 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
             if useOldLines:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
-                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.GRIDCOLOR, 3))
+                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.ARC, 3))
 
             startNode = endNode
 

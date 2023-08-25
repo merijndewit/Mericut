@@ -2,6 +2,7 @@ import customtkinter
 from UI.Colors import Colors
 from PIL import ImageTk, Image  
 import tkinter
+import os
 
 class HeaderFrame(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):
@@ -18,8 +19,9 @@ class HeaderFrame(customtkinter.CTkFrame):
 
         self.header = customtkinter.CTkLabel(master=self, text="MeriCut", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.header.grid(row=0, column=2, sticky=tkinter.NW, pady=(6, 0))
-
-        logo = Image.open("images/logo.png")
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        logo = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/logo.png")
         logo = logo.resize((40, 40))
         tkinterLogo = ImageTk.PhotoImage(logo)
         self.button = customtkinter.CTkButton(master=self, image=tkinterLogo, text="", fg_color=Colors.BGHEADERFRAME, hover_color=Colors.BGHEADERFRAME, font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())  # type: ignore

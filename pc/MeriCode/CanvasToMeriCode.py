@@ -1,4 +1,6 @@
 import math
+import os
+
 import UI.CanvasShapes as CanvasShapes
 from MeriCode.MericodeSlicingOptions import MericodeSlicingOptions
 class CanvasToMeriCode:
@@ -20,8 +22,10 @@ class CanvasToMeriCode:
         self.travels = 0
         self.lines = 0
         self.shapes = 0
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
 
-        with open('Test/MeriCodeTestFile.txt', "w") as file:
+        with open(os.path.dirname(dname) + '/Test/MeriCodeTestFile.txt', "w") as file:
             for cut in range(self.numberOfCuts):
                 self.currentCut = cut
 
@@ -34,6 +38,7 @@ class CanvasToMeriCode:
                         shapeEndPosition = shapesToDraw[i].GetEndPosition()
                         nextShapeEndPosition = [0, 0]
                         nextShapeStartPosition = [0, 0]
+
                         if len(shapesToDraw) - 1 != i:
                             nextShapeEndPosition = shapesToDraw[i + 1].GetEndPosition()
                             nextShapeStartPosition = shapesToDraw[i + 1].GetStartPosition()
@@ -43,13 +48,13 @@ class CanvasToMeriCode:
                             offset = self.GetOffsetPosition(self.toolOffsetRadius, self.rotation)
 
                         if (abs(self.position[0] - nextShapeEndPosition[0]) <= self.mergeDistance and abs(self.position[1] - nextShapeEndPosition[1]) <= self.mergeDistance):
-                            self.DrawShapeReversed(file, shapesToDraw[i].lines)
+                            self.DrawShapeReversed(file, shapesToDraw[i].lines, nextShapeStartPosition)
                             continue
                         if (abs(self.position[0] - nextShapeStartPosition[0]) <= self.mergeDistance and abs(self.position[1] - nextShapeStartPosition[1]) <= self.mergeDistance):
-                            self.DrawShape(file, shapesToDraw[i].lines)
+                            self.DrawShape(file, shapesToDraw[i].lines, nextShapeStartPosition)
                             continue
 
-                        self.DrawShapeReversed(file, shapesToDraw[i].lines)
+                        self.DrawShapeReversed(file, shapesToDraw[i].lines, nextShapeStartPosition)
 
 
             self.currentCut = 0
@@ -106,29 +111,29 @@ class CanvasToMeriCode:
         self.TravelXY(file, position[0], position[1], 4)
         self.position = position
 
-    def DrawShape(self, file, lines):
+    def DrawShape(self, file, lines, possibleNextPoint):
         self.shapes += 1
         for line in range(len(lines)):
-            nextLine = [0, 0]
+            nextLine = possibleNextPoint
 
             if line != len(lines) - 1:
                 nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line + 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line + 1].y0)]
 
             self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], nextLine)
 
-    def DrawShapeReversed(self, file, lines):
+    def DrawShapeReversed(self, file, lines, possibleNextPoint):
         self.shapes += 1
         for line in reversed(range(len(lines))):
-            nextLine = [0, 0]
+            nextLine = possibleNextPoint
             if line != 0:
                 nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line - 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line - 1].y0)]
 
             self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], nextLine)
 
-    def WriteMeriCodeLine(self, file, lineStart, lineEnd, nextLine):
+    def WriteMeriCodeLine(self, file, lineStart, lineEnd, possibleNextPoint):
         self.lines += 1
 
-        if nextLine[0] == lineStart[0] and nextLine[1] == lineStart[1]:
+        if possibleNextPoint[0] == lineStart[0] and possibleNextPoint[1] == lineStart[1]:
             tmpLine = lineStart
             lineStart = lineEnd
             lineEnd = tmpLine

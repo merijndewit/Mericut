@@ -20,10 +20,15 @@ class Serial:
         self.fileIndex = 0
         self.sendingFile = False
 
+        self.printArduinoOutput = False
+        self.printArduinoInput = True
+
     def Connect(self):
         if self.selectedComPort == None:
             return 
         self.connectedDevice = serial.Serial(port=self.selectedComPort, baudrate=921600, timeout=.01)
+        if not self.connectedDevice.isOpen():
+            self.connectedDevice.open()
         self.StartListeningToSerial()
 
     def TestConnection(self):
@@ -31,6 +36,8 @@ class Serial:
 
     def WriteToSerial(self, string):
         self.connectedDevice.write(bytes(string, 'utf-8'))
+        if self.printArduinoInput:
+            print(string)
 
     def StartListeningToSerial(self):
         self.child_thread = threading.Thread(target=self.ListenToSerial, daemon=True)
@@ -55,7 +62,8 @@ class Serial:
                 if(self.connectedDevice.in_waiting > 0):
                     serialString = self.connectedDevice.readline()
                     string = serialString.decode('Ascii')
-                    print("Arduino: " + string)
+                    if self.printArduinoOutput:
+                        print("Arduino: " + string)
                     start = '<'
                     end = '>'
                     self.parent.callbackMeriCode.ExecuteCallbackCode(string[string.find(start)+len(start):string.rfind(end)])
