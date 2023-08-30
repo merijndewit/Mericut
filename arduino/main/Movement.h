@@ -24,7 +24,8 @@ class Movement
     private:
         float targetPosition[4] = {0, 0, 0, 0};
         bool isMovingToTarget = false;
-        bool xytMoving = false;
+        bool xyMoving = false;
+        bool tMoving = false;
         bool zMoving = false;
         
         Stepperi xStepper = Stepperi(XDRIVERSTEPPIN, XDRIVERDIRECTIONPIN);

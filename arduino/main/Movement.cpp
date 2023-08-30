@@ -14,6 +14,8 @@ Movement::Movement()
 
     steppers.setMaxSpeed(XYMAXSPEED);
     zStepper.setSpeed(ZMAXSPEED);
+    tStepper.setSpeed(TMAXSPEED);
+
     SetNormalSpeed();
 }
 
@@ -39,7 +41,8 @@ void Movement::SetSpeedZ(float speed)
 
 void Movement::SetTargetPosition(float x, float y, float z, float t)
 {
-    xytMoving = false;
+    xyMoving = false;
+    tMoving = false;
     zMoving = false;
 
     isMovingToTarget = true;
@@ -47,14 +50,14 @@ void Movement::SetTargetPosition(float x, float y, float z, float t)
     if (!isnan(x))
     {
         steppers.setTargetPosition(x * MICROSTEPPING * XSTEPPERMM, 0);
-        xytMoving = true;
+        xyMoving = true;
     }
     if (!isnan(y))
     {
         steppers.setTargetPosition(y * MICROSTEPPING * YSTEPPERMM, 1);
         steppers.setTargetPosition(y * MICROSTEPPING * YSTEPPERMM, 2);
 
-        xytMoving = true;
+        xyMoving = true;
     }    
     if (!isnan(z))
     {
@@ -63,29 +66,30 @@ void Movement::SetTargetPosition(float x, float y, float z, float t)
     }
     if (!isnan(t))
     {
-        zStepper.setTargetPosition(t * MICROSTEPPING * TSTEPPERDEG);
-        xytMoving = true;
+        tStepper.setTargetPosition(t * MICROSTEPPING * TSTEPPERDEG);
+        tMoving = true;
     }
 }
 
 void Movement::Update()
 {
-    int moved = 0;
+    bool moved = false;
 
-    if(xytMoving)
+    if(xyMoving)
     {
-        xytMoving = steppers.run();
-        moved++;
+        xyMoving = steppers.run();
+        moved = true;
     }
-
+    if(tMoving)
+    {
+        tMoving = tStepper.run();
+        moved = true;
+    }
     if(zMoving)
     {
         zMoving = zStepper.run();
-        moved++;
+        moved = true;
     }
 
-    if (moved == 0)
-    {
-        isMovingToTarget = false;
-    }
+    isMovingToTarget = moved;
 }
