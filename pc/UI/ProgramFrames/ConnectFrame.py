@@ -19,11 +19,13 @@ class ConnectFrame(customtkinter.CTkFrame):
 
         def ComPortSelected(choice):
             self.parent.serial.selectedComPort = choice
+            self.parent.serial.Connect()
+            self.parent.serial.TestConnection()
 
         self.connectionStatusText = customtkinter.CTkLabel(master=self, text="Status: ", text_color=Colors.TEXT, font=("", 11), anchor=tkinter.W)
         self.connectionStatusText.grid(row=1, column=0, sticky=tkinter.NW, columnspan=2)
 
-        self.connectionStatus = customtkinter.CTkLabel(master=self, font=("", 11))
+        self.connectionStatus = customtkinter.CTkLabel(master=self, font=("Arial Bold", 11))
         self.connectionStatus.grid(row=1, column=1, sticky=tkinter.NW, columnspan=2)
         self.SetConnectionStatus(False)
 
@@ -37,14 +39,6 @@ class ConnectFrame(customtkinter.CTkFrame):
 
         self.previewButton = customtkinter.CTkButton(master=self, text="↻",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: SetAvailableComPorts(Serial.GetPortNames()))
         self.previewButton.grid(row=2, column=2, sticky=tkinter.NW)
-
-        self.connectButton = customtkinter.CTkButton(master=self, text="Connect",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=70, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.Connect())
-        self.connectButton.grid(row=3, column=0, sticky=tkinter.W)
-        self.connectButton.grid_propagate(0)
-
-        self.testConnectionButton = customtkinter.CTkButton(master=self, text="Test",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=70, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.serial.TestConnection())
-        self.testConnectionButton.grid(row=3, column=1, sticky=tkinter.W)
-        self.testConnectionButton.grid_propagate(0)
 
     def SetConnectionStatus(self, bool):
         if bool:

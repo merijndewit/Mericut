@@ -26,49 +26,49 @@ class ToolSelect(customtkinter.CTkFrame):
         dname = os.path.dirname(abspath)
         moveImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Select.png")
         moveImage = moveImage.resize((32, 32))
-        tkinterMoveImage = ImageTk.PhotoImage(moveImage)
+        tkinterMoveImage = customtkinter.CTkImage(moveImage)
 
-        self.moveButton = customtkinter.CTkButton(master=self, image=tkinterMoveImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.moveButton = customtkinter.CTkButton(master=self, image=tkinterMoveImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT)
         self.moveButton.configure(command= lambda: self.SelectTool(Move, self.moveButton))
         self.moveButton.grid(row=0, column=0, sticky=tkinter.W)
 
         lineImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Line.png")
         lineImage = lineImage.resize((32, 32))
-        tkinterLineImage = ImageTk.PhotoImage(lineImage)
+        tkinterLineImage = customtkinter.CTkImage(lineImage)
         
-        self.penButton = customtkinter.CTkButton(master=self, image=tkinterLineImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.penButton = customtkinter.CTkButton(master=self, image=tkinterLineImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT)
         self.penButton.configure(command= lambda: self.SelectTool(Pen, self.penButton))
         self.penButton.grid(row=0, column=1, sticky=tkinter.W)
 
         qBezierImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Qbezier.png")
         qBezierImage = qBezierImage.resize((32, 32))
-        tkinterqBezierImage = ImageTk.PhotoImage(qBezierImage)
+        tkinterqBezierImage = customtkinter.CTkImage(qBezierImage)
 
-        self.bezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.bezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT)
         self.bezierButton.configure(command= lambda: self.SelectTool(QuadraticBezier, self.bezierButton))
         self.bezierButton.grid(row=0, column=2, sticky=tkinter.W)
 
         cBezierImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Cbezier.png")
         cBezierImage = cBezierImage.resize((32, 32))
-        tkinterqBezierImage = ImageTk.PhotoImage(cBezierImage)
+        tkinterqBezierImage = customtkinter.CTkImage(cBezierImage)
 
-        self.cubicBezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.cubicBezierButton = customtkinter.CTkButton(master=self, image=tkinterqBezierImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT)
         self.cubicBezierButton.configure(command= lambda: self.SelectTool(CubicBezier, self.cubicBezierButton))
         self.cubicBezierButton.grid(row=0, column=3, sticky=tkinter.W)
 
         arcImage = Image.open(os.path.dirname(os.path.dirname(dname)) + "/images/Arc.png")
         arcImage = arcImage.resize((32, 32))
-        tkinterArcImage = ImageTk.PhotoImage(arcImage)
+        tkinterArcImage = customtkinter.CTkImage(arcImage)
 
-        self.arcButton = customtkinter.CTkButton(master=self, image=tkinterArcImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT)
+        self.arcButton = customtkinter.CTkButton(master=self, image=tkinterArcImage, text="", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT)
         self.arcButton.configure(command= lambda: self.SelectTool(Arc, self.arcButton))
         self.arcButton.grid(row=0, column=4, sticky=tkinter.W)
 
-        self.saveSVGButton = customtkinter.CTkButton(master=self, text="Save SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SaveSVG())
-        self.saveSVGButton.grid(row=0, column=6, sticky='e')
+        self.saveSVGButton = customtkinter.CTkButton(master=self, text="Save SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SaveSVG())
+        self.saveSVGButton.grid(row=0, column=6, sticky='W')
 
-        self.fileSelecting = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, text_color=Colors.BUTTONTEXT, command= lambda: self.SelectFile())
-        self.fileSelecting.grid(row=0, column=7, sticky='e')
+        self.fileSelecting = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT, command= lambda: self.SelectFile())
+        self.fileSelecting.grid(row=0, column=7, sticky='W')
 
         self.SelectTool(Move, self.moveButton)
 

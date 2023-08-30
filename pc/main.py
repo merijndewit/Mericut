@@ -27,7 +27,7 @@ class Main(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
         customtkinter.CTk.__init__(self, *args, **kwargs)
         self.geometry("820x520")
-        self.configure(bg=Colors.BGCOLOR)
+        self.configure(fg_color=Colors.BGSECCOLOR)
         self.title("Mericut")
         self.terminating = False
 

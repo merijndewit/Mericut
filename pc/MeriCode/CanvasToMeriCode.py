@@ -11,7 +11,7 @@ class CanvasToMeriCode:
         self.mergeDistance = 0.01
         self.slicingOptions = slicingOptions
         self.cutting = slicingOptions.cutting
-        self.toolOffsetRadius = 3.75
+        self.toolOffsetRadius = 2
         self.numberOfCuts = 1
         self.currentCut = 0
         if not self.cutting:
@@ -125,12 +125,18 @@ class CanvasToMeriCode:
         self.shapes += 1
         for line in reversed(range(len(lines))):
             nextLine = possibleNextPoint
+
             if line != 0:
                 nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line - 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line - 1].y0)]
 
-            self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], nextLine)
+            if(self.cutting):
+                self.CutMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], nextLine)
+                continue
 
-    def WriteMeriCodeLine(self, file, lineStart, lineEnd, possibleNextPoint):
+            self.DrawMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], nextLine)
+    
+    #this code bassicly does the same as cutting a line. but i found that having both functionalities in the same function is quite confusing, thats why they are seperate
+    def DrawMeriCodeLine(self, file, lineStart, lineEnd, possibleNextPoint):
         self.lines += 1
 
         if possibleNextPoint[0] == lineStart[0] and possibleNextPoint[1] == lineStart[1]:
@@ -140,9 +146,36 @@ class CanvasToMeriCode:
 
         if abs(lineStart[0] - self.position[0]) >= self.mergeDistance and abs(lineStart[1] - self.position[1]) >= self.mergeDistance:
             self.TravelTo(file, [lineStart[0], lineStart[1]])
+
         self.MoveToolDown(file)
         self.MoveXY(file, lineEnd[0], lineEnd[1], 4)
+
+    def CutMeriCodeLine(self, file, lineStart, lineEnd, possibleNextPoint):
+            self.lines += 1
+
+            if possibleNextPoint[0] == lineStart[0] and possibleNextPoint[1] == lineStart[1]:
+                tmpLine = lineStart
+                lineStart = lineEnd
+                lineEnd = tmpLine
+
+            offset = [0, 0]
+
+            angle = self.GetAngle(lineStart[1] - lineEnd[1], lineStart[0] - lineEnd[0])
+            moveToolDown = False
+            if abs(self.rotation - angle) > self.continueLineAngle:
+                moveToolDown = True
+                
+            self.MoveToolUp(file)
+            offset = self.GetOffsetPosition(self.toolOffsetRadius, angle)
+            oldOffset = self.GetOffsetPosition(self.toolOffsetRadius, self.rotation)
+            self.MoveXYT(file, (self.position[0] - oldOffset[0]) + offset[0], (self.position[1] - oldOffset[1]) + offset[1], angle, 4)
+            if moveToolDown:
+                self.MoveToolDown(file)
+            self.MoveXY(file, lineEnd[0] + offset[0], lineEnd[1] + offset[1], 4)
+
     
+#################### Functions to help write mericode
+
     def MoveToolUp(self, file):
         self.travels += 1
         file.write("<M0 Z" + str(20) + ">" + "\n")
@@ -171,6 +204,7 @@ class CanvasToMeriCode:
         file.write("<M0 T" + str(round(degrees, ndigits)) + ">" + "\n")
         self.rotation = round(degrees, ndigits)
 
+################## methods for calculating angle and offset for the cutting knife 
     @staticmethod
     def GetAngle(point0, point1):
         angle = math.degrees(math.atan2(point0, point1))

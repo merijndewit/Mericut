@@ -1,17 +1,18 @@
 class Colors():
     #Backgrounds
-    BGCOLOR = "#F0F2F0"
-    BGSECCOLOR = "#548C9C"
-    BGFRAME = "#F0F2F0"
-    BGHEADERFRAME = "#f1d3a1"
-    CANVASBACKGROUND = "#F0F2F0"
+    BGCOLOR = "#fcfaf8"
+    BGSECCOLOR = "#fcfaf8"
+    BGFRAME = "#fcfaf8"
+    BGHEADERFRAME = "#e8e5de"
+    SEPERATIONLINE = "#e8e5de"
+    CANVASBACKGROUND = "#fcfaf8"
     #Buttons
-    BUTTON = "#e3dbd9"
-    BUTTONHOVER = "#e3dbd9"
-    BUTTONTEXT = "#000000"
-    BUTTONNOTSELECTED = "#F0F2F0"
+    BUTTON = "#f3e9d8"
+    BUTTONHOVER = "#f3e9d8"
+    BUTTONTEXT = "#3c2d25"
+    BUTTONNOTSELECTED = "#f3e9d8"
     #Text
-    TEXT = "#000000"
+    TEXT = "#3c2d25"
     HEADERTEXT = "#927F6F"
     DISCONNECTEDTEXT = "#EE6868"
     CONNECTEDTEXT = "#ADDB81"
@@ -22,9 +23,9 @@ class Colors():
     HELPLINES = "#c9bba7"
     PAPERBACKGROUNDCANVAS = "#FAEEDB"
     #backgrounds
-    PAPERBACKGROUND = "#e3dbd9"
-    PAPERHOVERCOLOR = "#D2D2D4"
-    PAPERTEXT = "#1c2426"
+    PAPERBACKGROUND = "#e8e5de"
+    PAPERHOVERCOLOR = "#e8e5de"
+    PAPERTEXT = "#3c2d25"
 
     LINECOLOR = "#eeff8f"
     QBEZIER = "#91f8ff"

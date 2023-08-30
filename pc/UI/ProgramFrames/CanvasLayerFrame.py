@@ -48,8 +48,26 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
         self.grid_propagate(False)
         self.maxWidth = 3
         
-        self.moveButton = customtkinter.CTkButton(master=self, text="+", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.AddLayer())
-        self.moveButton.grid(row=0, column=0, pady=(0, 5), sticky=tkinter.NW)
+        self.row :int = 0
+
+        self.header = customtkinter.CTkLabel(master=self, text="Layers", text_color=Colors.TEXT, font=("Arial Bold", 11), anchor=tkinter.W)
+        self.header.grid(row=self.row, column=0, sticky=tkinter.S, columnspan=4)
+
+        ##### next row
+        self.row += 1
+
+        self.label = customtkinter.CTkLabel(master=self, text="", fg_color=Colors.SEPERATIONLINE, height=2)
+        self.label.grid(row=self.row, column=0, sticky=tkinter.EW, columnspan=4, pady=(5, 5), padx=(5, 5))
+        self.label.grid_propagate(False)
+
+        ##### next row
+        self.row += 1
+        
+        self.moveButton = customtkinter.CTkButton(master=self, text="Add new layer", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.AddLayer())
+        self.moveButton.grid(row=self.row, column=0, pady=(0, 5), sticky=tkinter.NW)
+
+        ##### next row
+        self.row += 1
 
         layerNames = self.parent.canvas.canvas.GetLayerNames()
         self.layerFrames = []
@@ -59,12 +77,12 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
             
     def AddLayerButton(self, name):
         posX = len(self.layerFrames) % 3
-        posY = int(len(self.layerFrames) / 3) + 1
+        posY = int(len(self.layerFrames) / 3) + self.row
         if posX == self.maxWidth:
             posX = 0
             posY += 1
 
         layerFrame = LayerButtonFrame(self, self, name)
         layerFrame.grid(row=posY, column=posX, sticky=tkinter.NW)
-        #layerFrame.grid_propagate(False)
+        layerFrame.grid_propagate(False)
         self.layerFrames.append(layerFrame)
