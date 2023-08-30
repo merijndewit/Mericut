@@ -28,7 +28,6 @@ class MeriCodeToCanvas:
             return
         self.lines[line].Draw()
         self.layer.AddShape(self.lines[line])
-        print(self.lines[line])
 
     def __ExecuteCallbackCode__(self, meriCode :str):
         if meriCode[0] == 'M':
