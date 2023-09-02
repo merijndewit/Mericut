@@ -10,7 +10,7 @@ class CanvasToMeriCode:
         self.centerToolPosition = [0, 0]
         self.rotation = 0
         self.canvas = canvas
-        self.mergeDistance = 0.01
+        self.mergeDistance = 0.0001
         self.slicingOptions = slicingOptions
         self.cutting = slicingOptions.cutting
         self.toolOffsetRadius = -2
@@ -69,7 +69,7 @@ class CanvasToMeriCode:
             if line != len(lines) - 1:
                 nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line + 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line + 1].y0)]
 
-            self.WriteMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], nextLine)
+            self.CreateMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], nextLine)
 
     def DrawShapeReversed(self, file, lines, possibleNextPoint):
         self.shapes += 1

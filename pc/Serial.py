@@ -21,7 +21,7 @@ class Serial:
         self.sendingFile = False
 
         self.printArduinoOutput = False
-        self.printArduinoInput = True
+        self.printArduinoInput = False
 
     def Connect(self):
         if self.selectedComPort == None:
