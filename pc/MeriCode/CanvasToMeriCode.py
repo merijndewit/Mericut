@@ -99,7 +99,9 @@ class CanvasToMeriCode:
             self.MoveXYT(file, lineEnd[0], lineEnd[1], angle)
             return
 
-        if not math.isclose(lineStart[0], self.centerToolPosition[0], rel_tol=self.mergeDistance) and not math.isclose(lineStart[1], self.centerToolPosition[1], rel_tol=self.mergeDistance):            
+        if ((math.isclose(lineStart[0], self.centerToolPosition[0], rel_tol=self.mergeDistance)) and (math.isclose(lineStart[1], self.centerToolPosition[1], rel_tol=self.mergeDistance))):            
+            pass
+        else:
             self.TravelTo(file, [lineStart[0], lineStart[1]])
 
         self.MoveToolDown(file)
