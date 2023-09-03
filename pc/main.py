@@ -47,8 +47,6 @@ class Main(customtkinter.CTk):
         self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
         self.mericodeInfo = MeriCodeInfoFrame.MericodeInfo(self, self)
 
-
-
         FileToMeriCode.GetMeriCodeFromTxt()
 
         self.mainloop()

@@ -74,7 +74,7 @@ class CanvasLine(CanvasShapes):
 
     def Draw(self):
         if self.scaleWithCanvas:
-            self.canvasLine = self.canvas.create_line((self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset, fill=self.color, width=self.width, dash=self.dash)
+            self.canvasLine = self.canvas.create_line((self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY, fill=self.color, width=self.width, dash=self.dash)
             return
         self.canvasLine = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1, fill=self.color, width=self.width, dash=self.dash)
         
@@ -84,7 +84,7 @@ class CanvasLine(CanvasShapes):
         self.x1 = x1
         self.y1 = y1 
         if self.scaleWithCanvas:
-            self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset)
+            self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)
             return
         self.canvas.coords(self.canvasLine, x0, y0, x1, y1)
 
@@ -92,4 +92,4 @@ class CanvasLine(CanvasShapes):
         self.canvas.delete(self.canvasLine)
 
     def Update(self):
-        self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset)
+        self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)

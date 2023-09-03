@@ -35,13 +35,13 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.pixelsPerMM = 10
         self.canvasScale = 1
-        self.xOffset = 0
-        self.yOffset = 0
+        self.screenOffsetX = 0
+        self.screenOffsetY = 0
 
         self.mousePressed = False
         self.snap = True
 
-        self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.xOffset, self.yOffset)
+        self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.screenOffsetX, self.screenOffsetY)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
 
         self.lastSnapPosition = [0, 0]
@@ -54,7 +54,7 @@ class DrawingCanvas(tkinter.Canvas):
 
         self.config(width=width, height=height)
         if self.background is not None:
-            self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
+            self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
 
         self.RedrawGrid()
         self.RedrawShapes()
@@ -83,19 +83,19 @@ class DrawingCanvas(tkinter.Canvas):
             width = 105
             height = 148.5
             color = Colors.PAPERBACKGROUNDCANVAS
-        self.background = CanvasShapes.CanvasRectangle([self.xOffset, self.yOffset], width, height, self, tags="background")
+        self.background = CanvasShapes.CanvasRectangle([self.screenOffsetX, self.screenOffsetY], width, height, self, tags="background")
         self.background.SetColor(color)
-        self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
+        self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
         self.tag_lower("background")
 
     def MoveView(self, x, y):
-        self.xOffset += x
-        self.yOffset += y
+        self.screenOffsetX += x
+        self.screenOffsetY += y
         self.RedrawGrid()
         self.RedrawShapes()
         self.selectedLayer.CanvasScaleChanged()
         if self.background is not None:
-            self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
+            self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
 
     def Scroll(self, event):
         self.pixelsPerMM += (-1*(event.delta/120)) * 2
@@ -104,14 +104,14 @@ class DrawingCanvas(tkinter.Canvas):
             self.pixelsPerMM = 2
             self.canvasScale = self.pixelsPerMM / 10
         if self.background is not None:
-            self.background.Update([self.xOffset, self.yOffset], self.canvasScale)
+            self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
         self.RedrawGrid()
         self.RedrawShapes()
         self.selectedLayer.CanvasScaleChanged()
 
 
     def RedrawGrid(self):
-        self.canvasGrid.ReDraw(int(10 * self.canvasScale), self.xOffset, self.yOffset)
+        self.canvasGrid.ReDraw(int(10 * self.canvasScale), self.screenOffsetX, self.screenOffsetY)
 
     def SetTool(self, tool):
         self.tool = tool(self)
@@ -128,8 +128,8 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Clicked(self, event):
         x, y = self.Snap(event.x, event.y)
-        x -= self.xOffset
-        y -= self.yOffset
+        x -= self.screenOffsetX
+        y -= self.screenOffsetY
         self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition), self.selectedLayer.IsColliding([x / self.canvasScale, y / self.canvasScale]))
         self.mousePressed = True
 
@@ -138,10 +138,10 @@ class DrawingCanvas(tkinter.Canvas):
 
     def Motion(self, event):            
         x, y = self.Snap(event.x, event.y)
-        x -= self.xOffset
-        y -= self.yOffset
+        x -= self.screenOffsetX
+        y -= self.screenOffsetY
         self.lastSnapPosition = [x, y]
-        self.mousePosition = [event.x - self.xOffset, event.y - self.yOffset]
+        self.mousePosition = [event.x - self.screenOffsetX, event.y - self.screenOffsetY]
         self.tool.Hover(x, y)
         self.ShowColision()
 
@@ -224,10 +224,10 @@ class DrawingCanvas(tkinter.Canvas):
         self.selectedLayer = self.layers[0]
 
     def CanvasPosXToNormalPosX(self, x):
-        return (x / self.canvasScale) - self.xOffset
+        return (x / self.canvasScale) - self.screenOffsetX
     
     def CanvasPosYToNormalPosY(self, y):
-        return (y / self.canvasScale) - self.yOffset
+        return (y / self.canvasScale) - self.screenOffsetY
 
     def ShowMeriCode(self, cutting :bool):
         for i in range(len(self.layers)):
@@ -250,3 +250,6 @@ class DrawingCanvas(tkinter.Canvas):
             self.AddLayer("Movement")
 
         self.mericodeToCanvas.ShowSingleMeriCodeLine(line)
+
+    def ConvertPositionToScreenPosition(self, position : tuple):
+        return [self.screenOffsetX + position[0], self.screenOffsetY + position[1]]

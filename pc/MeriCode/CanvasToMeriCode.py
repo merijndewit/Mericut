@@ -34,6 +34,8 @@ class CanvasToMeriCode:
 
                 for layer in range(len(self.canvas.layers)):
                     shapesToDraw = self.canvas.layers[layer].drawnShapes
+                    if len(shapesToDraw) == 0:
+                        continue
                     if self.slicingOptions.calculatePathOrder:
                         shapesToDraw = ShortestPathCalculator.CalculateShortestPath(self.canvas.layers[layer].drawnShapes)
 
@@ -46,14 +48,14 @@ class CanvasToMeriCode:
                             nextShapeEndPosition = shapesToDraw[i + 1].GetEndPosition()
                             nextShapeStartPosition = shapesToDraw[i + 1].GetStartPosition()
 
-                        if (abs(self.centerToolPosition[0] - nextShapeEndPosition[0]) <= self.mergeDistance and abs(self.centerToolPosition[1] - nextShapeEndPosition[1]) <= self.mergeDistance):
-                            self.DrawShapeReversed(file, shapesToDraw[i].lines, nextShapeStartPosition)
+                        if math.isclose(self.centerToolPosition[0], nextShapeEndPosition[0], rel_tol=self.mergeDistance) and math.isclose(self.centerToolPosition[1], nextShapeEndPosition[1], rel_tol=self.mergeDistance):
+                            self.DrawShapeReversed(file, shapesToDraw[i].GetLinePositions(), nextShapeStartPosition)
                             continue
-                        if (abs(self.centerToolPosition[0] - nextShapeStartPosition[0]) <= self.mergeDistance and abs(self.centerToolPosition[1] - nextShapeStartPosition[1]) <= self.mergeDistance):
-                            self.DrawShape(file, shapesToDraw[i].lines, nextShapeStartPosition)
+                        if math.isclose(self.centerToolPosition[0], nextShapeStartPosition[0], rel_tol=self.mergeDistance) and math.isclose(self.centerToolPosition[1], nextShapeStartPosition[1], rel_tol=self.mergeDistance):
+                            self.DrawShape(file, shapesToDraw[i].GetLinePositions(), nextShapeStartPosition)
                             continue
 
-                        self.DrawShapeReversed(file, shapesToDraw[i].lines, nextShapeStartPosition)
+                        self.DrawShapeReversed(file, shapesToDraw[i].GetLinePositions(), nextShapeStartPosition)
 
             self.currentCut = 0
             self.MoveToolUp(file)
@@ -67,9 +69,9 @@ class CanvasToMeriCode:
             nextLine = possibleNextPoint
 
             if line != len(lines) - 1:
-                nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line + 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line + 1].y0)]
+                nextLine = [lines[line + 1].x0, lines[line + 1].y0]
 
-            self.CreateMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], nextLine)
+            self.CreateMeriCodeLine(file, [lines[line].x0, lines[line].y0], [lines[line].x1, lines[line].y1], nextLine)
 
     def DrawShapeReversed(self, file, lines, possibleNextPoint):
         self.shapes += 1
@@ -77,9 +79,9 @@ class CanvasToMeriCode:
             nextLine = possibleNextPoint
 
             if line != 0:
-                nextLine = [self.canvas.CanvasPosXToNormalPosX(lines[line - 1].x0), self.canvas.CanvasPosYToNormalPosY(lines[line - 1].y0)]
+                nextLine = [lines[line - 1].x0, lines[line - 1].y0]
 
-            self.CreateMeriCodeLine(file, [self.canvas.CanvasPosXToNormalPosX(lines[line].x1), self.canvas.CanvasPosYToNormalPosY(lines[line].y1)], [self.canvas.CanvasPosXToNormalPosX(lines[line].x0), self.canvas.CanvasPosYToNormalPosY(lines[line].y0)], nextLine)
+            self.CreateMeriCodeLine(file, [lines[line].x1, lines[line].y1], [lines[line].x0, lines[line].y0], nextLine)
     
     def CreateMeriCodeLine(self, file, lineStart, lineEnd, possibleNextPoint):
         self.lines += 1
@@ -97,7 +99,7 @@ class CanvasToMeriCode:
             self.MoveXYT(file, lineEnd[0], lineEnd[1], angle)
             return
 
-        if abs(lineStart[0] - self.centerToolPosition[0]) >= self.mergeDistance and abs(lineStart[1] - self.centerToolPosition[1]) >= self.mergeDistance:
+        if not math.isclose(lineStart[0], self.centerToolPosition[0], rel_tol=self.mergeDistance) and not math.isclose(lineStart[1], self.centerToolPosition[1], rel_tol=self.mergeDistance):            
             self.TravelTo(file, [lineStart[0], lineStart[1]])
 
         self.MoveToolDown(file)
@@ -122,7 +124,7 @@ class CanvasToMeriCode:
         file.write("<M0 X" + str(round(x, self.decimalRoundingMeriCode)) + " Y" + str(round(y, self.decimalRoundingMeriCode)) + ">" + "\n")
         self.centerToolPosition = [x, y]
 
-    #DO NOT USE WITH A NON ROTATING TOOLS!!!
+    #DO NOT USE WITH NON ROTATING TOOLS!!!
     #use this for tools that need to rotate eg. using a knife tip. the x and y position is the contact position
     def MoveXYT(self, file, x, y, t): 
         self.centerToolPosition = [x, y]

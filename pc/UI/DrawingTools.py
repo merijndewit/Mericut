@@ -39,11 +39,11 @@ class Pen(Tool):
         self.clicks += 1
 
     def Hover(self, x, y):
-        x = (x + self.parentCanvas.xOffset)
-        y = (y + self.parentCanvas.yOffset)
+        x = (x + self.parentCanvas.screenOffsetX)
+        y = (y + self.parentCanvas.screenOffsetY)
         if self.clicks == 1:
             if self.previewLine == None:
-                self.previewLine = CanvasShapes.CanvasLine(self.parentCanvas, self.nodes[0].GetPositionOnCanvasX(self.parentCanvas), self.nodes[0].GetPositionOnCanvasY(self.parentCanvas), (x / self.parentCanvas.canvasScale) + self.parentCanvas.xOffset, (y / self.parentCanvas.canvasScale) + self.parentCanvas.yOffset)
+                self.previewLine = CanvasShapes.CanvasLine(self.parentCanvas, self.nodes[0].GetPositionOnCanvasX(self.parentCanvas), self.nodes[0].GetPositionOnCanvasY(self.parentCanvas), (x / self.parentCanvas.canvasScale) + self.parentCanvas.screenOffsetX, (y / self.parentCanvas.canvasScale) + self.parentCanvas.screenOffsetY)
                 return
             self.previewLine.Move(self.nodes[0].GetPositionOnCanvasX(self.parentCanvas), self.nodes[0].GetPositionOnCanvasY(self.parentCanvas), (x), (y))
             return
@@ -61,7 +61,7 @@ class Move(Tool):
         self.clickedLayer = clickedLayer
         self.clickedPosition = [x, y]
         self.lastMoved = [0, 0]
-        self.clickedOffset = [self.parentCanvas.xOffset, self.parentCanvas.yOffset]
+        self.clickedOffset = [self.parentCanvas.screenOffsetX, self.parentCanvas.screenOffsetY]
 
     def Hover(self, x, y):
         nodePositionX = x / self.parentCanvas.canvasScale

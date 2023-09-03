@@ -39,10 +39,10 @@ class Node():
         return [self.GetPositionOnCanvasX(canvas), self.GetPositionOnCanvasY(canvas)]
 
     def GetPositionOnCanvasX(self, canvas):
-        return (self.position[0] * canvas.canvasScale) + canvas.xOffset
+        return (self.position[0] * canvas.canvasScale) + canvas.screenOffsetX
 
     def GetPositionOnCanvasY(self, canvas):
-        return (self.position[1] * canvas.canvasScale) + canvas.yOffset
+        return (self.position[1] * canvas.canvasScale) + canvas.screenOffsetY
  
     
     @staticmethod
