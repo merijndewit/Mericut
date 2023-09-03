@@ -1,5 +1,6 @@
 import tkinter
 import math
+import customtkinter
 
 from UI.Colors import Colors
 import UI.CanvasUI as CanvasUI
@@ -10,20 +11,11 @@ import MeriCode.CanvasToMeriCode as CanvasToMeriCode
 import UI.Layer as Layer
 import MeriCode.MeriCodeToCanvas as MeriCodeToCanvas
 
-class DrawingCanvas(tkinter.Canvas):
-    def __init__(self, parent, *args, **kwargs):
-        tkinter.Canvas.__init__(self, parent, *args, **kwargs)
+class DrawingCanvas():
+    def __init__(self, parent):
         self.parent = parent
-        self.configure( width=590,
-                        height=590,
-                        highlightthickness=0,
-                        bg=Colors.CANVASBACKGROUND)
 
-        self.bind("<Button-1>", self.Clicked)
-        self.bind('<MouseWheel>', self.Scroll)
-        self.bind('<ButtonRelease-1>',self.Released)
-        self.bind('<Motion>', self.Motion)
-        self.bind("<Configure>", self.ResizedWindow)
+
 
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
@@ -41,8 +33,8 @@ class DrawingCanvas(tkinter.Canvas):
         self.mousePressed = False
         self.snap = True
 
-        self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.xOffset, self.yOffset)
-        self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
+        #self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.xOffset, self.yOffset)
+        #self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
 
         self.lastSnapPosition = [0, 0]
 

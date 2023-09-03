@@ -4,8 +4,6 @@ from tkinter import filedialog
 from PIL import ImageTk, Image  
 
 from UI.Colors import Colors
-from Serial import Serial
-from UI.DrawingCanvas import DrawingCanvas
 
 class LeftFramesContainer(customtkinter.CTkFrame):
     def __init__(self, parent, frameParent, *args, **kwargs):

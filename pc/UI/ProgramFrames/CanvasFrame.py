@@ -2,7 +2,7 @@ import customtkinter
 import tkinter
 
 from UI.Colors import Colors
-from UI.DrawingCanvas import DrawingCanvas
+from UI.TkCanvasFrame import DrawingCanvas
 
 
 class Canvas(customtkinter.CTkFrame):

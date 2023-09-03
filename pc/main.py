@@ -3,13 +3,14 @@ import atexit
 
 #mericut
 import UI.Frames as Frames
+import UI.GLFrame as GLFrame
 
 import UI.ProgramFrames.HeaderFrame as HeaderFrame
 import UI.ProgramFrames.ConnectFrame as ConnectFrame
 import UI.ProgramFrames.MericodeTestFrame as MericodeTestFrame
 import UI.ProgramFrames.MeriCodeFrame as MeriCodeFrame
 import UI.ProgramFrames.ToolSelectFrame as ToolSelect
-import UI.ProgramFrames.CanvasFrame as Canvas
+import UI.DrawingCanvas as Canvas
 import UI.ProgramFrames.CanvasLayerFrame as CanvasLayerFrame
 import UI.ProgramFrames.BackgroundFrame as BackgroundFrame
 import UI.ProgramFrames.MericodeInfoFrame as MeriCodeInfoFrame
@@ -41,7 +42,8 @@ class Main(customtkinter.CTk):
         self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
         self.meriCodeTestFrame = MericodeTestFrame.MeriCodeTestFrame(self, leftFramesContainer)
         self.meriCodeFrame = MeriCodeFrame.MeriCodeFrame(self, leftFramesContainer)
-        self.canvas = Canvas.Canvas(self, self)
+        self.canvasAPI = GLFrame.GLFrame(self, self) #this is the frame that shows all of the lines
+        self.canvas = Canvas.DrawingCanvas(self) #this is a class that manages all of the drawing
         self.toolSelect = ToolSelect.ToolSelect(self, self)
         self.backgroundFrame = BackgroundFrame.BackgroundFrame(self, self)
         self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)

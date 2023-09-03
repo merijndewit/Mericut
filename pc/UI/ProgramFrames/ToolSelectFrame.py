@@ -64,7 +64,7 @@ class ToolSelect(customtkinter.CTkFrame):
         self.arcButton.configure(command= lambda: self.SelectTool(Arc, self.arcButton))
         self.arcButton.grid(row=0, column=4, sticky=tkinter.W)
 
-        self.saveSVGButton = customtkinter.CTkButton(master=self, text="Save SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SaveSVG())
+        self.saveSVGButton = customtkinter.CTkButton(master=self, text="Save SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.SaveSVG())
         self.saveSVGButton.grid(row=0, column=6, sticky='W')
 
         self.fileSelecting = customtkinter.CTkButton(master=self, text="Load SVG", fg_color=Colors.BUTTONNOTSELECTED, hover_color=Colors.BUTTONHOVER, font=("", 11), width=28, height=28, corner_radius=0, text_color=Colors.BUTTONTEXT, command= lambda: self.SelectFile())
@@ -76,7 +76,7 @@ class ToolSelect(customtkinter.CTkFrame):
     def SelectFile(self):
         filetypes = (('svg files', '*.svg'), ('All files', '*.*'))
         self.filename = filedialog.askopenfilename(title='Open a file', initialdir='/', filetypes=filetypes)
-        self.parent.canvas.canvas.LoadSVG(self.filename)
+        self.parent.canvas.LoadSVG(self.filename)
 
     def SelectTool(self, name, button):
         if button == self.lastDisabledButton:
@@ -86,4 +86,4 @@ class ToolSelect(customtkinter.CTkFrame):
 
         button.configure(state=tkinter.DISABLED, fg_color=Colors.BUTTON)
         self.lastDisabledButton = button
-        self.parent.canvas.canvas.SetTool(name)
+        self.parent.canvas.SetTool(name)

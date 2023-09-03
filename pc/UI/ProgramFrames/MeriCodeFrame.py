@@ -35,7 +35,7 @@ class MeriCodeFrame(customtkinter.CTkFrame):
         self.showButton = customtkinter.CTkButton(master=self, text="<",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(-1))
         self.showButton.grid(row=3, column=0, sticky=tkinter.W, pady=(5, 0))
 
-        self.showButton = customtkinter.CTkButton(master=self, text="Show MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=125, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.ShowMeriCode(self.cutting))
+        self.showButton = customtkinter.CTkButton(master=self, text="Show MeriCode",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=125, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.ShowMeriCode(self.cutting))
         self.showButton.grid(row=3, column=0, columnspan=2, padx=(30, 5), sticky=tkinter.W)
 
         self.showButton = customtkinter.CTkButton(master=self, text=">",  fg_color=Colors.BUTTON, hover_color=Colors.BUTTONHOVER, font=("", 11), width=25, height=25, text_color=Colors.BUTTONTEXT, command= lambda: self.ShowNextLine(1))
@@ -48,14 +48,14 @@ class MeriCodeFrame(customtkinter.CTkFrame):
             self.parent.mericodeSlicingOptions.cutting = True
 
     def GenerateMeriCode(self):
-        self.parent.canvas.canvas.CanvasToMeriCode(self.cutting)
-        canvasToMericode = self.parent.canvas.canvas.canvasToMericode
+        self.parent.canvas.CanvasToMeriCode(self.cutting)
+        canvasToMericode = self.parent.canvasToMericode
         self.parent.mericodeInfo.setAmountOfLines(canvasToMericode.lines)
         self.parent.mericodeInfo.setAmountOfTravels(canvasToMericode.travels)
         self.parent.mericodeInfo.setAmountOfShapes(canvasToMericode.shapes)
 
     def ShowNextLine(self, incresement):
-        self.parent.canvas.canvas.ShowSingleMeriCodeLine(self.line)
+        self.parent.canvas.ShowSingleMeriCodeLine(self.line)
         self.line += incresement
 
     def StartSendingFile(self):

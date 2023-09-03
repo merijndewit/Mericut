@@ -30,11 +30,11 @@ class BackgroundFrame(customtkinter.CTkFrame):
         ########next row
         row += 1
 
-        self.moveButton = customtkinter.CTkButton(master=self, text="A4", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A4"))
+        self.moveButton = customtkinter.CTkButton(master=self, text="A4", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.SetBackground("A4"))
         self.moveButton.grid(row=row, column=0, sticky=tkinter.NW)
 
-        self.moveButton = customtkinter.CTkButton(master=self, text="A5", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A5"))
+        self.moveButton = customtkinter.CTkButton(master=self, text="A5", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.SetBackground("A5"))
         self.moveButton.grid(row=row, column=1, sticky=tkinter.NW)
 
-        self.moveButton = customtkinter.CTkButton(master=self, text="A6", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.SetBackground("A6"))
+        self.moveButton = customtkinter.CTkButton(master=self, text="A6", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 13), width=55, height=70, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.SetBackground("A6"))
         self.moveButton.grid(row=row, column=2, sticky=tkinter.NW)

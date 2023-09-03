@@ -25,13 +25,13 @@ class LayerButtonFrame(customtkinter.CTkFrame):
         self.deletebutton.grid(row=3, column=1, padx=(0, 0), pady=(0, 0), sticky=tkinter.SW)
 
     def SelectLayer(self):
-        self.parent.parent.canvas.canvas.SelectLayer(self.name)
+        self.parent.parent.canvas.SelectLayer(self.name)
 
     def TransformLayer(self):
-        self.parent.parent.canvas.canvas.TransformLayer(self.name)
+        self.parent.parent.canvas.TransformLayer(self.name)
 
     def DeleteLayer(self):
-        self.parent.parent.canvas.canvas.DeleteLayer(self.name)
+        self.parent.parent.canvas.DeleteLayer(self.name)
         self.destroy()
 
 
@@ -63,13 +63,13 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
         ##### next row
         self.row += 1
         
-        self.moveButton = customtkinter.CTkButton(master=self, text="Add new layer", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.canvas.AddLayer())
+        self.moveButton = customtkinter.CTkButton(master=self, text="Add new layer", fg_color=Colors.PAPERBACKGROUND, hover_color=Colors.PAPERHOVERCOLOR, font=("", 11), width=40, height=40, text_color=Colors.BUTTONTEXT, command= lambda: self.parent.canvas.AddLayer())
         self.moveButton.grid(row=self.row, column=0, pady=(0, 5), sticky=tkinter.NW)
 
         ##### next row
         self.row += 1
 
-        layerNames = self.parent.canvas.canvas.GetLayerNames()
+        layerNames = self.parent.canvas.GetLayerNames()
         self.layerFrames = []
         for i in range(len(layerNames)):
             self.AddLayerButton(layerNames[i])
