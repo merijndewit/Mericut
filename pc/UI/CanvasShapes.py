@@ -75,9 +75,10 @@ class CanvasLine(CanvasShapes):
 
     def Draw(self):
         if self.scaleWithCanvas:
-            self.canvasLine = self.canvas.create_line((self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset, fill=self.color, width=self.width, dash=self.dash)
+            
+            self.canvasLine = self.canvas.canvasAPI.addLine([(self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset])
             return
-        self.canvasLine = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1, fill=self.color, width=self.width, dash=self.dash)
+        self.canvasLine = self.canvas.canvasAPI.addLine([self.x0, self.y0, self.x1, self.y1])
         
     def Move(self, x0, y0, x1, y1):
         self.x0 = x0
@@ -87,10 +88,11 @@ class CanvasLine(CanvasShapes):
         if self.scaleWithCanvas:
             self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset)
             return
-        self.canvas.coords(self.canvasLine, x0, y0, x1, y1)
+        #self.canvas.coords(self.canvasLine, x0, y0, x1, y1)
 
     def Delete(self):
         self.canvas.delete(self.canvasLine)
 
     def Update(self):
-        self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset)
+        pass
+        #self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y0 * self.canvas.canvasScale) + self.canvas.yOffset, (self.x1 * self.canvas.canvasScale) + self.canvas.xOffset, (self.y1 * self.canvas.canvasScale) + self.canvas.yOffset)

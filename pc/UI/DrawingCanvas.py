@@ -15,8 +15,6 @@ class DrawingCanvas():
     def __init__(self, parent):
         self.parent = parent
 
-
-
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.selectedLayer = Layer.Layer(self, "layer")
@@ -29,6 +27,7 @@ class DrawingCanvas():
         self.canvasScale = 1
         self.xOffset = 0
         self.yOffset = 0
+        self.canvasAPI = self.parent.canvasAPI
 
         self.mousePressed = False
         self.snap = True
@@ -140,6 +139,7 @@ class DrawingCanvas():
     def RedrawShapes(self):
         for i in range(len(self.layers)):
             self.layers[i].RedrawShapes()
+        print("redrew shapes")
 
     def CanvasToMeriCode(self, cutting):
         self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, self.parent.parent.mericodeSlicingOptions)
@@ -156,6 +156,7 @@ class DrawingCanvas():
 
     def LoadSVG(self, dir):
         CanvasSVG.LoadSVG(self, dir)
+        self.RedrawShapes()
 
     def SaveSVG(self):
         CanvasSVG.SaveSVG(self)

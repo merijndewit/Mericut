@@ -6,7 +6,7 @@ from OpenGL.GL import *
 
 class GLFrame(OpenGLFrame):
     def __init__(self, parent, *args, **kw):
-        super().__init__(*args, **kw)
+        super().__init__(parent, *args, **kw)
         self.parent = parent
         self.configure( width=590,
                         height=590,
@@ -48,12 +48,11 @@ class GLFrame(OpenGLFrame):
             glEnd()
 
         glFlush()
+        print("Updated glframe")
 
-    def addLine(self, line : tuple, color : tuple):
+    def addLine(self, line : tuple, color : tuple = [0, 0, 0]):
         self.lines.append(line)  #line = [x, y, x1, y1]
         self.lineColors.append(color) #color = [r, g, b]
-
-    
 
 if __name__=='__main__':
 

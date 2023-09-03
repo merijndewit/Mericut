@@ -42,17 +42,14 @@ class Main(customtkinter.CTk):
         self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
         self.meriCodeTestFrame = MericodeTestFrame.MeriCodeTestFrame(self, leftFramesContainer)
         self.meriCodeFrame = MeriCodeFrame.MeriCodeFrame(self, leftFramesContainer)
-        self.canvasAPI = GLFrame.GLFrame(self, self) #this is the frame that shows all of the lines
+        self.canvasAPI = GLFrame.GLFrame(self) #this is the frame that shows all of the lines
         self.canvas = Canvas.DrawingCanvas(self) #this is a class that manages all of the drawing
         self.toolSelect = ToolSelect.ToolSelect(self, self)
         self.backgroundFrame = BackgroundFrame.BackgroundFrame(self, self)
         self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
         self.mericodeInfo = MeriCodeInfoFrame.MericodeInfo(self, self)
 
-
-
         FileToMeriCode.GetMeriCodeFromTxt()
-
         self.mainloop()
 
     def OnExit(self):

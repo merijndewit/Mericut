@@ -23,7 +23,7 @@ def LoadSVG(canvas, dir):
                 node1 = Nodes.Node(object.end.real * scale, (object.end.imag * scale) - yOffset)
 
                 line = DrawingShapes.Line([node0, node1], canvas)
-                canvas.selectedLayer.drawnShapes.append(line)
+                canvas.selectedLayer.AddShape(line)
                 continue
 
             if isinstance(object, QuadraticBezier):
@@ -32,7 +32,7 @@ def LoadSVG(canvas, dir):
                 node2 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset)
 
                 curve = DrawingShapes.QuadraticBezier(canvas, [node0, node1, node2])
-                canvas.selectedLayer.drawnShapes.append(curve)
+                canvas.selectedLayer.AddShape(curve)
                 continue
 
             if isinstance(object, CubicBezier):
@@ -42,7 +42,7 @@ def LoadSVG(canvas, dir):
                 node3 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset)
 
                 curve = DrawingShapes.CubicBezier(canvas, [node0, node1, node2, node3])
-                canvas.selectedLayer.drawnShapes.append(curve)
+                canvas.selectedLayer.AddShape(curve)
                 continue
 
             if isinstance(object, Arc):
@@ -50,7 +50,7 @@ def LoadSVG(canvas, dir):
                 node1 = Nodes.Node(object.center * scale, object.center.imag * scale - yOffset)
                 node2 = Nodes.Node(object.end.real * scale, object.end.imag * scale - yOffset)
                 arc = DrawingShapes.Arc(canvas, [node0, node1, node2])
-                canvas.selectedLayer.drawnShapes.append(arc)
+                canvas.selectedLayer.AddShape(arc)
                 continue
 
 def SaveSVG(canvas):
