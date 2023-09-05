@@ -48,7 +48,7 @@ class MeriCodeFrame(customtkinter.CTkFrame):
             self.parent.mericodeSlicingOptions.cutting = True
 
     def GenerateMeriCode(self):
-        self.parent.canvas.canvas.CanvasToMeriCode(self.cutting)
+        self.parent.canvas.canvas.CanvasToMeriCode()
         canvasToMericode = self.parent.canvas.canvas.canvasToMericode
         self.parent.mericodeInfo.setAmountOfLines(canvasToMericode.lines)
         self.parent.mericodeInfo.setAmountOfTravels(canvasToMericode.travels)

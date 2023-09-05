@@ -69,6 +69,7 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
         self.nodes = nodes
         self.lines = []
         self.helpLines = []
+        self.resolution = int(math.dist(self.nodes[0].GetPosition(), self.nodes[2].GetPosition()) / 3) + 2
 
         for i in range(len(self.nodes)):
             self.nodes[i].SetShape(self)
@@ -80,22 +81,22 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
         startNode = [0, 0]
         endNode = [0, 0]
         self.DrawHelpLines(useOldLines)
-        resolution = int(math.dist(self.nodes[0].GetPosition(), self.nodes[2].GetPosition()) / 3) + 2
-        for i in range(resolution + 1):
+        
+        for i in range(self.resolution + 1):
             if i == 0:
-                startNode = VectorMath.QuadraticBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), i / resolution)
+                startNode = VectorMath.QuadraticBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), i / self.resolution)
                 continue
-            endNode = VectorMath.QuadraticBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), i / resolution)
-            if useOldLines and len(self.lines) >= resolution:
+            endNode = VectorMath.QuadraticBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), i / self.resolution)
+            if useOldLines and len(self.lines) >= self.resolution:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
                 self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.QBEZIER, 3))
 
             startNode = endNode
 
-        if len(self.lines) > resolution:
-            toDelete = len(self.lines) - resolution
-            for i in range(resolution, len(self.lines)):
+        if len(self.lines) > self.resolution:
+            toDelete = len(self.lines) - self.resolution
+            for i in range(self.resolution, len(self.lines)):
                 self.lines[i].Delete()
             del self.lines[len(self.lines) - toDelete:]
 
@@ -147,6 +148,8 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
         self.nodes = nodes
         self.lines = []
         self.helpLines = []
+        self.resolution = int(math.dist(self.nodes[0].GetPosition(), self.nodes[3].GetPosition()) / 3) + 2
+        
         for i in range(len(self.nodes)):
             self.nodes[i].SetShape(self)
         
@@ -157,20 +160,19 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
         startNode = [0, 0]
         endNode = [0, 0]
         self.DrawHelpLines(useOldLines)
-        resolution = int(math.dist(self.nodes[0].GetPosition(), self.nodes[3].GetPosition()) / 3) + 2
 
-        if len(self.lines) > resolution:
-            toDelete = len(self.lines) - resolution
-            for i in range(resolution, len(self.lines)):
+        if len(self.lines) > self.resolution:
+            toDelete = len(self.lines) - self.resolution
+            for i in range(self.resolution, len(self.lines)):
                 self.lines[i].Delete()
             del self.lines[len(self.lines) - toDelete:]
 
-        for i in range(resolution + 1):
+        for i in range(self.resolution + 1):
             if i == 0:
-                startNode = VectorMath.CubicBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), self.nodes[3].GetPositionOnCanvas(self.canvas), i / resolution)
+                startNode = VectorMath.CubicBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), self.nodes[3].GetPositionOnCanvas(self.canvas), i / self.resolution)
                 continue
-            endNode = VectorMath.CubicBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), self.nodes[3].GetPositionOnCanvas(self.canvas), i / resolution)
-            if useOldLines and len(self.lines) >= resolution:
+            endNode = VectorMath.CubicBezier(self.nodes[0].GetPositionOnCanvas(self.canvas), self.nodes[1].GetPositionOnCanvas(self.canvas), self.nodes[2].GetPositionOnCanvas(self.canvas), self.nodes[3].GetPositionOnCanvas(self.canvas), i / self.resolution)
+            if useOldLines and len(self.lines) >= self.resolution:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
                 self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.CBEZIER, 3))
@@ -210,13 +212,11 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
         endNode = [0, 0]
         linePositions = []
 
-        resolution = int(math.dist(self.nodes[0].GetPosition(), self.nodes[3].GetPosition()) / 3) + 2
-
-        for i in range(resolution + 1):
+        for i in range(self.resolution + 1):
             if i == 0:
-                startNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / resolution)
+                startNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / self.resolution)
                 continue
-            endNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / resolution)
+            endNode = VectorMath.CubicBezier(self.nodes[0].position, self.nodes[1].position, self.nodes[2].position, self.nodes[3].position, i / self.resolution)
             linePositions.append(LinePositions(startNode[0], startNode[1], endNode[0], endNode[1]))
 
             startNode = endNode

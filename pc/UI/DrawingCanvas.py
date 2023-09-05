@@ -149,7 +149,7 @@ class DrawingCanvas(tkinter.Canvas):
         for i in range(len(self.layers)):
             self.layers[i].RedrawShapes()
 
-    def CanvasToMeriCode(self, cutting):
+    def CanvasToMeriCode(self):
         self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, self.parent.parent.mericodeSlicingOptions)
 
     def ShowColision(self):
