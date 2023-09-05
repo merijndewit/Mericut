@@ -25,11 +25,26 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
         self.screen = pygame.display.set_mode((500,500), vsync=1)
         time.sleep(2)
 
+    def UpdateCanvas(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif event.type == pygame.MOUSEWHEEL:
+                print(event)
+                print(event.x, event.y)
+                print(event.flipped)
+                self.canvas.Scroll(event.y)
+
+        self.pygame.display.update()
+        
+    def Clear(self):
+        self.screen.fill((255,255,255))
+        self.pygame.display.update()
+
 
     def InitializeDisplay(self):
         self.screen.fill((255,255,255))
-
-        self.DrawLine(0, 100, 100, 300)
         self.pygame.display.update()
 
     def DrawLine(self, x0, y0, x1, y1):

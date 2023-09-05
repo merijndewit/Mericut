@@ -93,10 +93,7 @@ class CanvasLine(CanvasShapes):
         self.y0 = y0 
         self.x1 = x1
         self.y1 = y1 
-        if self.scaleWithCanvas:
-            self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)
-            return
-        self.canvas.coords(self.canvasLine, x0, y0, x1, y1)
+        self.Draw()
 
     def Delete(self):
         self.canvas.delete(self.canvasLine)

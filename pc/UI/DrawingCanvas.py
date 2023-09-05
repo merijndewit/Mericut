@@ -86,18 +86,21 @@ class DrawingCanvas():
         if self.background is not None:
             self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
 
-    def Scroll(self, event):
-        self.pixelsPerMM += (-1*(event.delta/120)) * 2
+    def Scroll(self, scroll : int):
+        self.pixelsPerMM += (-1*(scroll/20)) * 2
         self.canvasScale = self.pixelsPerMM / 10
         if self.pixelsPerMM <= 0:
             self.pixelsPerMM = 2
             self.canvasScale = self.pixelsPerMM / 10
         if self.background is not None:
             self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
+        self.ClearCanvas()
         self.RedrawGrid()
         self.RedrawShapes()
         self.selectedLayer.CanvasScaleChanged()
 
+    def ClearCanvas(self):
+        self.parent.Clear()
 
     def RedrawGrid(self):
         self.canvasGrid.ReDraw(int(10 * self.canvasScale), self.screenOffsetX, self.screenOffsetY)

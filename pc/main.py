@@ -57,12 +57,15 @@ class Main(customtkinter.CTk):
 
     def OnExit(self):
         self.terminating = True
+        self.hardwareAcceleratedCanvas.pygame.display.quit()
+        self.hardwareAcceleratedCanvas.pygame.quit()
+        exit()
 
     def Run(self):
-        while True:
+        while not self.terminating:
             self.update()
+            self.hardwareAcceleratedCanvas.UpdateCanvas()
 
-            self.hardwareAcceleratedCanvas.pygame.display.update()
 
         
 if __name__ == "__main__":
