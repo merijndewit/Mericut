@@ -41,18 +41,29 @@ class Main(customtkinter.CTk):
         self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
         self.meriCodeTestFrame = MericodeTestFrame.MeriCodeTestFrame(self, leftFramesContainer)
         self.meriCodeFrame = MeriCodeFrame.MeriCodeFrame(self, leftFramesContainer)
-        self.canvas = Canvas.Canvas(self, self)
+        self.hardwareAcceleratedCanvas = Canvas.HardwareAcceleratedCanvas(self, self)
         self.toolSelect = ToolSelect.ToolSelect(self, self)
         self.backgroundFrame = BackgroundFrame.BackgroundFrame(self, self)
         self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
         self.mericodeInfo = MeriCodeInfoFrame.MericodeInfo(self, self)
 
         FileToMeriCode.GetMeriCodeFromTxt()
+        self.update()
+        self.hardwareAcceleratedCanvas.pygame.display.update()
 
-        self.mainloop()
+        self.hardwareAcceleratedCanvas.InitializeDisplay()
+        self.Run()
+        
 
     def OnExit(self):
         self.terminating = True
+
+    def Run(self):
+        while True:
+            self.update()
+
+            self.hardwareAcceleratedCanvas.pygame.display.update()
+
         
 if __name__ == "__main__":
     main = Main()

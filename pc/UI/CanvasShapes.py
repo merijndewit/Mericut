@@ -1,4 +1,6 @@
 from UI.Colors import Colors
+#from UI.ProgramFrames.CanvasFrame import Canvas
+
 class CanvasShapes():
     def __init__(self):
         pass
@@ -13,13 +15,16 @@ class CanvasCircle(CanvasShapes):
         self.Draw()
 
     def Draw(self):
-        self.circle = self.canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, outline=Colors.COLISIONNODE, width=2)
+        pass
+        #self.circle = self.canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, outline=Colors.COLISIONNODE, width=2)
     
     def SetScale(self, scale):
-        self.canvas.coords(self.circle, int(self.x * scale) - self.radius, int(self.y * scale) - self.radius, int(self.x * scale) + self.radius, int(self.y * scale) + self.radius)
+        pass
+        #self.canvas.coords(self.circle, int(self.x * scale) - self.radius, int(self.y * scale) - self.radius, int(self.x * scale) + self.radius, int(self.y * scale) + self.radius)
 
     def Move(self, x, y):
-        self.canvas.coords(self.circle, x - self.radius, y - self.radius, x + self.radius, y + self.radius)
+        pass
+        #self.canvas.coords(self.circle, x - self.radius, y - self.radius, x + self.radius, y + self.radius)
         self.x = x
         self.y = y
         
@@ -41,21 +46,25 @@ class CanvasRectangle(CanvasShapes):
         self.Draw()
 
     def Draw(self):
-        self.rectangle = self.canvas.create_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, fill=Colors.COLISIONNODE, tags=(self.tag), width=0)
+        pass
+        #self.rectangle = self.canvas.create_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, fill=Colors.COLISIONNODE, tags=(self.tag), width=0)
     
     def Update(self, position, scale):
         self.x = position[0]
         self.y = position[1]
-        self.canvas.coords(self.rectangle, int(self.x), int(self.y), int((self.width * scale) + self.x), int((self.height * scale) + self.y))
+        #self.canvas.coords(self.rectangle, int(self.x), int(self.y), int((self.width * scale) + self.x), int((self.height * scale) + self.y))
 
     def Move(self, x, y):
-        self.canvas.coords(self.rectangle, x, y, x + self.width, y + self.height)
+        pass
+        #self.canvas.coords(self.rectangle, x, y, x + self.width, y + self.height)
 
     def SetColor(self, color):
-        self.canvas.itemconfig(self.rectangle, fill=color)
+        pass
+        #self.canvas.itemconfig(self.rectangle, fill=color)
 
     def Delete(self):
-        self.canvas.delete(self.rectangle)
+        pass
+        #self.canvas.delete(self.rectangle)
 
 class CanvasLine(CanvasShapes):
     def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1, dash=None, scaleWithCanvas=False):
@@ -68,15 +77,16 @@ class CanvasLine(CanvasShapes):
         self.width = width
         self.dash = dash
         self.scaleWithCanvas = scaleWithCanvas
+        self.canvasFrame = canvas.parent
 
         self.canvasLine = None
         self.Draw()
 
     def Draw(self):
         if self.scaleWithCanvas:
-            self.canvasLine = self.canvas.create_line((self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY, fill=self.color, width=self.width, dash=self.dash)
+            self.canvasLine = self.canvasFrame.DrawLine((self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)
             return
-        self.canvasLine = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1, fill=self.color, width=self.width, dash=self.dash)
+        self.canvasLine = self.canvasFrame.DrawLine(self.x0, self.y0, self.x1, self.y1)
         
     def Move(self, x0, y0, x1, y1):
         self.x0 = x0

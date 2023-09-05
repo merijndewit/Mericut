@@ -76,7 +76,7 @@ class ToolSelect(customtkinter.CTkFrame):
     def SelectFile(self):
         filetypes = (('svg files', '*.svg'), ('All files', '*.*'))
         self.filename = filedialog.askopenfilename(title='Open a file', initialdir='/', filetypes=filetypes)
-        self.parent.canvas.canvas.LoadSVG(self.filename)
+        self.parent.hardwareAcceleratedCanvas.canvas.LoadSVG(self.filename)
 
     def SelectTool(self, name, button):
         if button == self.lastDisabledButton:
@@ -86,4 +86,4 @@ class ToolSelect(customtkinter.CTkFrame):
 
         button.configure(state=tkinter.DISABLED, fg_color=Colors.BUTTON)
         self.lastDisabledButton = button
-        self.parent.canvas.canvas.SetTool(name)
+        self.parent.hardwareAcceleratedCanvas.canvas.SetTool(name)

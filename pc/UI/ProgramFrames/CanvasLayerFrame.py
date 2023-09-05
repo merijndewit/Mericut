@@ -25,13 +25,13 @@ class LayerButtonFrame(customtkinter.CTkFrame):
         self.deletebutton.grid(row=3, column=1, padx=(0, 0), pady=(0, 0), sticky=tkinter.SW)
 
     def SelectLayer(self):
-        self.parent.parent.canvas.canvas.SelectLayer(self.name)
+        self.parent.parent.hardwareAcceleratedCanvas.canvas.SelectLayer(self.name)
 
     def TransformLayer(self):
-        self.parent.parent.canvas.canvas.TransformLayer(self.name)
+        self.parent.parent.hardwareAcceleratedCanvas.canvas.TransformLayer(self.name)
 
     def DeleteLayer(self):
-        self.parent.parent.canvas.canvas.DeleteLayer(self.name)
+        self.parent.parent.hardwareAcceleratedCanvas.canvas.DeleteLayer(self.name)
         self.destroy()
 
 
@@ -69,7 +69,7 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
         ##### next row
         self.row += 1
 
-        layerNames = self.parent.canvas.canvas.GetLayerNames()
+        layerNames = self.parent.hardwareAcceleratedCanvas.canvas.GetLayerNames()
         self.layerFrames = []
         for i in range(len(layerNames)):
             self.AddLayerButton(layerNames[i])
