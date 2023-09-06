@@ -55,8 +55,13 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
         self.screen.fill((255,255,255))
         self.pygame.display.update()
 
+    @staticmethod
+    def ConvertHexToRGB(hexColor):
+        hexColor = hexColor.lstrip('#')
+        return tuple(int(hexColor[i:i+2], 16) for i in (0, 2, 4))
+
     def DrawLine(self, x0, y0, x1, y1, hexColor):
-        self.pygame.draw.line(self.screen, start_pos=(x0, y0), end_pos=(x1, y1), color=(50, 50, 50))
+        self.pygame.draw.line(self.screen, start_pos=(x0, y0), end_pos=(x1, y1), color=self.ConvertHexToRGB(hexColor))
 
     def DrawCircle(self, x, y, radius, hexColor):
-        self.pygame.draw.circle(self.screen, center=(x, y), radius=radius, color=(50, 50, 50))
+        self.pygame.draw.circle(self.screen, center=(x, y), radius=radius, color=self.ConvertHexToRGB(hexColor))
