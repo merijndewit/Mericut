@@ -80,6 +80,7 @@ class DrawingCanvas():
     def MoveView(self, x, y):
         self.screenOffsetX += x
         self.screenOffsetY += y
+        self.parent.Clear()
         self.RedrawGrid()
         self.RedrawShapes()
         self.selectedLayer.CanvasScaleChanged()
@@ -135,7 +136,7 @@ class DrawingCanvas():
         self.lastSnapPosition = [x, y]
         self.mousePosition = [xInput - self.screenOffsetX, yInput - self.screenOffsetY]
         self.tool.Hover(x, y)
-        self.ShowColision()
+        #self.ShowColision()
 
     def RedrawShapes(self):
         for i in range(len(self.layers)):
@@ -145,7 +146,8 @@ class DrawingCanvas():
         self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, self.parent.parent.mericodeSlicingOptions)
 
     def ShowColision(self):
-        collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)
+        #collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)
+        collidingNode = None
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
             self.parent.Clear()
             self.RedrawGrid()
@@ -156,9 +158,6 @@ class DrawingCanvas():
             self.RedrawGrid()
             self.RedrawShapes()
             return
-        self.parent.Clear()
-        self.RedrawGrid()
-        self.RedrawShapes()
         self.selectUIObject.Move(collidingNode.GetPositionOnCanvasX(self), collidingNode.GetPositionOnCanvasY(self))
 
     def LoadSVG(self, dir):

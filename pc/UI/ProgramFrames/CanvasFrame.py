@@ -49,7 +49,7 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
         
     def Clear(self):
         self.screen.fill((255,255,255))
-        #self.pygame.display.update()
+        print("clear")
 
     def InitializeDisplay(self):
         self.screen.fill((255,255,255))
