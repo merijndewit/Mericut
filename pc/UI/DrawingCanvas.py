@@ -103,7 +103,7 @@ class DrawingCanvas():
         self.parent.Clear()
 
     def RedrawGrid(self):
-        self.canvasGrid.ReDraw(int(10 * self.canvasScale), self.screenOffsetX, self.screenOffsetY)
+        self.canvasGrid.ReDraw(10 * self.canvasScale, self.screenOffsetX, self.screenOffsetY)
 
     def SetTool(self, tool):
         self.tool = tool(self)
@@ -148,13 +148,16 @@ class DrawingCanvas():
         collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
             self.parent.Clear()
+            self.RedrawGrid()
             self.RedrawShapes()
             return
         if collidingNode == None: # mouse is not on a node so hide the colision circle
             self.parent.Clear()
+            self.RedrawGrid()
             self.RedrawShapes()
             return
         self.parent.Clear()
+        self.RedrawGrid()
         self.RedrawShapes()
         self.selectUIObject.Move(collidingNode.GetPositionOnCanvasX(self), collidingNode.GetPositionOnCanvasY(self))
 

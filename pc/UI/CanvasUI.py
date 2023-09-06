@@ -10,24 +10,18 @@ class CanvasGrid():
         self.DrawGrid()
 
     def DrawGrid(self, color=Colors.GRIDCOLOR):
-        #self.canvasLines.append(self.canvas.create_line(self.xOffset, 0 + self.yOffset, self.xOffset, self.canvas.winfo_reqheight() + self.yOffset, fill=color, width=2))
-        #self.canvasLines.append(self.canvas.create_line(0 + self.xOffset, 0 + self.yOffset, self.canvas.winfo_reqwidth() + self.xOffset, 0 + self.yOffset, fill=color, width=2))
+        self.canvas.parent.DrawLine(self.xOffset, 0 + self.yOffset, self.xOffset, self.canvas.parent.GetHeight() + self.yOffset, color)
+        self.canvas.parent.DrawLine(0 + self.xOffset, 0 + self.yOffset, self.canvas.parent.GetWidth() + self.xOffset, 0 + self.yOffset, color)
 
         offsetX = self.xOffset % self.cellSize - self.cellSize
         offsetY = self.yOffset % self.cellSize - self.cellSize
-        #for i in range(int(self.canvas.winfo_reqwidth() / self.cellSize) + 1):
-        #    self.canvasLines.append(self.canvas.create_line((i * self.cellSize) + offsetX, 0 + offsetY, (i * self.cellSize) + offsetX, self.canvas.winfo_reqheight() + offsetY, fill=color, width=1))
-        #for i in range(int(self.canvas.winfo_reqheight() / self.cellSize) + 1):
-        #    self.canvasLines.append(self.canvas.create_line(0 + offsetX, (i * self.cellSize) + offsetY, self.canvas.winfo_reqwidth() + offsetX, (i * self.cellSize) + offsetY, fill=color, width=1))
-
-    def DeleteGrid(self):
-        for i in range(len(self.canvasLines)):
-            pass
-            #self.canvas.delete(self.canvasLines[i])
+        for i in range(int(self.canvas.parent.GetWidth() / self.cellSize) + 1):
+            self.canvas.parent.DrawLine((i * self.cellSize) + offsetX, 0 + offsetY, (i * self.cellSize) + offsetX, self.canvas.parent.GetHeight() + offsetY, color)
+        for i in range(int(self.canvas.parent.GetHeight() / self.cellSize) + 1):
+            self.canvas.parent.DrawLine(0 + offsetX, (i * self.cellSize) + offsetY, self.canvas.parent.GetWidth() + offsetX, (i * self.cellSize) + offsetY, color)
 
     def ReDraw(self, cellSize, xOffset, yOffset):
         self.cellSize = cellSize
         self.xOffset = xOffset
         self.yOffset = yOffset
-        self.DeleteGrid()
         self.DrawGrid()

@@ -65,3 +65,9 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
 
     def DrawCircle(self, x, y, radius, hexColor):
         self.pygame.draw.circle(self.screen, center=(x, y), radius=radius, color=self.ConvertHexToRGB(hexColor))
+
+    def GetHeight(self):
+        return self.screen.get_height()
+    
+    def GetWidth(self):
+        return self.screen.get_width()
