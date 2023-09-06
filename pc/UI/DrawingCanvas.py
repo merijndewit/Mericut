@@ -31,7 +31,7 @@ class DrawingCanvas():
         self.snap = True
 
         self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.screenOffsetX, self.screenOffsetY)
-        self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self)
+        self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self, Colors.COLISIONNODE)
 
         self.lastSnapPosition = [0, 0]
 
@@ -118,22 +118,22 @@ class DrawingCanvas():
             y = int(y * (self.canvasScale * 1))
         return x, y
 
-    def Clicked(self, event):
-        x, y = self.Snap(event.x, event.y)
+    def Clicked(self, xInput, yInput):
+        x, y = self.Snap(xInput, yInput)
         x -= self.screenOffsetX
         y -= self.screenOffsetY
         self.tool.Clicked(x, y, self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition), self.selectedLayer.IsColliding([x / self.canvasScale, y / self.canvasScale]))
         self.mousePressed = True
 
-    def Released(self, event):
+    def Released(self):
         self.mousePressed = False
 
-    def Motion(self, event):            
-        x, y = self.Snap(event.x, event.y)
+    def Motion(self, xInput, yInput):            
+        x, y = self.Snap(xInput, yInput)
         x -= self.screenOffsetX
         y -= self.screenOffsetY
         self.lastSnapPosition = [x, y]
-        self.mousePosition = [event.x - self.screenOffsetX, event.y - self.screenOffsetY]
+        self.mousePosition = [xInput - self.screenOffsetX, yInput - self.screenOffsetY]
         self.tool.Hover(x, y)
         self.ShowColision()
 
@@ -147,11 +147,15 @@ class DrawingCanvas():
     def ShowColision(self):
         collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
+            self.parent.Clear()
+            self.RedrawShapes()
             return
         if collidingNode == None: # mouse is not on a node so hide the colision circle
-            self.selectUIObject.Move(-20, -20)
+            self.parent.Clear()
+            self.RedrawShapes()
             return
-        self.selectUIObject.SetColor(collidingNode.GetColisionColor())
+        self.parent.Clear()
+        self.RedrawShapes()
         self.selectUIObject.Move(collidingNode.GetPositionOnCanvasX(self), collidingNode.GetPositionOnCanvasY(self))
 
     def LoadSVG(self, dir):

@@ -7,14 +7,12 @@ import time
 from UI.Colors import Colors
 from UI.DrawingCanvas import DrawingCanvas
 
-
 class HardwareAcceleratedCanvas(tkinter.Canvas):
     def __init__(self, parent, frameParent, *args, **kwargs):
         tkinter.Canvas.__init__(self, frameParent, *args, **kwargs)
         self.parent = parent
         self.configure( width=600,
                         height=600)
-        self.canvas = DrawingCanvas(self)
         self.grid(row=2, column=1, padx=(5, 5), pady=(5, 5), rowspan=4, sticky=tkinter.NSEW)
 
         #pygame window
@@ -23,30 +21,42 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
         self.pygame = pygame
         self.pygame.display.init()
         self.screen = pygame.display.set_mode((500,500), vsync=1)
-        time.sleep(2)
+        self.canvas = DrawingCanvas(self)
+
 
     def UpdateCanvas(self):
+        #input
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
-            elif event.type == pygame.MOUSEWHEEL:
-                print(event)
-                print(event.x, event.y)
-                print(event.flipped)
+            if event.type == pygame.MOUSEWHEEL:
                 self.canvas.Scroll(event.y)
+            if pygame.mouse.get_focused():
+                #cursor
+                cursor = pygame.mouse.get_pos()
+                self.canvas.Motion(cursor[0], cursor[1])
+                #mouse buttons
+                buttons = pygame.mouse.get_pressed() #button1, button2, button3
+                if buttons[0]:
+                    self.canvas.Clicked(cursor[0], cursor[1])
+                else:
+                    self.canvas.Released()
+                
+
 
         self.pygame.display.update()
         
     def Clear(self):
         self.screen.fill((255,255,255))
-        self.pygame.display.update()
-
+        #self.pygame.display.update()
 
     def InitializeDisplay(self):
         self.screen.fill((255,255,255))
         self.pygame.display.update()
 
-    def DrawLine(self, x0, y0, x1, y1):
+    def DrawLine(self, x0, y0, x1, y1, hexColor):
         self.pygame.draw.line(self.screen, start_pos=(x0, y0), end_pos=(x1, y1), color=(50, 50, 50))
-        #print("draw line")
+
+    def DrawCircle(self, x, y, radius, hexColor):
+        self.pygame.draw.circle(self.screen, center=(x, y), radius=radius, color=(50, 50, 50))

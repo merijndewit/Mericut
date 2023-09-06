@@ -6,43 +6,41 @@ class CanvasShapes():
         pass
 
 class CanvasCircle(CanvasShapes):
-    def __init__(self, x, y, radius, canvas):
+    def __init__(self, x, y, radius, canvas, color):
         self.x = x
         self.y = y 
         self.radius = radius
         self.canvas = canvas
         self.circle = None
+        self.canvasFrame = canvas.parent
+        self.color = color
         self.Draw()
 
     def Draw(self):
         pass
-        #self.circle = self.canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, outline=Colors.COLISIONNODE, width=2)
+        self.circle = self.canvasFrame.DrawCircle(self.x, self.y, self.radius, self.color)
     
+    def Move(self, x, y):
+        self.x = x
+        self.y = y 
+        self.Draw()
+
     def SetScale(self, scale):
         pass
         #self.canvas.coords(self.circle, int(self.x * scale) - self.radius, int(self.y * scale) - self.radius, int(self.x * scale) + self.radius, int(self.y * scale) + self.radius)
-
-    def Move(self, x, y):
-        pass
-        #self.canvas.coords(self.circle, x - self.radius, y - self.radius, x + self.radius, y + self.radius)
-        self.x = x
-        self.y = y
-        
-    def SetColor(self, color):
-        self.canvas.itemconfig(self.circle, outline=color)
 
     def Delete(self):
         self.canvas.delete(self.circle)
 
 class CanvasRectangle(CanvasShapes):
-    def __init__(self, position :list, width, height, canvas, tags=""):
+    def __init__(self, position :list, width, height, canvas, color):
         self.width = width
         self.height = height
         self.x = position[0]
         self.y = position[1]
         self.canvas = canvas
         self.rectangle = None
-        self.tag = tags
+        self.color = color
         self.Draw()
 
     def Draw(self):
@@ -75,7 +73,6 @@ class CanvasLine(CanvasShapes):
         self.canvas = canvas
         self.color = color
         self.width = width
-        self.dash = dash
         self.scaleWithCanvas = scaleWithCanvas
         self.canvasFrame = canvas.parent
 
@@ -86,7 +83,7 @@ class CanvasLine(CanvasShapes):
         if self.scaleWithCanvas:
             self.canvasLine = self.canvasFrame.DrawLine((self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)
             return
-        self.canvasLine = self.canvasFrame.DrawLine(self.x0, self.y0, self.x1, self.y1)
+        self.canvasLine = self.canvasFrame.DrawLine(self.x0, self.y0, self.x1, self.y1, self.color)
         
     def Move(self, x0, y0, x1, y1):
         self.x0 = x0

@@ -2,6 +2,7 @@ import math
 from UI.Nodes import Node
 from UI.CanvasShapes import CanvasCircle
 import UI.CanvasShapes as CanvasShapes
+from UI.Colors import Colors
 
 class Layer():
     def __init__(self, canvas, name):
@@ -13,7 +14,7 @@ class Layer():
         self.drawnShapes = [] #drawn by user
         self.canvasShapes = [] #drawn by program
         self.resizeNodes = [Node(-100, -100), Node(-100, -100)]
-        self.sizeShapes = [CanvasCircle(-100, -100, 5, self.canvas), CanvasCircle(-100, -100, 5, self.canvas)]
+        self.sizeShapes = [CanvasCircle(-100, -100, 5, self.canvas, Colors.COLISIONNODE), CanvasCircle(-100, -100, 5, self.canvas, Colors.COLISIONNODE)]
         self.resizeNodes[0].SetShape(self)
         self.resizeNodes[1].SetShape(self)
         self.resizing = False
