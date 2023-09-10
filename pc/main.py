@@ -39,8 +39,6 @@ class Main(customtkinter.CTk):
         self.mericodeSlicingOptions = MericodeSlicingOptions()
 
         #Frames
-
-
         leftFramesContainer = Frames.LeftFramesContainer(self, self)
         self.headerFrame = HeaderFrame.HeaderFrame(self, self)
         self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
@@ -54,7 +52,6 @@ class Main(customtkinter.CTk):
         self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
 
         self.toolSelect = ToolSelect.ToolSelect(self, self)
-        #self.hardwareAcceleratedCanvas.UpdateCanvas()
         
     def StartRenderThreadLoop(self):
         while not self.terminating:
@@ -78,10 +75,8 @@ def SecondInit():
 if __name__ == "__main__":
     main = Main()
     
-    #tkinterThread = threading.Thread(target=main.mainloop)
     renderThread = threading.Thread(target=main.StartRenderThreadLoop, daemon=True)
-    #tkinterThread.start()
     renderThread.start()
+
     main.after(1, SecondInit)
     main.mainloop()
-

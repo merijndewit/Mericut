@@ -116,6 +116,8 @@ class DrawingCanvas():
         return x, y
 
     def Clicked(self, xInput, yInput):
+        if self.mousePressed:
+            return
         x, y = self.Snap(xInput, yInput)
         x -= self.screenOffsetX
         y -= self.screenOffsetY
@@ -132,7 +134,7 @@ class DrawingCanvas():
         self.lastSnapPosition = [x, y]
         self.mousePosition = [xInput - self.screenOffsetX, yInput - self.screenOffsetY]
         self.tool.Hover(x, y)
-        #self.ShowColision()
+        self.ShowColision()
 
     def RedrawShapes(self):
         for i in range(len(self.layers)):
@@ -142,17 +144,12 @@ class DrawingCanvas():
         self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, self.parent.parent.mericodeSlicingOptions)
 
     def ShowColision(self):
-        #collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition)
-        collidingNode = None
+        collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition, True)
         if collidingNode == self.lastCollidedNode and collidingNode != None: #check if the mouse is still on the same node
-            self.parent.Clear()
-            self.RedrawGrid()
-            self.RedrawShapes()
+            self.CanvasChanged()
             return
         if collidingNode == None: # mouse is not on a node so hide the colision circle
-            self.parent.Clear()
-            self.RedrawGrid()
-            self.RedrawShapes()
+            self.CanvasChanged()
             return
         self.selectUIObject.Move(collidingNode.GetPositionOnCanvasX(self), collidingNode.GetPositionOnCanvasY(self))
 
@@ -216,6 +213,7 @@ class DrawingCanvas():
             self.AddLayer()
             return
         self.selectedLayer = self.layers[0]
+        self.CanvasChanged()
 
     def CanvasPosXToNormalPosX(self, x):
         return (x / self.canvasScale) - self.screenOffsetX

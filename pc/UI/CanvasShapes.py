@@ -49,7 +49,7 @@ class CanvasLine(CanvasShapes):
 
     def Draw(self):
         if self.scaleWithCanvas:
-            self.canvasLine = self.canvasFrame.DrawLine((self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)
+            self.canvasLine = self.canvasFrame.DrawLine((self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY, self.color)
             return
         self.canvasLine = self.canvasFrame.DrawLine(self.x0, self.y0, self.x1, self.y1, self.color)
         
@@ -61,7 +61,9 @@ class CanvasLine(CanvasShapes):
         self.Draw()
 
     def Delete(self):
-        self.canvas.delete(self.canvasLine)
+        pass
+        #self.canvas.delete(self.canvasLine)
 
     def Update(self):
-        self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)
+        self.Draw()
+        #self.canvas.coords(self.canvasLine, (self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY)

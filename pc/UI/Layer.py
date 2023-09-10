@@ -45,10 +45,10 @@ class Layer():
         self.canvasShapes = []
 
 
-    def GetCollidingNode(self, distance :float, canvasScale :float, mousePosition :list):
+    def GetCollidingNode(self, distance :float, canvasScale :float, mousePosition :list, onlyResizeNodes = False):
         nearestNode = None
         nodesToCheck = []
-        if self.resizing: 
+        if self.resizing or onlyResizeNodes: 
             nodesToCheck = [self.resizeNodes[1]]
         else:
             for i in range(len(self.drawnShapes)): #check shapes

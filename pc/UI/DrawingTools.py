@@ -32,7 +32,7 @@ class Pen(Tool):
             self.parentCanvas.selectedLayer.AddShape(line)
             self.clicks = 0
             self.nodes = []
-            self.parentCanvas.delete(self.previewLine.canvasLine)
+            #self.parentCanvas.delete(self.previewLine.canvasLine)
             self.previewLine = None
             return
 
