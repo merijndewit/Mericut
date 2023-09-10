@@ -1,5 +1,8 @@
 import customtkinter
 import atexit
+import time
+import sys
+import threading
 
 #mericut
 import UI.Frames as Frames
@@ -36,38 +39,49 @@ class Main(customtkinter.CTk):
         self.mericodeSlicingOptions = MericodeSlicingOptions()
 
         #Frames
+
+
         leftFramesContainer = Frames.LeftFramesContainer(self, self)
         self.headerFrame = HeaderFrame.HeaderFrame(self, self)
         self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
         self.meriCodeTestFrame = MericodeTestFrame.MeriCodeTestFrame(self, leftFramesContainer)
         self.meriCodeFrame = MeriCodeFrame.MeriCodeFrame(self, leftFramesContainer)
-        self.hardwareAcceleratedCanvas = Canvas.HardwareAcceleratedCanvas(self, self)
-        self.toolSelect = ToolSelect.ToolSelect(self, self)
         self.backgroundFrame = BackgroundFrame.BackgroundFrame(self, self)
-        self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
         self.mericodeInfo = MeriCodeInfoFrame.MericodeInfo(self, self)
 
-        FileToMeriCode.GetMeriCodeFromTxt()
-        self.update()
-        self.hardwareAcceleratedCanvas.pygame.display.update()
-
+        self.hardwareAcceleratedCanvas = Canvas.HardwareAcceleratedCanvas(self, self)
         self.hardwareAcceleratedCanvas.InitializeDisplay()
-        self.Run()
+        self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
+
+        self.toolSelect = ToolSelect.ToolSelect(self, self)
+        #self.hardwareAcceleratedCanvas.UpdateCanvas()
         
+    def StartRenderThreadLoop(self):
+        while not self.terminating:
+            self.hardwareAcceleratedCanvas.UpdateCanvas()
 
     def OnExit(self):
         self.terminating = True
-        self.hardwareAcceleratedCanvas.pygame.display.quit()
         self.hardwareAcceleratedCanvas.pygame.quit()
         exit()
 
-    def Run(self):
-        while not self.terminating:
-            self.update()
-            self.hardwareAcceleratedCanvas.UpdateCanvas()
+def Stop():
+    print("Stopping")
+    return
 
+atexit.register(Stop)
 
+def SecondInit():
+    main.hardwareAcceleratedCanvas.canvas.CanvasChanged()
+    main.hardwareAcceleratedCanvas.canvas.RedrawGrid()
         
 if __name__ == "__main__":
     main = Main()
-    atexit.register(main.OnExit)
+    
+    #tkinterThread = threading.Thread(target=main.mainloop)
+    renderThread = threading.Thread(target=main.StartRenderThreadLoop, daemon=True)
+    #tkinterThread.start()
+    renderThread.start()
+    main.after(1, SecondInit)
+    main.mainloop()
+

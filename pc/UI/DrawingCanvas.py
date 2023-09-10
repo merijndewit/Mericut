@@ -29,13 +29,18 @@ class DrawingCanvas():
 
         self.mousePressed = False
         self.snap = True
-
         self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.screenOffsetX, self.screenOffsetY)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self, Colors.COLISIONNODE)
 
         self.lastSnapPosition = [0, 0]
 
         self.canvasToMericode = None
+
+    def CanvasChanged(self):
+        self.parent.Clear()
+        self.RedrawGrid()
+        self.RedrawShapes()
+        self.selectedLayer.CanvasScaleChanged()
 
     def ResizedWindow(self,event):
         width = event.width
@@ -80,10 +85,7 @@ class DrawingCanvas():
     def MoveView(self, x, y):
         self.screenOffsetX += x
         self.screenOffsetY += y
-        self.parent.Clear()
-        self.RedrawGrid()
-        self.RedrawShapes()
-        self.selectedLayer.CanvasScaleChanged()
+        self.CanvasChanged()
         if self.background is not None:
             self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
 
@@ -95,13 +97,7 @@ class DrawingCanvas():
             self.canvasScale = self.pixelsPerMM / 10
         if self.background is not None:
             self.background.Update([self.screenOffsetX, self.screenOffsetY], self.canvasScale)
-        self.ClearCanvas()
-        self.RedrawGrid()
-        self.RedrawShapes()
-        self.selectedLayer.CanvasScaleChanged()
-
-    def ClearCanvas(self):
-        self.parent.Clear()
+        self.CanvasChanged()
 
     def RedrawGrid(self):
         self.canvasGrid.ReDraw(10 * self.canvasScale, self.screenOffsetX, self.screenOffsetY)
