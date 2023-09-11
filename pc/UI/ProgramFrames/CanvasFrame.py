@@ -13,8 +13,9 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
         self.parent = parent
         self.configure( width=600,
                         height=600)
-        self.grid(row=2, column=1, padx=(5, 5), pady=(5, 5), rowspan=4, sticky=tkinter.NSEW)
-
+        self.grid(row=2, column=1, padx=(5, 5), pady=(5, 5), rowspan=6, sticky=tkinter.NSEW)
+        self.parent.columnconfigure(1, weight=1)
+        self.parent.rowconfigure(5, weight=1)
         #pygame window
         os.environ['SDL_WINDOWID'] = str(self.winfo_id())
         os.environ['SDL_VIDEODRIVER'] = 'windib'
