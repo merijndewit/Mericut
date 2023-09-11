@@ -1,6 +1,3 @@
-import tkinter
-import math
-
 from UI.Colors import Colors
 import UI.CanvasUI as CanvasUI
 import UI.CanvasShapes as CanvasShapes
@@ -10,14 +7,14 @@ import MeriCode.CanvasToMeriCode as CanvasToMeriCode
 import UI.Layer as Layer
 import MeriCode.MeriCodeToCanvas as MeriCodeToCanvas
 
-class DrawingCanvas():
+class CanvasManager():
     def __init__(self, parent):
         self.parent = parent
 
         self.tool = DrawingTools.Pen(self)
         self.mousePosition = [0, 0]
         self.selectedLayer = Layer.Layer(self, "layer")
-        self.mericodeToCanvas = MeriCodeToCanvas.MeriCodeToCanvas()
+        self.mericodeToCanvas = MeriCodeToCanvas.MeriCodeToCanvas(self)
         self.layers = [self.selectedLayer]
         self.lastCollidedNode = None
         self.background = None
@@ -29,7 +26,7 @@ class DrawingCanvas():
 
         self.mousePressed = False
         self.snap = True
-        self.canvasGrid = CanvasUI.CanvasGrid(self, self.pixelsPerMM, self.screenOffsetX, self.screenOffsetY)
+        self.canvasGrid = CanvasUI.CanvasGrid(self.parent.hardwareAcceleratedCanvas, self.pixelsPerMM, self.screenOffsetX, self.screenOffsetY)
         self.selectUIObject = CanvasShapes.CanvasCircle(-20, -20, 8, self, Colors.COLISIONNODE)
 
         self.lastSnapPosition = [0, 0]
@@ -37,10 +34,12 @@ class DrawingCanvas():
         self.canvasToMericode = None
 
     def CanvasChanged(self):
-        self.parent.Clear()
+        self.parent.hardwareAcceleratedCanvas.Clear()
         self.RedrawGrid()
         self.RedrawShapes()
-        self.selectedLayer.CanvasScaleChanged()
+
+        for i in range(len(self.layers)):
+            self.layers[i].CanvasScaleChanged()
 
     def ResizedWindow(self,event):
         width = event.width
@@ -141,7 +140,7 @@ class DrawingCanvas():
             self.layers[i].RedrawShapes()
 
     def CanvasToMeriCode(self):
-        self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, self.parent.parent.mericodeSlicingOptions)
+        self.canvasToMericode = CanvasToMeriCode.CanvasToMeriCode(self, self.parent.mericodeSlicingOptions)
 
     def ShowColision(self):
         collidingNode = self.selectedLayer.GetCollidingNode(8, self.canvasScale, self.mousePosition, True)
@@ -149,7 +148,7 @@ class DrawingCanvas():
             self.CanvasChanged()
             return
         if collidingNode == None: # mouse is not on a node so hide the colision circle
-            self.CanvasChanged()
+            #self.CanvasChanged()
             return
         self.selectUIObject.Move(collidingNode.GetPositionOnCanvasX(self), collidingNode.GetPositionOnCanvasY(self))
 
@@ -200,12 +199,11 @@ class DrawingCanvas():
         newLayer = Layer.Layer(self, name)
         self.layers.append(newLayer)
         self.selectedLayer = newLayer
-        self.parent.parent.canvasLayerFrame.AddLayerButton(name)
+        self.parent.canvasLayerFrame.AddLayerButton(name)
 
     def DeleteLayer(self, name):
         for i in range(len(self.layers)):
             if self.layers[i].name == name:
-                self.layers[i].Delete()
                 self.layers.remove(self.layers[i])
                 break
 

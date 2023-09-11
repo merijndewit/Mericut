@@ -5,7 +5,6 @@ import pygame
 import time
 
 from UI.Colors import Colors
-from UI.DrawingCanvas import DrawingCanvas
 
 class HardwareAcceleratedCanvas(tkinter.Canvas):
     def __init__(self, parent, frameParent, *args, **kwargs):
@@ -22,7 +21,12 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
         self.pygame = pygame
         self.pygame.display.init()
         self.screen = pygame.display.set_mode((500,500), vsync=1)
-        self.canvas = DrawingCanvas(self)
+        self.canvas = None
+        self.dontCheckEvents = True
+
+    def SendEventsToCanvas(self, canvas):
+        self.canvas = canvas
+        self.dontCheckEvents = False
 
     def UpdateCanvas(self):
         #input
@@ -30,6 +34,8 @@ class HardwareAcceleratedCanvas(tkinter.Canvas):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 print("quit")
+                return
+            if self.dontCheckEvents:
                 return
             if event.type == pygame.MOUSEWHEEL:
                 self.canvas.Scroll(event.y)

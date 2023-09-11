@@ -17,6 +17,8 @@ import UI.ProgramFrames.CanvasLayerFrame as CanvasLayerFrame
 import UI.ProgramFrames.BackgroundFrame as BackgroundFrame
 import UI.ProgramFrames.MericodeInfoFrame as MeriCodeInfoFrame
 
+import UI.CanvasManager as CanvasManager
+
 from Serial import Serial
 
 from UI.Colors import Colors
@@ -38,7 +40,8 @@ class Main(customtkinter.CTk):
         self.callbackMeriCode = CallbackMeriCode(self)
         self.mericodeSlicingOptions = MericodeSlicingOptions()
 
-        #Frames
+
+        #Frames / UI
         leftFramesContainer = Frames.LeftFramesContainer(self, self)
         self.headerFrame = HeaderFrame.HeaderFrame(self, self)
         self.connectFrame = ConnectFrame.ConnectFrame(self, leftFramesContainer)
@@ -46,12 +49,15 @@ class Main(customtkinter.CTk):
         self.meriCodeFrame = MeriCodeFrame.MeriCodeFrame(self, leftFramesContainer)
         self.backgroundFrame = BackgroundFrame.BackgroundFrame(self, self)
         self.mericodeInfo = MeriCodeInfoFrame.MericodeInfo(self, self)
-
         self.hardwareAcceleratedCanvas = Canvas.HardwareAcceleratedCanvas(self, self)
         self.hardwareAcceleratedCanvas.InitializeDisplay()
-        self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
+        
+        self.canvasManager = CanvasManager.CanvasManager(self)
 
+        self.canvasLayerFrame = CanvasLayerFrame.CanvasLayerFrame(self, self)
         self.toolSelect = ToolSelect.ToolSelect(self, self)
+
+        self.hardwareAcceleratedCanvas.SendEventsToCanvas(self.canvasManager)
         
     def StartRenderThreadLoop(self):
         while not self.terminating:
@@ -70,7 +76,6 @@ atexit.register(Stop)
 
 def SecondInit():
     main.hardwareAcceleratedCanvas.canvas.CanvasChanged()
-    main.hardwareAcceleratedCanvas.canvas.RedrawGrid()
         
 if __name__ == "__main__":
     main = Main()
@@ -78,5 +83,5 @@ if __name__ == "__main__":
     renderThread = threading.Thread(target=main.StartRenderThreadLoop, daemon=True)
     renderThread.start()
 
-    main.after(1, SecondInit)
+    main.after(100, SecondInit)
     main.mainloop()

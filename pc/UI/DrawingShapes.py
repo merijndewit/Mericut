@@ -21,38 +21,29 @@ class LinePositions():
         self.y1 = y1
 
 class Line(Shapes):
-    def __init__(self, nodes, canvas, draw = True):
+    def __init__(self, nodes, canvas, color = Colors.LINECOLOR):
         self.nodes = nodes
         self.canvas = canvas
-        self.lines = []
+        self.color = color
 
         for i in range(len(self.nodes)):
             self.nodes[i].SetShape(self)
-
-        if draw:
-            self.Draw()
 
     def Scale(self, scale):
         self.layerScale = scale
         self.Update()
 
     def Draw(self):
-        self.lines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.LINECOLOR, 3))
+        CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), self.color, 3)
 
     def Update(self):
-        self.lines[0].Move(self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas))
+        CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), self.color, 3)
 
     def GetStartPosition(self):
         return self.nodes[0].GetPosition()
 
     def GetEndPosition(self):
         return self.nodes[1].GetPosition()
-
-    def Delete(self):
-        for i in range(len(self.lines)):
-            self.lines[i].Delete()
-
-        self.lines = []
 
     #this method will return the actual position of the lines start and end
     def GetLinePositions(self): 
@@ -90,7 +81,7 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
             if useOldLines and len(self.lines) >= self.resolution:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
-                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.QBEZIER, 3))
+                self.lines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.QBEZIER, 3))
 
             startNode = endNode
 
@@ -105,8 +96,8 @@ class QuadraticBezier(Shapes): #takes 3 nodes [start, control, end]
             self.helpLines[0].Move(self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas))
             self.helpLines[1].Move(self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas))
             return
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
 
     def Update(self):
         self.Draw(True)
@@ -175,7 +166,7 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
             if useOldLines and len(self.lines) >= self.resolution:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
-                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.CBEZIER, 3))
+                self.lines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.CBEZIER, 3))
 
             startNode = endNode
 
@@ -184,8 +175,8 @@ class CubicBezier(Shapes): #takes 4 nodes [start, control0, control1, end]
             self.helpLines[0].Move(self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas))
             self.helpLines[1].Move(self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[3].GetPositionOnCanvasX(self.canvas), self.nodes[3].GetPositionOnCanvasY(self.canvas))
             return
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[3].GetPositionOnCanvasX(self.canvas), self.nodes[3].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2))
+        self.helpLines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[3].GetPositionOnCanvasX(self.canvas), self.nodes[3].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2))
 
     def Update(self):
         self.Draw(True)
@@ -283,7 +274,7 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
             if useOldLines:
                 self.lines[i - 1].Move(startNode[0], startNode[1], endNode[0], endNode[1])
             else:
-                self.lines.append(CanvasLine(self.canvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.ARC, 3))
+                self.lines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, startNode[0], startNode[1], endNode[0], endNode[1], Colors.ARC, 3))
 
             startNode = endNode
 
@@ -292,8 +283,8 @@ class Arc(Shapes): #takes 3 nodes [start, control, end]
             self.helpLines[0].Move(self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas))
             self.helpLines[1].Move(self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas))
             return
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
-        self.helpLines.append(CanvasLine(self.canvas, self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[0].GetPositionOnCanvasX(self.canvas), self.nodes[0].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
+        self.helpLines.append(CanvasLine(self.canvas.parent.hardwareAcceleratedCanvas, self.nodes[2].GetPositionOnCanvasX(self.canvas), self.nodes[2].GetPositionOnCanvasY(self.canvas), self.nodes[1].GetPositionOnCanvasX(self.canvas), self.nodes[1].GetPositionOnCanvasY(self.canvas), Colors.HELPLINES, 2, (2, 2)))
 
     def Update(self):
         self.Draw(True)

@@ -18,7 +18,7 @@ class CanvasCircle(CanvasShapes):
 
     def Draw(self):
         pass
-        self.circle = self.canvasFrame.DrawCircle(self.x, self.y, self.radius, self.color)
+        #self.circle = self.canvasFrame.DrawCircle(self.x, self.y, self.radius, self.color)
     
     def Move(self, x, y):
         self.x = x
@@ -33,24 +33,19 @@ class CanvasCircle(CanvasShapes):
         self.canvas.delete(self.circle)
 
 class CanvasLine(CanvasShapes):
-    def __init__(self, canvas, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1, dash=None, scaleWithCanvas=False):
+    def __init__(self, canvasFrame, x0, y0, x1, y1, color=Colors.GRIDCOLOR, width=1):
         self.x0 = x0
         self.y0 = y0 
         self.x1 = x1
         self.y1 = y1 
-        self.canvas = canvas
+        self.canvasFrame = canvasFrame
         self.color = color
         self.width = width
-        self.scaleWithCanvas = scaleWithCanvas
-        self.canvasFrame = canvas.parent
 
         self.canvasLine = None
         self.Draw()
 
     def Draw(self):
-        if self.scaleWithCanvas:
-            self.canvasLine = self.canvasFrame.DrawLine((self.x0 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y0 * self.canvas.canvasScale) + self.canvas.screenOffsetY, (self.x1 * self.canvas.canvasScale) + self.canvas.screenOffsetX, (self.y1 * self.canvas.canvasScale) + self.canvas.screenOffsetY, self.color)
-            return
         self.canvasLine = self.canvasFrame.DrawLine(self.x0, self.y0, self.x1, self.y1, self.color)
         
     def Move(self, x0, y0, x1, y1):

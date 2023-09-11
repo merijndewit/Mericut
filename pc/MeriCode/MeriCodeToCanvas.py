@@ -2,9 +2,11 @@ from MeriCode.FileToMeriCode import FileToMeriCode
 import UI.CanvasShapes as CanvasShapes
 import re
 import math
+import UI.DrawingShapes as DrawingShapes
+import UI.Nodes as Nodes
 
 class MeriCodeToCanvas:
-    def __init__(self):
+    def __init__(self, canvasManager):
         self.position = [0.0, 0.0, 0.0] #x, y and z
         self.rotation = 0
         self.layer = None
@@ -12,6 +14,7 @@ class MeriCodeToCanvas:
         self.toolOffsetRadius = 3.75
         self.zUpPosition = 20
         self.lines = []
+        self.canvasManager = canvasManager
 
     def DrawMeriCode(self, layer, cutting):
         self.layer = layer
@@ -79,7 +82,7 @@ class MeriCodeToCanvas:
         color = "#FF0000"
         if travel: 
             color = "#00FF00"
-        line = CanvasShapes.CanvasLine(self.layer.canvas, self.position[0], self.position[1], nextPosition[0], nextPosition[1], color, scaleWithCanvas=True)
+        line = DrawingShapes.Line((Nodes.Node(self.position[0], self.position[1]), Nodes.Node(nextPosition[0], nextPosition[1])), self.canvasManager, color)
         self.lines.append(line)
         self.layer.AddShape(line)
             

@@ -69,7 +69,7 @@ class CanvasLayerFrame(customtkinter.CTkFrame):
         ##### next row
         self.row += 1
 
-        layerNames = self.parent.hardwareAcceleratedCanvas.canvas.GetLayerNames()
+        layerNames = self.parent.canvasManager.GetLayerNames()
         self.layerFrames = []
         for i in range(len(layerNames)):
             self.AddLayerButton(layerNames[i])

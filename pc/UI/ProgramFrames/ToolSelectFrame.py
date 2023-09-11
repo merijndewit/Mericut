@@ -86,4 +86,4 @@ class ToolSelect(customtkinter.CTkFrame):
 
         button.configure(state=tkinter.DISABLED, fg_color=Colors.BUTTON)
         self.lastDisabledButton = button
-        self.parent.hardwareAcceleratedCanvas.canvas.SetTool(name)
+        self.parent.canvasManager.SetTool(name)
